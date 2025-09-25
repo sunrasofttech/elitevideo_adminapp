@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dropdown_search/dropdown_search.dart';
+import 'package:elite_admin/utils/apiurls/api.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -60,11 +61,7 @@ class _CastCrewScreenState extends State<ShortFilmCastCrewScreen> with Utility {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const TextWidget(
-                text: "Cast Crew",
-                fontSize: 15,
-                fontWeight: FontWeight.w600,
-              ),
+              const TextWidget(text: "Cast Crew", fontSize: 15, fontWeight: FontWeight.w600),
               heightBox15(),
               Row(
                 children: [
@@ -72,9 +69,7 @@ class _CastCrewScreenState extends State<ShortFilmCastCrewScreen> with Utility {
                     child: BlocBuilder<GetAllShortFilmCubit, GetAllShortFilmState>(
                       builder: (context, state) {
                         if (state is GetAllShortFilmLoadingState) {
-                          return const Center(
-                            child: CustomCircularProgressIndicator(),
-                          );
+                          return const Center(child: CustomCircularProgressIndicator());
                         }
 
                         if (state is GetAllShortFilmLoadedState) {
@@ -87,9 +82,7 @@ class _CastCrewScreenState extends State<ShortFilmCastCrewScreen> with Utility {
                               return DropdownSearch<String>(
                                 popupProps: PopupProps.menu(
                                   showSearchBox: true,
-                                  menuProps: const MenuProps(
-                                    backgroundColor: AppColors.whiteColor,
-                                  ),
+                                  menuProps: const MenuProps(backgroundColor: AppColors.whiteColor),
                                   searchFieldProps: TextFieldProps(
                                     decoration: InputDecoration(
                                       fillColor: AppColors.blackColor,
@@ -110,12 +103,7 @@ class _CastCrewScreenState extends State<ShortFilmCastCrewScreen> with Utility {
                                         children: [
                                           if (isSelected) Icon(Icons.check, color: Theme.of(context).primaryColor),
                                           widthBox10(),
-                                          Expanded(
-                                            child: Text(
-                                              item,
-                                              style: const TextStyle(fontSize: 12),
-                                            ),
-                                          ),
+                                          Expanded(child: Text(item, style: const TextStyle(fontSize: 12))),
                                         ],
                                       ),
                                     );
@@ -127,32 +115,26 @@ class _CastCrewScreenState extends State<ShortFilmCastCrewScreen> with Utility {
                                 decoratorProps: const DropDownDecoratorProps(
                                   decoration: InputDecoration(
                                     contentPadding: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
-                                    border: OutlineInputBorder(
-                                      borderSide: BorderSide(color: AppColors.greyColor),
-                                    ),
+                                    border: OutlineInputBorder(borderSide: BorderSide(color: AppColors.greyColor)),
                                     hintText: "Series Type",
-                                    hintStyle: TextStyle(
-                                      fontSize: 11,
-                                    ),
+                                    hintStyle: TextStyle(fontSize: 11),
                                     focusedBorder: OutlineInputBorder(
                                       borderSide: BorderSide(color: AppColors.greyColor),
                                     ),
                                   ),
                                 ),
                                 selectedItem: marketData
-                                    .firstWhere(
-                                      (datum) => datum.id == value,
-                                      orElse: () => Datum(),
-                                    )
+                                    .firstWhere((datum) => datum.id == value, orElse: () => Datum())
                                     .shortFilmTitle,
                                 onChanged: (String? newValue) {
-                                  final selectedItem =
-                                      state.model.data?.firstWhere((datum) => datum.shortFilmTitle == newValue);
+                                  final selectedItem = state.model.data?.firstWhere(
+                                    (datum) => datum.shortFilmTitle == newValue,
+                                  );
                                   selectedMovie.value = selectedItem?.id;
                                   log("Selected Market ID: ${selectedMovie.value}  $newValue");
-                                  context
-                                      .read<GetAllCastCrewShortFilmCubit>()
-                                      .getAllCastCrew(movieId: selectedMovie.value);
+                                  context.read<GetAllCastCrewShortFilmCubit>().getAllCastCrew(
+                                    movieId: selectedMovie.value,
+                                  );
                                 },
                               );
                             },
@@ -171,24 +153,14 @@ class _CastCrewScreenState extends State<ShortFilmCastCrewScreen> with Utility {
                     child: Container(
                       padding: const EdgeInsets.all(14),
                       decoration: const BoxDecoration(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(12),
-                        ),
-                        gradient: LinearGradient(
-                          colors: AppColors.blueGradientList,
-                        ),
+                        borderRadius: BorderRadius.all(Radius.circular(12)),
+                        gradient: LinearGradient(colors: AppColors.blueGradientList),
                       ),
                       child: Row(
                         children: [
-                          const TextWidget(
-                            text: "Add",
-                            color: AppColors.whiteColor,
-                          ),
+                          const TextWidget(text: "Add", color: AppColors.whiteColor),
                           widthBox5(),
-                          const Icon(
-                            Icons.add_circle_rounded,
-                            color: AppColors.whiteColor,
-                          )
+                          const Icon(Icons.add_circle_rounded, color: AppColors.whiteColor),
                         ],
                       ),
                     ),
@@ -223,22 +195,16 @@ class _CastCrewScreenState extends State<ShortFilmCastCrewScreen> with Utility {
                   child: BlocBuilder<GetAllCastCrewShortFilmCubit, GetAllCastCrewShortFilmState>(
                     builder: (context, state) {
                       if (state is GetAllCastCrewShortFilmLoadingState) {
-                        return const Center(
-                          child: CustomCircularProgressIndicator(),
-                        );
+                        return const Center(child: CustomCircularProgressIndicator());
                       }
 
                       if (state is GetAllCastCrewShortFilmErrorState) {
-                        return const Center(
-                          child: CustomErrorWidget(),
-                        );
+                        return const Center(child: CustomErrorWidget());
                       }
 
                       if (state is GetAllCastCrewShortFilmLoadedState) {
                         return state.model.data?.isEmpty ?? false
-                            ? const Center(
-                                child: CustomEmptyWidget(),
-                              )
+                            ? const Center(child: CustomEmptyWidget())
                             : ListView.builder(
                                 physics: const NeverScrollableScrollPhysics(),
                                 shrinkWrap: true,
@@ -257,14 +223,10 @@ class _CastCrewScreenState extends State<ShortFilmCastCrewScreen> with Utility {
                                             child: CachedNetworkImage(
                                               height: 100,
                                               width: 120,
-                                              imageUrl: "${data?.profileImg}",
+                                              imageUrl: "${AppUrls.baseUrl}/${data?.profileImg}",
                                               fit: BoxFit.fill,
                                               errorWidget: (context, url, error) {
-                                                return const Center(
-                                                  child: TextWidget(
-                                                    text: "No Img 😒",
-                                                  ),
-                                                );
+                                                return const Center(child: TextWidget(text: "No Img 😒"));
                                               },
                                             ),
                                           ),
@@ -281,10 +243,7 @@ class _CastCrewScreenState extends State<ShortFilmCastCrewScreen> with Utility {
                                                   fontWeight: FontWeight.w600,
                                                 ),
                                                 const SizedBox(height: 4),
-                                                TextWidget(
-                                                  text: "${data?.role}",
-                                                  color: AppColors.greyColor,
-                                                ),
+                                                TextWidget(text: "${data?.role}", color: AppColors.greyColor),
                                                 const SizedBox(height: 4),
                                                 TextWidget(
                                                   text: "SHort Film Name : ${data?.shortfilm?.shortFilmTitle}",
@@ -332,9 +291,7 @@ class _CastCrewScreenState extends State<ShortFilmCastCrewScreen> with Utility {
                                                         },
                                                       );
                                                     },
-                                                    child: svgAsset(
-                                                      assetName: AppImages.deleteSvg,
-                                                    ),
+                                                    child: svgAsset(assetName: AppImages.deleteSvg),
                                                   ),
                                                 ],
                                               ),
@@ -358,16 +315,15 @@ class _CastCrewScreenState extends State<ShortFilmCastCrewScreen> with Utility {
                 builder: (context, state) {
                   if (state is GetAllCastCrewShortFilmLoadedState) {
                     return CustomPagination(
-                        currentPage: currentPage,
-                        totalPages: state.model.pagination?.totalPages ?? 0,
-                        onPageChanged: (e) {
-                          setState(() {
-                            currentPage = e;
-                          });
-                          context.read<GetAllCastCrewShortFilmCubit>().getAllCastCrew(
-                                page: currentPage,
-                              );
+                      currentPage: currentPage,
+                      totalPages: state.model.pagination?.totalPages ?? 0,
+                      onPageChanged: (e) {
+                        setState(() {
+                          currentPage = e;
                         });
+                        context.read<GetAllCastCrewShortFilmCubit>().getAllCastCrew(page: currentPage);
+                      },
+                    );
                   }
                   return const SizedBox();
                 },
@@ -380,13 +336,7 @@ class _CastCrewScreenState extends State<ShortFilmCastCrewScreen> with Utility {
     );
   }
 
-  _addUpdatecastCrewPopUp({
-    String? id,
-    String? name,
-    String? description,
-    String? role,
-    String? movieId,
-  }) {
+  _addUpdatecastCrewPopUp({String? id, String? name, String? description, String? role, String? movieId}) {
     final TextEditingController nameController = TextEditingController(text: name ?? "");
     final TextEditingController descriptionController = TextEditingController(text: description ?? "");
     final TextEditingController roleContoller = TextEditingController(text: role ?? "");
@@ -398,278 +348,230 @@ class _CastCrewScreenState extends State<ShortFilmCastCrewScreen> with Utility {
           child: SingleChildScrollView(
             child: Padding(
               padding: const EdgeInsets.all(12.0),
-              child: StatefulBuilder(builder: (context, setState) {
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const TextWidget(
-                          text: "castCrew",
-                          fontWeight: FontWeight.w700,
-                          fontSize: 15,
-                        ),
-                        InkWell(
-                          onTap: () {
-                            Navigator.pop(context);
-                          },
-                          child: Container(
-                            decoration: const BoxDecoration(
-                              color: AppColors.greyColor,
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(12),
-                              ),
-                            ),
-                            child: const Icon(
-                              Icons.close,
-                              color: AppColors.whiteColor,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    heightBox15(),
-                    Container(
-                      width: MediaQuery.of(context).size.width,
-                      padding: const EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12),
-                        color: AppColors.whiteColor,
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+              child: StatefulBuilder(
+                builder: (context, setState) {
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          const TextWidget(
-                            text: "Cover Image",
-                          ),
-                          heightBox10(),
-                          GestureDetector(
+                          const TextWidget(text: "castCrew", fontWeight: FontWeight.w700, fontSize: 15),
+                          InkWell(
                             onTap: () {
-                              _pickImage(setState);
+                              Navigator.pop(context);
                             },
                             child: Container(
-                              width: MediaQuery.of(context).size.width,
-                              padding: const EdgeInsets.all(8),
-                              decoration: BoxDecoration(
-                                borderRadius: const BorderRadius.all(
-                                  Radius.circular(8),
-                                ),
-                                border: Border.all(
-                                  color: AppColors.greyColor,
-                                ),
+                              decoration: const BoxDecoration(
+                                color: AppColors.greyColor,
+                                borderRadius: BorderRadius.all(Radius.circular(12)),
                               ),
-                              child: _selectedImage == null
-                                  ? Column(
-                                      children: [
-                                        SvgPicture.asset("asset/svg/profile-circle.svg"),
-                                        heightBox10(),
-                                        const TextWidget(text: "Select a Cover picture"),
-                                        const TextWidget(text: "Browse or Drag image here.."),
-                                      ],
-                                    )
-                                  : ClipRRect(
-                                      borderRadius: BorderRadius.circular(8),
-                                      child: Image.file(
-                                        File(_selectedImage!.path),
-                                        width: double.infinity,
-                                        height: 190,
-                                        fit: BoxFit.cover,
-                                      ),
-                                    ),
+                              child: const Icon(Icons.close, color: AppColors.whiteColor),
                             ),
                           ),
                         ],
                       ),
-                    ),
-                    heightBox15(),
-                    const TextWidget(
-                      text: "Name *",
-                      color: AppColors.blackColor,
-                    ),
-                    heightBox10(),
-                    TextFormFieldWidget(
-                      controller: nameController,
-                    ),
-                    heightBox15(),
-                    const TextWidget(
-                      text: "Description *",
-                      color: AppColors.blackColor,
-                    ),
-                    heightBox10(),
-                    TextFormFieldWidget(
-                      controller: descriptionController,
-                    ),
-                    heightBox15(),
-                    const TextWidget(
-                      text: "Role *",
-                      color: AppColors.blackColor,
-                    ),
-                    heightBox10(),
-                    TextFormFieldWidget(
-                      controller: roleContoller,
-                    ),
-                    heightBox10(),
-                    const TextWidget(
-                      text: "Select Movie *",
-                      color: AppColors.blackColor,
-                    ),
-                    heightBox10(),
-                    BlocBuilder<GetAllShortFilmCubit, GetAllShortFilmState>(
-                      builder: (context, state) {
-                        if (state is GetAllShortFilmLoadingState) {
-                          return const Center(
-                            child: CustomCircularProgressIndicator(),
-                          );
-                        }
+                      heightBox15(),
+                      Container(
+                        width: MediaQuery.of(context).size.width,
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(12), color: AppColors.whiteColor),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const TextWidget(text: "Cover Image"),
+                            heightBox10(),
+                            GestureDetector(
+                              onTap: () {
+                                _pickImage(setState);
+                              },
+                              child: Container(
+                                width: MediaQuery.of(context).size.width,
+                                padding: const EdgeInsets.all(8),
+                                decoration: BoxDecoration(
+                                  borderRadius: const BorderRadius.all(Radius.circular(8)),
+                                  border: Border.all(color: AppColors.greyColor),
+                                ),
+                                child: _selectedImage == null
+                                    ? Column(
+                                        children: [
+                                          SvgPicture.asset("asset/svg/profile-circle.svg"),
+                                          heightBox10(),
+                                          const TextWidget(text: "Select a Cover picture"),
+                                          const TextWidget(text: "Browse or Drag image here.."),
+                                        ],
+                                      )
+                                    : ClipRRect(
+                                        borderRadius: BorderRadius.circular(8),
+                                        child: Image.file(
+                                          File(_selectedImage!.path),
+                                          width: double.infinity,
+                                          height: 190,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      heightBox15(),
+                      const TextWidget(text: "Name *", color: AppColors.blackColor),
+                      heightBox10(),
+                      TextFormFieldWidget(controller: nameController),
+                      heightBox15(),
+                      const TextWidget(text: "Description *", color: AppColors.blackColor),
+                      heightBox10(),
+                      TextFormFieldWidget(controller: descriptionController),
+                      heightBox15(),
+                      const TextWidget(text: "Role *", color: AppColors.blackColor),
+                      heightBox10(),
+                      TextFormFieldWidget(controller: roleContoller),
+                      heightBox10(),
+                      const TextWidget(text: "Select Movie *", color: AppColors.blackColor),
+                      heightBox10(),
+                      BlocBuilder<GetAllShortFilmCubit, GetAllShortFilmState>(
+                        builder: (context, state) {
+                          if (state is GetAllShortFilmLoadingState) {
+                            return const Center(child: CustomCircularProgressIndicator());
+                          }
 
-                        if (state is GetAllShortFilmLoadedState) {
-                          final marketNames =
-                              state.model.data?.map((datum) => datum.shortFilmTitle ?? '').toList() ?? [];
-                          return ValueListenableBuilder<String?>(
-                            valueListenable: selectedMovie,
-                            builder: (context, value, child) {
-                              final marketData = state.model.data ?? [];
-                              return DropdownSearch<String>(
-                                popupProps: PopupProps.menu(
-                                  showSearchBox: true,
-                                  menuProps: const MenuProps(
-                                    backgroundColor: AppColors.whiteColor,
+                          if (state is GetAllShortFilmLoadedState) {
+                            final marketNames =
+                                state.model.data?.map((datum) => datum.shortFilmTitle ?? '').toList() ?? [];
+                            return ValueListenableBuilder<String?>(
+                              valueListenable: selectedMovie,
+                              builder: (context, value, child) {
+                                final marketData = state.model.data ?? [];
+                                return DropdownSearch<String>(
+                                  popupProps: PopupProps.menu(
+                                    showSearchBox: true,
+                                    menuProps: const MenuProps(backgroundColor: AppColors.whiteColor),
+                                    searchFieldProps: TextFieldProps(
+                                      decoration: InputDecoration(
+                                        fillColor: AppColors.blackColor,
+                                        hintText: "Search Series Type",
+                                        border: const OutlineInputBorder(
+                                          borderSide: BorderSide(color: AppColors.greyColor),
+                                        ),
+                                        focusedBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(color: Theme.of(context).primaryColor),
+                                        ),
+                                        contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                                      ),
+                                    ),
+                                    itemBuilder: (context, item, isDisabled, isSelected) {
+                                      return SizedBox(
+                                        height: 40,
+                                        child: Row(
+                                          children: [
+                                            if (isSelected) Icon(Icons.check, color: Theme.of(context).primaryColor),
+                                            widthBox10(),
+                                            Expanded(child: Text(item, style: const TextStyle(fontSize: 12))),
+                                          ],
+                                        ),
+                                      );
+                                    },
                                   ),
-                                  searchFieldProps: TextFieldProps(
+                                  items: (filter, loadProps) {
+                                    return marketNames;
+                                  },
+                                  decoratorProps: const DropDownDecoratorProps(
                                     decoration: InputDecoration(
-                                      fillColor: AppColors.blackColor,
-                                      hintText: "Search Series Type",
-                                      border: const OutlineInputBorder(
+                                      contentPadding: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+                                      border: OutlineInputBorder(borderSide: BorderSide(color: AppColors.greyColor)),
+                                      hintText: "Series Type",
+                                      hintStyle: TextStyle(fontSize: 11),
+                                      focusedBorder: OutlineInputBorder(
                                         borderSide: BorderSide(color: AppColors.greyColor),
                                       ),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(color: Theme.of(context).primaryColor),
-                                      ),
-                                      contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                                     ),
                                   ),
-                                  itemBuilder: (context, item, isDisabled, isSelected) {
-                                    return SizedBox(
-                                      height: 40,
-                                      child: Row(
-                                        children: [
-                                          if (isSelected) Icon(Icons.check, color: Theme.of(context).primaryColor),
-                                          widthBox10(),
-                                          Expanded(
-                                            child: Text(
-                                              item,
-                                              style: const TextStyle(fontSize: 12),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
+                                  selectedItem: marketData
+                                      .firstWhere((datum) => datum.id == value, orElse: () => Datum())
+                                      .shortFilmTitle,
+                                  onChanged: (String? newValue) {
+                                    final selectedItem = state.model.data?.firstWhere(
+                                      (datum) => datum.shortFilmTitle == newValue,
+                                    );
+                                    selectedMovie.value = selectedItem?.id;
+                                    log("Selected Market ID: ${selectedMovie.value}  $newValue");
+                                    context.read<GetAllCastCrewShortFilmCubit>().getAllCastCrew(
+                                      movieId: selectedMovie.value,
                                     );
                                   },
-                                ),
-                                items: (filter, loadProps) {
-                                  return marketNames;
+                                );
+                              },
+                            );
+                          }
+
+                          return const SizedBox();
+                        },
+                      ),
+                      heightBox15(),
+                      BlocConsumer<UpdateCastCrewShortFilmCubit, UpdateCastCrewShortFilmState>(
+                        listener: (context, state) {
+                          if (state is UpdateCastCrewShortFilmErrorState) {
+                            Fluttertoast.showToast(msg: state.error);
+                            return;
+                          }
+
+                          if (state is UpdateCastCrewShortFilmLaodedState) {
+                            Fluttertoast.showToast(msg: "Update Sucessfully");
+                            context.read<GetAllCastCrewShortFilmCubit>().getAllCastCrew(page: 1);
+                            Navigator.pop(context);
+                          }
+                        },
+                        builder: (context, updateState) {
+                          return BlocConsumer<CreateShortFilmCastcrewCubit, CreateShortFilmCastcrewState>(
+                            listener: (context, state) {
+                              if (state is CreateShortFilmCastcrewErrorState) {
+                                Fluttertoast.showToast(msg: state.error);
+                                return;
+                              }
+
+                              if (state is CreateShortFilmCastcrewLoadedState) {
+                                Fluttertoast.showToast(msg: "Post castCrew Successfully");
+                                context.read<GetAllCastCrewShortFilmCubit>().getAllCastCrew(page: 1);
+                                Navigator.pop(context);
+                              }
+                            },
+                            builder: (context, state) {
+                              return CustomOutlinedButton(
+                                inProgress:
+                                    (updateState is UpdateCastCrewShortFilmLoadingState ||
+                                    state is CreateShortFilmCastcrewLoadingState),
+                                onPressed: () {
+                                  if (id != null) {
+                                    context.read<UpdateCastCrewShortFilmCubit>().updateCastCrew(
+                                      id: id,
+                                      name: nameController.text,
+                                      profileImg: _selectedImage != null ? File(_selectedImage!.path) : null,
+                                      description: descriptionController.text,
+                                      movieId: selectedMovie.value,
+                                      role: roleContoller.text,
+                                    );
+                                    return;
+                                  }
+
+                                  context.read<CreateShortFilmCastcrewCubit>().createCastCrew(
+                                    name: nameController.text,
+                                    description: descriptionController.text,
+                                    movieId: selectedMovie.value,
+                                    profileImg: _selectedImage != null ? File(_selectedImage!.path) : null,
+                                    role: roleContoller.text,
+                                  );
                                 },
-                                decoratorProps: const DropDownDecoratorProps(
-                                  decoration: InputDecoration(
-                                    contentPadding: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
-                                    border: OutlineInputBorder(
-                                      borderSide: BorderSide(color: AppColors.greyColor),
-                                    ),
-                                    hintText: "Series Type",
-                                    hintStyle: TextStyle(
-                                      fontSize: 11,
-                                    ),
-                                    focusedBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(color: AppColors.greyColor),
-                                    ),
-                                  ),
-                                ),
-                                selectedItem: marketData
-                                    .firstWhere(
-                                      (datum) => datum.id == value,
-                                      orElse: () => Datum(),
-                                    )
-                                    .shortFilmTitle,
-                                onChanged: (String? newValue) {
-                                  final selectedItem =
-                                      state.model.data?.firstWhere((datum) => datum.shortFilmTitle == newValue);
-                                  selectedMovie.value = selectedItem?.id;
-                                  log("Selected Market ID: ${selectedMovie.value}  $newValue");
-                                  context
-                                      .read<GetAllCastCrewShortFilmCubit>()
-                                      .getAllCastCrew(movieId: selectedMovie.value);
-                                },
+                                buttonText: id != null ? 'Save castCrew' : 'Add castCrew',
                               );
                             },
                           );
-                        }
-
-                        return const SizedBox();
-                      },
-                    ),
-                    heightBox15(),
-                    BlocConsumer<UpdateCastCrewShortFilmCubit, UpdateCastCrewShortFilmState>(
-                      listener: (context, state) {
-                        if (state is UpdateCastCrewShortFilmErrorState) {
-                          Fluttertoast.showToast(msg: state.error);
-                          return;
-                        }
-
-                        if (state is UpdateCastCrewShortFilmLaodedState) {
-                          Fluttertoast.showToast(msg: "Update Sucessfully");
-                          context.read<GetAllCastCrewShortFilmCubit>().getAllCastCrew(page: 1);
-                          Navigator.pop(context);
-                        }
-                      },
-                      builder: (context, updateState) {
-                        return BlocConsumer<CreateShortFilmCastcrewCubit, CreateShortFilmCastcrewState>(
-                          listener: (context, state) {
-                            if (state is CreateShortFilmCastcrewErrorState) {
-                              Fluttertoast.showToast(msg: state.error);
-                              return;
-                            }
-
-                            if (state is CreateShortFilmCastcrewLoadedState) {
-                              Fluttertoast.showToast(msg: "Post castCrew Successfully");
-                              context.read<GetAllCastCrewShortFilmCubit>().getAllCastCrew(page: 1);
-                              Navigator.pop(context);
-                            }
-                          },
-                          builder: (context, state) {
-                            return CustomOutlinedButton(
-                              inProgress: (updateState is UpdateCastCrewShortFilmLoadingState ||
-                                  state is CreateShortFilmCastcrewLoadingState),
-                              onPressed: () {
-                                if (id != null) {
-                                  context.read<UpdateCastCrewShortFilmCubit>().updateCastCrew(
-                                        id: id,
-                                        name: nameController.text,
-                                        profileImg: _selectedImage != null ? File(_selectedImage!.path) : null,
-                                        description: descriptionController.text,
-                                        movieId: selectedMovie.value,
-                                        role: roleContoller.text,
-                                      );
-                                  return;
-                                }
-
-                                context.read<CreateShortFilmCastcrewCubit>().createCastCrew(
-                                      name: nameController.text,
-                                      description: descriptionController.text,
-                                      movieId: selectedMovie.value,
-                                      profileImg: _selectedImage != null ? File(_selectedImage!.path) : null,
-                                      role: roleContoller.text,
-                                    );
-                              },
-                              buttonText: id != null ? 'Save castCrew' : 'Add castCrew',
-                            );
-                          },
-                        );
-                      },
-                    ),
-                  ],
-                );
-              }),
+                        },
+                      ),
+                    ],
+                  );
+                },
+              ),
             ),
           ),
         );

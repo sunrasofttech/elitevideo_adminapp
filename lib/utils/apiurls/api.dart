@@ -25,7 +25,7 @@ class AppUrls {
 
   static const String movieLanguageUrl = "$baseUrl/api/ott/movie-language";
 
-  static const String genreUrl = "$baseUrl/api/ott/genre/admin";
+  static const String genreUrl = "$baseUrl/api/ott/genre";
 
   static const String movieUrl = "$baseUrl/api/ott/movie";
 

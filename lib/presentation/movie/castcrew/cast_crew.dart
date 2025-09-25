@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dropdown_search/dropdown_search.dart';
+import 'package:elite_admin/utils/apiurls/api.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -262,7 +263,7 @@ class _CastCrewScreenState extends State<CastCrewScreen> with Utility {
                                             child: CachedNetworkImage(
                                               height: 100,
                                               width: 120,
-                                              imageUrl: "${data?.profileImg}",
+                                              imageUrl: "${AppUrls.baseUrl}/${data?.profileImg}",
                                               fit: BoxFit.fill,
                                               errorWidget: (context, url, error) {
                                                 return const Center(

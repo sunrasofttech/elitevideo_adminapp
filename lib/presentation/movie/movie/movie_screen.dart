@@ -63,30 +63,22 @@ class _MovieScreenState extends State<MovieScreen> with Utility {
           padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 12),
           child: ListView(
             children: [
-              const TextWidget(
-                text: "Manage Movies",
-                fontSize: 15,
-                fontWeight: FontWeight.w600,
-              ),
+              const TextWidget(text: "Manage Movies", fontSize: 15, fontWeight: FontWeight.w600),
               heightBox15(),
               Row(
                 children: [
                   Expanded(
-                      child: TextFormFieldWidget(
-                    focusNode: movieNameFocusNode,
-                    isSuffixIconShow: true,
-                    hintText: "Search movie name ...",
-                    controller: movieNameController,
-                    onChanged: (p0) {
-                      context.read<GetAllMovieCubit>().getAllMovie(
-                            movieName: p0,
-                          );
-                    },
-                    suffixIcon: const Icon(
-                      Icons.search,
-                      color: AppColors.blackColor,
+                    child: TextFormFieldWidget(
+                      focusNode: movieNameFocusNode,
+                      isSuffixIconShow: true,
+                      hintText: "Search movie name ...",
+                      controller: movieNameController,
+                      onChanged: (p0) {
+                        context.read<GetAllMovieCubit>().getAllMovie(movieName: p0);
+                      },
+                      suffixIcon: const Icon(Icons.search, color: AppColors.blackColor),
                     ),
-                  )),
+                  ),
                   widthBox10(),
                   // StreamBuilder<bool>(
                   //   stream: OrientationHelper.autoRotateStream,
@@ -113,34 +105,19 @@ class _MovieScreenState extends State<MovieScreen> with Utility {
                       // } else {
                       //   Fluttertoast.showToast(msg: "❌ Auto-rotate is OFF");
                       // }
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const AddUpdateMoveiScreen(),
-                        ),
-                      );
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => const AddUpdateMoveiScreen()));
                     },
                     child: Container(
                       padding: const EdgeInsets.all(14),
                       decoration: const BoxDecoration(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(12),
-                        ),
-                        gradient: LinearGradient(
-                          colors: AppColors.blueGradientList,
-                        ),
+                        borderRadius: BorderRadius.all(Radius.circular(12)),
+                        gradient: LinearGradient(colors: AppColors.blueGradientList),
                       ),
                       child: Row(
                         children: [
-                          const TextWidget(
-                            text: "Add",
-                            color: AppColors.whiteColor,
-                          ),
+                          const TextWidget(text: "Add", color: AppColors.whiteColor),
                           widthBox5(),
-                          const Icon(
-                            Icons.add_circle_rounded,
-                            color: AppColors.whiteColor,
-                          )
+                          const Icon(Icons.add_circle_rounded, color: AppColors.whiteColor),
                         ],
                       ),
                     ),
@@ -163,8 +140,9 @@ class _MovieScreenState extends State<MovieScreen> with Utility {
                             onChanged: (value) {
                               setState(() {
                                 selectedCategory = value;
-                                final selectedDatum =
-                                    state.model.categories?.firstWhere((datum) => datum.name == value);
+                                final selectedDatum = state.model.categories?.firstWhere(
+                                  (datum) => datum.name == value,
+                                );
                                 selectedCategoryId = selectedDatum?.id;
                                 print("Selected Datum ID: ${selectedDatum?.id}");
                                 context.read<GetAllMovieCubit>().getAllMovie(categoryId: selectedDatum?.id);
@@ -214,9 +192,7 @@ class _MovieScreenState extends State<MovieScreen> with Utility {
                           child: Row(
                             children: [
                               Checkbox(
-                                fillColor: const WidgetStatePropertyAll(
-                                  AppColors.whiteColor,
-                                ),
+                                fillColor: const WidgetStatePropertyAll(AppColors.whiteColor),
                                 side: const BorderSide(color: AppColors.greyColor),
                                 value: isSelectAll,
                                 checkColor: AppColors.blackColor,
@@ -232,11 +208,7 @@ class _MovieScreenState extends State<MovieScreen> with Utility {
                                   });
                                 },
                               ),
-                              const TextWidget(
-                                text: "Select All",
-                                fontSize: 13,
-                                fontWeight: FontWeight.w500,
-                              ),
+                              const TextWidget(text: "Select All", fontSize: 13, fontWeight: FontWeight.w500),
                             ],
                           ),
                         );
@@ -261,10 +233,7 @@ class _MovieScreenState extends State<MovieScreen> with Utility {
                             ),
                           );
                         },
-                        child: const Icon(
-                          Icons.delete,
-                          color: Colors.red,
-                        ),
+                        child: const Icon(Icons.delete, color: Colors.red),
                       ),
                     ),
                   widthBox10(),
@@ -316,9 +285,7 @@ class _MovieScreenState extends State<MovieScreen> with Utility {
                   child: BlocBuilder<GetAllMovieCubit, GetAllMovieState>(
                     builder: (context, state) {
                       if (state is GetAllMovieLoadingState) {
-                        return const Center(
-                          child: CustomCircularProgressIndicator(),
-                        );
+                        return const Center(child: CustomCircularProgressIndicator());
                       }
 
                       if (state is GetAllMovieErrorState) {
@@ -342,80 +309,179 @@ class _MovieScreenState extends State<MovieScreen> with Utility {
                                 itemBuilder: (context, index) {
                                   final item = state.model.data?.movies?[index];
                                   return Container(
-                                      decoration: BoxDecoration(
-                                        image: DecorationImage(
-                                          image: (item?.coverImg == null || item!.coverImg!.isEmpty)
-                                              ? AssetImage(noImgFound) as ImageProvider
-                                              : NetworkImage("${item.coverImg}"),
-                                          fit: BoxFit.cover,
-                                        ),
-                                        borderRadius: BorderRadius.circular(12),
+                                    decoration: BoxDecoration(
+                                      image: DecorationImage(
+                                        image: (item?.coverImg == null || item!.coverImg!.isEmpty)
+                                            ? AssetImage(noImgFound) as ImageProvider
+                                            : NetworkImage("${AppUrls.baseUrl}/${item.coverImg}"),
+                                        fit: BoxFit.cover,
                                       ),
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Row(
-                                              children: [
-                                                SizedBox(
-                                                  height: 40,
-                                                  width: 40,
-                                                  child: Checkbox(
-                                                    side: const BorderSide(
-                                                      color: AppColors.whiteColor,
-                                                    ),
-                                                    shape: const CircleBorder(
-                                                      side: BorderSide(
-                                                        color: AppColors.whiteColor,
-                                                      ),
-                                                    ),
-                                                    fillColor: const WidgetStatePropertyAll(AppColors.greyColor),
-                                                    focusColor: AppColors.whiteColor,
-                                                    value: selectedMovieIds.contains(item?.id),
-                                                    onChanged: (value) {
-                                                      setState(() {
-                                                        if (value == true) {
-                                                          selectedMovieIds.add(item!.id!);
-                                                        } else {
-                                                          selectedMovieIds.remove(item!.id!);
-                                                        }
-
-                                                        // Handle Select All toggle based on current selection
-                                                        final totalMovies = state.model.data?.movies?.length ?? 0;
-                                                        isSelectAll = selectedMovieIds.length == totalMovies;
-                                                      });
-                                                    },
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Row(
+                                            children: [
+                                              SizedBox(
+                                                height: 40,
+                                                width: 40,
+                                                child: Checkbox(
+                                                  side: const BorderSide(color: AppColors.whiteColor),
+                                                  shape: const CircleBorder(
+                                                    side: BorderSide(color: AppColors.whiteColor),
                                                   ),
-                                                ),
-                                                const Spacer(),
-                                                Switch(
-                                                  trackOutlineColor: const WidgetStatePropertyAll(AppColors.whiteColor),
-                                                  activeColor: Colors.transparent,
-                                                  thumbColor: const WidgetStatePropertyAll(AppColors.zGreenColor),
-                                                  value: item?.status ?? false,
+                                                  fillColor: const WidgetStatePropertyAll(AppColors.greyColor),
+                                                  focusColor: AppColors.whiteColor,
+                                                  value: selectedMovieIds.contains(item?.id),
                                                   onChanged: (value) {
-                                                    context.read<UpdateMovieCubit>().updateMovies(
-                                                          id: item?.id ?? "",
-                                                          status: value,
-                                                        );
+                                                    setState(() {
+                                                      if (value == true) {
+                                                        selectedMovieIds.add(item!.id!);
+                                                      } else {
+                                                        selectedMovieIds.remove(item!.id!);
+                                                      }
+
+                                                      // Handle Select All toggle based on current selection
+                                                      final totalMovies = state.model.data?.movies?.length ?? 0;
+                                                      isSelectAll = selectedMovieIds.length == totalMovies;
+                                                    });
                                                   },
                                                 ),
-                                              ],
-                                            ),
-                                            Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              children: [
-                                                TextWidget(
-                                                  text: "${item?.movieName}",
-                                                  color: AppColors.whiteColor,
-                                                  fontSize: 14,
-                                                ),
-                                                heightBox10(),
-                                                Row(
-                                                  children: [
-                                                    Expanded(
+                                              ),
+                                              const Spacer(),
+                                              Switch(
+                                                trackOutlineColor: const WidgetStatePropertyAll(AppColors.whiteColor),
+                                                activeColor: Colors.transparent,
+                                                thumbColor: const WidgetStatePropertyAll(AppColors.zGreenColor),
+                                                value: item?.status ?? false,
+                                                onChanged: (value) {
+                                                  context.read<UpdateMovieCubit>().updateMovies(
+                                                    id: item?.id ?? "",
+                                                    status: value,
+                                                  );
+                                                },
+                                              ),
+                                            ],
+                                          ),
+                                          Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              TextWidget(
+                                                text: "${item?.movieName}",
+                                                color: AppColors.whiteColor,
+                                                fontSize: 14,
+                                              ),
+                                              heightBox10(),
+                                              Row(
+                                                children: [
+                                                  Expanded(
+                                                    child: ClipRRect(
+                                                      borderRadius: BorderRadius.circular(12),
+                                                      child: BackdropFilter(
+                                                        filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                                                        child: Container(
+                                                          padding: const EdgeInsets.all(8),
+                                                          decoration: BoxDecoration(
+                                                            color: Colors.white.withOpacity(0.2),
+                                                            borderRadius: BorderRadius.circular(12),
+                                                          ),
+                                                          child: svgAsset(
+                                                            assetName: AppImages.eyeSvg,
+                                                            height: 20,
+                                                            width: 20,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  widthBox5(),
+                                                  Expanded(
+                                                    child: ClipRRect(
+                                                      borderRadius: BorderRadius.circular(12),
+                                                      child: BackdropFilter(
+                                                        filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                                                        child: InkWell(
+                                                          onTap: () {
+                                                            context.read<UpdateMovieCubit>().updateMovies(
+                                                              id: item?.id ?? "",
+                                                              isHighlighted: item?.isHighlighted == true ? false : true,
+                                                            );
+                                                          },
+                                                          child: Container(
+                                                            padding: const EdgeInsets.all(8),
+                                                            decoration: BoxDecoration(
+                                                              color: Colors.white.withOpacity(0.2),
+                                                              borderRadius: BorderRadius.circular(12),
+                                                            ),
+                                                            child: svgAsset(
+                                                              assetName: AppImages.starSvg,
+                                                              height: 20,
+                                                              width: 20,
+                                                              color: item?.isHighlighted ?? false
+                                                                  ? Colors.amber
+                                                                  : AppColors.whiteColor,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  widthBox5(),
+                                                  Expanded(
+                                                    child: ClipRRect(
+                                                      borderRadius: BorderRadius.circular(12),
+                                                      child: BackdropFilter(
+                                                        filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                                                        child: InkWell(
+                                                          onTap: () {
+                                                            Navigator.push(
+                                                              context,
+                                                              MaterialPageRoute(
+                                                                builder: (context) =>
+                                                                    AddUpdateMoveiScreen(id: item?.id, model: item),
+                                                              ),
+                                                            );
+                                                          },
+                                                          child: Container(
+                                                            padding: const EdgeInsets.all(8),
+                                                            decoration: BoxDecoration(
+                                                              color: Colors.white.withOpacity(0.2),
+                                                              borderRadius: BorderRadius.circular(12),
+                                                            ),
+                                                            child: svgAsset(
+                                                              assetName: AppImages.zeditSvg,
+                                                              height: 20,
+                                                              width: 20,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  widthBox5(),
+                                                  Expanded(
+                                                    child: InkWell(
+                                                      onTap: () {
+                                                        showDialog(
+                                                          context: context,
+                                                          builder: (context) {
+                                                            return DeleteDialog(
+                                                              onCancelPressed: () {
+                                                                Navigator.pop(context);
+                                                              },
+                                                              onDeletePressed: () {
+                                                                context.read<DeleteMovieCubit>().deleteMovie([
+                                                                  item?.id ?? "",
+                                                                ]);
+                                                              },
+                                                            );
+                                                          },
+                                                        );
+                                                      },
                                                       child: ClipRRect(
                                                         borderRadius: BorderRadius.circular(12),
                                                         child: BackdropFilter(
@@ -427,7 +493,7 @@ class _MovieScreenState extends State<MovieScreen> with Utility {
                                                               borderRadius: BorderRadius.circular(12),
                                                             ),
                                                             child: svgAsset(
-                                                              assetName: AppImages.eyeSvg,
+                                                              assetName: AppImages.trashSvg,
                                                               height: 20,
                                                               width: 20,
                                                             ),
@@ -435,120 +501,15 @@ class _MovieScreenState extends State<MovieScreen> with Utility {
                                                         ),
                                                       ),
                                                     ),
-                                                    widthBox5(),
-                                                    Expanded(
-                                                      child: ClipRRect(
-                                                        borderRadius: BorderRadius.circular(12),
-                                                        child: BackdropFilter(
-                                                          filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-                                                          child: InkWell(
-                                                            onTap: () {
-                                                              context.read<UpdateMovieCubit>().updateMovies(
-                                                                    id: item?.id ?? "",
-                                                                    isHighlighted:
-                                                                        item?.isHighlighted == true ? false : true,
-                                                                  );
-                                                            },
-                                                            child: Container(
-                                                              padding: const EdgeInsets.all(8),
-                                                              decoration: BoxDecoration(
-                                                                color: Colors.white.withOpacity(0.2),
-                                                                borderRadius: BorderRadius.circular(12),
-                                                              ),
-                                                              child: svgAsset(
-                                                                assetName: AppImages.starSvg,
-                                                                height: 20,
-                                                                width: 20,
-                                                                color: item?.isHighlighted ?? false
-                                                                    ? Colors.amber
-                                                                    : AppColors.whiteColor,
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    widthBox5(),
-                                                    Expanded(
-                                                      child: ClipRRect(
-                                                        borderRadius: BorderRadius.circular(12),
-                                                        child: BackdropFilter(
-                                                          filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-                                                          child: InkWell(
-                                                            onTap: () {
-                                                              Navigator.push(
-                                                                context,
-                                                                MaterialPageRoute(
-                                                                  builder: (context) => AddUpdateMoveiScreen(
-                                                                    id: item?.id,
-                                                                    model: item,
-                                                                  ),
-                                                                ),
-                                                              );
-                                                            },
-                                                            child: Container(
-                                                              padding: const EdgeInsets.all(8),
-                                                              decoration: BoxDecoration(
-                                                                color: Colors.white.withOpacity(0.2),
-                                                                borderRadius: BorderRadius.circular(12),
-                                                              ),
-                                                              child: svgAsset(
-                                                                assetName: AppImages.zeditSvg,
-                                                                height: 20,
-                                                                width: 20,
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    widthBox5(),
-                                                    Expanded(
-                                                      child: InkWell(
-                                                        onTap: () {
-                                                          showDialog(
-                                                            context: context,
-                                                            builder: (context) {
-                                                              return DeleteDialog(
-                                                                onCancelPressed: () {
-                                                                  Navigator.pop(context);
-                                                                },
-                                                                onDeletePressed: () {
-                                                                  context
-                                                                      .read<DeleteMovieCubit>()
-                                                                      .deleteMovie([item?.id ?? ""]);
-                                                                },
-                                                              );
-                                                            },
-                                                          );
-                                                        },
-                                                        child: ClipRRect(
-                                                          borderRadius: BorderRadius.circular(12),
-                                                          child: BackdropFilter(
-                                                            filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-                                                            child: Container(
-                                                              padding: const EdgeInsets.all(8),
-                                                              decoration: BoxDecoration(
-                                                                color: Colors.white.withOpacity(0.2),
-                                                                borderRadius: BorderRadius.circular(12),
-                                                              ),
-                                                              child: svgAsset(
-                                                                assetName: AppImages.trashSvg,
-                                                                height: 20,
-                                                                width: 20,
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ],
-                                            )
-                                          ],
-                                        ),
-                                      ));
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  );
                                 },
                               );
                       }
@@ -562,16 +523,15 @@ class _MovieScreenState extends State<MovieScreen> with Utility {
                 builder: (context, state) {
                   if (state is GetAllMovieLaodedState) {
                     return CustomPagination(
-                        currentPage: currentPage,
-                        totalPages: state.model.data?.totalPages ?? 0,
-                        onPageChanged: (e) {
-                          setState(() {
-                            currentPage = e;
-                          });
-                          context.read<GetAllMovieCubit>().getAllMovie(
-                                page: currentPage,
-                              );
+                      currentPage: currentPage,
+                      totalPages: state.model.data?.totalPages ?? 0,
+                      onPageChanged: (e) {
+                        setState(() {
+                          currentPage = e;
                         });
+                        context.read<GetAllMovieCubit>().getAllMovie(page: currentPage);
+                      },
+                    );
                   }
                   return const SizedBox();
                 },
@@ -600,11 +560,7 @@ class _MovieScreenState extends State<MovieScreen> with Utility {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       heightBox15(),
-                      const TextWidget(
-                        text: 'Add Rating',
-                        fontWeight: FontWeight.w700,
-                        fontSize: 16,
-                      ),
+                      const TextWidget(text: 'Add Rating', fontWeight: FontWeight.w700, fontSize: 16),
                       heightBox30(),
                       InkWell(
                         onTap: () {
@@ -613,25 +569,17 @@ class _MovieScreenState extends State<MovieScreen> with Utility {
                         child: Container(
                           decoration: const BoxDecoration(
                             color: AppColors.greyColor,
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(12),
-                            ),
+                            borderRadius: BorderRadius.all(Radius.circular(12)),
                           ),
-                          child: const Icon(
-                            Icons.close,
-                            color: AppColors.whiteColor,
-                          ),
+                          child: const Icon(Icons.close, color: AppColors.whiteColor),
                         ),
                       ),
                       heightBox30(),
                     ],
                   ),
                   RatingBar.builder(
-                    itemBuilder: (context, index) => Icon(
-                      Icons.star,
-                      color: index <= rating ? Colors.orange : Colors.grey,
-                      size: 100,
-                    ),
+                    itemBuilder: (context, index) =>
+                        Icon(Icons.star, color: index <= rating ? Colors.orange : Colors.grey, size: 100),
                     onRatingUpdate: (ratingvalue) {
                       setState(() {
                         rating = ratingvalue;

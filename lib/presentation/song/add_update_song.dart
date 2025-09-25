@@ -69,9 +69,7 @@ class _AddUpdateSongScreenState extends State<AddUpdateSongScreen> with Utility 
   }
 
   Future<void> _pickSong() async {
-    final result = await FilePicker.platform.pickFiles(
-      type: FileType.audio,
-    );
+    final result = await FilePicker.platform.pickFiles(type: FileType.audio);
 
     if (result != null && result.files.isNotEmpty) {
       setState(() {
@@ -124,16 +122,11 @@ class _AddUpdateSongScreenState extends State<AddUpdateSongScreen> with Utility 
                 Container(
                   width: MediaQuery.of(context).size.width,
                   padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
-                    color: AppColors.whiteColor,
-                  ),
+                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(12), color: AppColors.whiteColor),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const TextWidget(
-                        text: "Cover Image",
-                      ),
+                      const TextWidget(text: "Cover Image"),
                       heightBox10(),
                       GestureDetector(
                         onTap: _pickImage,
@@ -141,12 +134,8 @@ class _AddUpdateSongScreenState extends State<AddUpdateSongScreen> with Utility 
                           width: MediaQuery.of(context).size.width,
                           padding: const EdgeInsets.all(8),
                           decoration: BoxDecoration(
-                            borderRadius: const BorderRadius.all(
-                              Radius.circular(8),
-                            ),
-                            border: Border.all(
-                              color: AppColors.greyColor,
-                            ),
+                            borderRadius: const BorderRadius.all(Radius.circular(8)),
+                            border: Border.all(color: AppColors.greyColor),
                           ),
                           child: _selectedCoverImage == null
                               ? Column(
@@ -175,25 +164,16 @@ class _AddUpdateSongScreenState extends State<AddUpdateSongScreen> with Utility 
                 Container(
                   width: MediaQuery.of(context).size.width,
                   padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
-                    color: AppColors.whiteColor,
-                  ),
+                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(12), color: AppColors.whiteColor),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       heightBox10(),
-                      const TextWidget(
-                        text: "Song Title",
-                      ),
+                      const TextWidget(text: "Song Title"),
                       heightBox5(),
-                      TextFormFieldWidget(
-                        controller: songTitleController,
-                      ),
+                      TextFormFieldWidget(controller: songTitleController),
                       heightBox10(),
-                      const TextWidget(
-                        text: "Song Artist Name",
-                      ),
+                      const TextWidget(text: "Song Artist Name"),
                       heightBox5(),
                       BlocBuilder<GetArtistCubit, GetArtistState>(
                         builder: (context, state) {
@@ -205,8 +185,11 @@ class _AddUpdateSongScreenState extends State<AddUpdateSongScreen> with Utility 
                               selectedValue: selectedArtist,
                               onChanged: (value) {
                                 selectedArtist = value;
-                                final selectedArtists =
-                                    state.model.data?.firstWhere((datum) => datum.artistName == value);
+
+                                final selectedArtists = state.model.data?.firstWhere(
+                                  (datum) => datum.artistName == value,
+                                );
+                                songArtistController.text = selectedArtists?.artistName ?? "";
                                 selectedArtistId = selectedArtists?.id;
                                 print("Selected Datum ID: ${selectedArtists?.id}");
                                 setState(() {});
@@ -217,9 +200,7 @@ class _AddUpdateSongScreenState extends State<AddUpdateSongScreen> with Utility 
                         },
                       ),
                       heightBox10(),
-                      const TextWidget(
-                        text: "Song Language",
-                      ),
+                      const TextWidget(text: "Song Language"),
                       heightBox5(),
                       BlocBuilder<GetAllLanguageCubit, GetAllLanguageState>(
                         builder: (context, state) {
@@ -243,9 +224,7 @@ class _AddUpdateSongScreenState extends State<AddUpdateSongScreen> with Utility 
                         },
                       ),
                       heightBox10(),
-                      const TextWidget(
-                        text: "Select Movie Category",
-                      ),
+                      const TextWidget(text: "Select Movie Category"),
                       heightBox5(),
                       BlocBuilder<GetAllMusicCategoryCubit, GetAllMusicCategoryState>(
                         builder: (context, state) {
@@ -274,14 +253,9 @@ class _AddUpdateSongScreenState extends State<AddUpdateSongScreen> with Utility 
                           ? Text("Selected song: ${_selectedSong!.name}")
                           : const Text("No song selected."),
                       heightBox5(),
-                      CustomOutlinedButton(
-                        onPressed: _pickSong,
-                        buttonText: "Pick song",
-                      ),
+                      CustomOutlinedButton(onPressed: _pickSong, buttonText: "Pick song"),
                       heightBox10(),
-                      const TextWidget(
-                        text: "Description",
-                      ),
+                      const TextWidget(text: "Description"),
                       heightBox5(),
                       SizedBox(
                         height: 500,
@@ -293,31 +267,29 @@ class _AddUpdateSongScreenState extends State<AddUpdateSongScreen> with Utility 
                         ),
                       ),
                       heightBox10(),
-                      const TextWidget(
-                        text: "Popular",
-                      ),
+                      const TextWidget(text: "Popular"),
                       heightBox10(),
                       Switch(
-                          activeColor: AppColors.zGreenColor,
-                          value: isPopular,
-                          onChanged: (v) {
-                            setState(() {
-                              isPopular = v;
-                            });
-                          }),
-                      heightBox10(),
-                      const TextWidget(
-                        text: "Status",
+                        activeColor: AppColors.zGreenColor,
+                        value: isPopular,
+                        onChanged: (v) {
+                          setState(() {
+                            isPopular = v;
+                          });
+                        },
                       ),
                       heightBox10(),
+                      const TextWidget(text: "Status"),
+                      heightBox10(),
                       Switch(
-                          activeColor: AppColors.zGreenColor,
-                          value: status,
-                          onChanged: (v) {
-                            setState(() {
-                              status = v;
-                            });
-                          }),
+                        activeColor: AppColors.zGreenColor,
+                        value: status,
+                        onChanged: (v) {
+                          setState(() {
+                            status = v;
+                          });
+                        },
+                      ),
                       heightBox10(),
                       BlocConsumer<UpdateMusicCubit, UpdateMusicState>(
                         listener: (context, state) {
@@ -355,21 +327,20 @@ class _AddUpdateSongScreenState extends State<AddUpdateSongScreen> with Utility 
                                   final contentData = await descriptionController.getText();
                                   final document = parse(contentData);
                                   final validHtml = document.outerHtml;
-                                  log("Validated HTML: $validHtml");
+                                  log("Validated HTML: $validHtml   $selectedArtistId");
                                   if (widget.id != null) {
                                     context.read<UpdateMusicCubit>().updateMusic(
-                                          id: widget.id ?? "",
-                                          artistName: songArtistController.text,
-                                          coverImg:
-                                              _selectedCoverImage != null ? File(_selectedCoverImage!.path) : null,
-                                          description: validHtml,
-                                          musicName: songTitleController.text,
-                                          songFile: _selectedSong != null ? File(_selectedSong!.path ?? "") : null,
-                                          status: status,
-                                          artistId: selectedArtistId,
-                                          isPopular: isPopular,
-                                          languageId: selectedLanguageId,
-                                        );
+                                      id: widget.id ?? "",
+                                      artistName: songArtistController.text,
+                                      coverImg: _selectedCoverImage != null ? File(_selectedCoverImage!.path) : null,
+                                      description: validHtml,
+                                      musicName: songTitleController.text,
+                                      songFile: _selectedSong != null ? File(_selectedSong!.path ?? "") : null,
+                                      status: status,
+                                      artistId: selectedArtistId,
+                                      isPopular: isPopular,
+                                      languageId: selectedLanguageId,
+                                    );
                                     return;
                                   }
 
@@ -398,7 +369,7 @@ class _AddUpdateSongScreenState extends State<AddUpdateSongScreen> with Utility 
                                     return;
                                   }
 
-                                  if (selectedArtistId == null || selectedArtistId!.isEmpty) {
+                                  if (selectedArtistId == null) {
                                     Fluttertoast.showToast(msg: "Please select a artist name");
                                     return;
                                   }
@@ -409,17 +380,17 @@ class _AddUpdateSongScreenState extends State<AddUpdateSongScreen> with Utility 
                                   }
 
                                   context.read<CreateMusicCubit>().createMusic(
-                                        artistName: songArtistController.text,
-                                        coverImg: _selectedCoverImage != null ? File(_selectedCoverImage!.path) : null,
-                                        description: validHtml,
-                                        musicName: songTitleController.text,
-                                        songFile: _selectedSong != null ? File(_selectedSong!.path ?? "") : null,
-                                        status: status,
-                                        categoryId: selectedCategoryId,
-                                        artistId: selectedArtistId,
-                                        isPopular: isPopular,
-                                        languageId: selectedLanguageId,
-                                      );
+                                    artistName: songArtistController.text,
+                                    coverImg: _selectedCoverImage != null ? File(_selectedCoverImage!.path) : null,
+                                    description: validHtml,
+                                    musicName: songTitleController.text,
+                                    songFile: _selectedSong != null ? File(_selectedSong!.path ?? "") : null,
+                                    status: status,
+                                    categoryId: selectedCategoryId,
+                                    artistId: selectedArtistId,
+                                    isPopular: isPopular,
+                                    languageId: selectedLanguageId,
+                                  );
                                 },
                                 buttonText: widget.id != null ? "Save Song" : "Upload Song",
                               );

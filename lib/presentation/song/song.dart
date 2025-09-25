@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:elite_admin/utils/apiurls/api.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -44,60 +45,37 @@ class _SongScreenState extends State<SongScreen> with Utility {
           padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 12),
           child: ListView(
             children: [
-              const TextWidget(
-                text: "Songs",
-                fontSize: 15,
-                fontWeight: FontWeight.w600,
-              ),
+              const TextWidget(text: "Songs", fontSize: 15, fontWeight: FontWeight.w600),
               heightBox15(),
               Row(
                 children: [
                   Expanded(
-                      child: TextFormFieldWidget(
-                    controller: searchController,
-                    isSuffixIconShow: true,
-                    onChanged: (p0) {
-                      context.read<GetAllMusicCubit>().getAllMusic(
-                            search: p0,
-                          );
-                    },
-                    hintText: "search song",
-                    suffixIcon: const Icon(
-                      Icons.search,
-                      color: AppColors.blackColor,
+                    child: TextFormFieldWidget(
+                      controller: searchController,
+                      isSuffixIconShow: true,
+                      onChanged: (p0) {
+                        context.read<GetAllMusicCubit>().getAllMusic(search: p0);
+                      },
+                      hintText: "search song",
+                      suffixIcon: const Icon(Icons.search, color: AppColors.blackColor),
                     ),
-                  )),
+                  ),
                   widthBox10(),
                   InkWell(
                     onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const AddUpdateSongScreen(),
-                        ),
-                      );
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => const AddUpdateSongScreen()));
                     },
                     child: Container(
                       padding: const EdgeInsets.all(14),
                       decoration: const BoxDecoration(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(12),
-                        ),
-                        gradient: LinearGradient(
-                          colors: AppColors.blueGradientList,
-                        ),
+                        borderRadius: BorderRadius.all(Radius.circular(12)),
+                        gradient: LinearGradient(colors: AppColors.blueGradientList),
                       ),
                       child: Row(
                         children: [
-                          const TextWidget(
-                            text: "Add",
-                            color: AppColors.whiteColor,
-                          ),
+                          const TextWidget(text: "Add", color: AppColors.whiteColor),
                           widthBox5(),
-                          const Icon(
-                            Icons.add_circle_rounded,
-                            color: AppColors.whiteColor,
-                          )
+                          const Icon(Icons.add_circle_rounded, color: AppColors.whiteColor),
                         ],
                       ),
                     ),
@@ -121,9 +99,7 @@ class _SongScreenState extends State<SongScreen> with Utility {
                 child: BlocBuilder<GetAllMusicCubit, GetAllMusicState>(
                   builder: (context, state) {
                     if (state is GetAllMusicLoadingState) {
-                      return const Center(
-                        child: CustomCircularProgressIndicator(),
-                      );
+                      return const Center(child: CustomCircularProgressIndicator());
                     }
 
                     if (state is GetAllMusicErrorState) {
@@ -138,85 +114,77 @@ class _SongScreenState extends State<SongScreen> with Utility {
                               itemBuilder: (context, index) {
                                 var data = state.model.data?.items?[index];
                                 return Card(
-                                    color: AppColors.whiteColor,
-                                    surfaceTintColor: AppColors.whiteColor,
-                                    child: Container(
-                                      height: 130,
-                                      padding: const EdgeInsets.all(8),
-                                      child: Row(
-                                        children: [
-                                          ClipRRect(
-                                            borderRadius: BorderRadius.circular(4),
-                                            child: CachedNetworkImage(
-                                              imageUrl: "${data?.coverImg}",
-                                              width: 120,
-                                              height: 120,
-                                              fit: BoxFit.cover,
-                                            ),
+                                  color: AppColors.whiteColor,
+                                  surfaceTintColor: AppColors.whiteColor,
+                                  child: Container(
+                                    height: 130,
+                                    padding: const EdgeInsets.all(8),
+                                    child: Row(
+                                      children: [
+                                        ClipRRect(
+                                          borderRadius: BorderRadius.circular(4),
+                                          child: CachedNetworkImage(
+                                            imageUrl: "${AppUrls.baseUrl}/${data?.coverImg}",
+                                            width: 120,
+                                            height: 120,
+                                            fit: BoxFit.cover,
                                           ),
-                                          const SizedBox(width: 10),
-                                          Expanded(
-                                            child: Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              mainAxisAlignment: MainAxisAlignment.center,
-                                              children: [
-                                                TextWidget(
-                                                    text: '${data?.songTitle}', style: const TextStyle(fontSize: 16)),
-                                                heightBox5(),
-                                                TextWidget(text: data?.artist?.artistName ?? ""),
-                                              ],
-                                            ),
-                                          ),
-                                          Column(
-                                            crossAxisAlignment: CrossAxisAlignment.end,
+                                        ),
+                                        const SizedBox(width: 10),
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
                                             mainAxisAlignment: MainAxisAlignment.center,
                                             children: [
-                                              InkWell(
-                                                onTap: () {
-                                                  Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                      builder: (context) => AddUpdateSongScreen(
-                                                        id: data?.id,
-                                                        data: data,
-                                                      ),
-                                                    ),
-                                                  );
-                                                },
-                                                child: svgAsset(
-                                                  assetName: AppImages.editSvg,
-                                                  height: 32,
-                                                  width: 30,
-                                                ),
+                                              TextWidget(
+                                                text: '${data?.songTitle}',
+                                                style: const TextStyle(fontSize: 16),
                                               ),
                                               heightBox5(),
-                                              InkWell(
-                                                onTap: () {
-                                                  showDialog(
-                                                    context: context,
-                                                    builder: (context) {
-                                                      return DeleteDialog(
-                                                        onCancelPressed: () {
-                                                          Navigator.pop(context);
-                                                        },
-                                                        onDeletePressed: () {
-                                                          context.read<DeleteMusicCubit>().deleteMusic(data?.id ?? "");
-                                                        },
-                                                      );
-                                                    },
-                                                  );
-                                                },
-                                                child: svgAsset(
-                                                  assetName: AppImages.deleteSvg,
-                                                  height: 32,
-                                                  width: 28,
-                                                ),
-                                              ),
+                                              TextWidget(text: data?.artist?.artistName ?? ""),
                                             ],
-                                          )
-                                        ],
-                                      ),
-                                    ));
+                                          ),
+                                        ),
+                                        Column(
+                                          crossAxisAlignment: CrossAxisAlignment.end,
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            InkWell(
+                                              onTap: () {
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) => AddUpdateSongScreen(id: data?.id, data: data),
+                                                  ),
+                                                );
+                                              },
+                                              child: svgAsset(assetName: AppImages.editSvg, height: 32, width: 30),
+                                            ),
+                                            heightBox5(),
+                                            InkWell(
+                                              onTap: () {
+                                                showDialog(
+                                                  context: context,
+                                                  builder: (context) {
+                                                    return DeleteDialog(
+                                                      onCancelPressed: () {
+                                                        Navigator.pop(context);
+                                                      },
+                                                      onDeletePressed: () {
+                                                        context.read<DeleteMusicCubit>().deleteMusic(data?.id ?? "");
+                                                      },
+                                                    );
+                                                  },
+                                                );
+                                              },
+                                              child: svgAsset(assetName: AppImages.deleteSvg, height: 32, width: 28),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                );
                               },
                               itemCount: state.model.data?.items?.length,
                             );
@@ -230,16 +198,15 @@ class _SongScreenState extends State<SongScreen> with Utility {
                 builder: (context, state) {
                   if (state is GetAllMusicLoadedState) {
                     return CustomPagination(
-                        currentPage: currentPage,
-                        totalPages: state.model.data?.totalPages ?? 0,
-                        onPageChanged: (e) {
-                          setState(() {
-                            currentPage = e;
-                          });
-                          context.read<GetAllMusicCubit>().getAllMusic(
-                                page: currentPage,
-                              );
+                      currentPage: currentPage,
+                      totalPages: state.model.data?.totalPages ?? 0,
+                      onPageChanged: (e) {
+                        setState(() {
+                          currentPage = e;
                         });
+                        context.read<GetAllMusicCubit>().getAllMusic(page: currentPage);
+                      },
+                    );
                   }
                   return const SizedBox();
                 },

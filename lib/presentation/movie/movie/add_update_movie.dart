@@ -242,16 +242,11 @@ class _AddUpdateMoveiScreenState extends State<AddUpdateMoveiScreen> with Utilit
                 Container(
                   width: MediaQuery.of(context).size.width,
                   padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
-                    color: AppColors.whiteColor,
-                  ),
+                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(12), color: AppColors.whiteColor),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const TextWidget(
-                        text: "Cover Image",
-                      ),
+                      const TextWidget(text: "Cover Image"),
                       heightBox10(),
                       GestureDetector(
                         onTap: _pickImage,
@@ -259,12 +254,8 @@ class _AddUpdateMoveiScreenState extends State<AddUpdateMoveiScreen> with Utilit
                           width: MediaQuery.of(context).size.width,
                           padding: const EdgeInsets.all(8),
                           decoration: BoxDecoration(
-                            borderRadius: const BorderRadius.all(
-                              Radius.circular(8),
-                            ),
-                            border: Border.all(
-                              color: AppColors.greyColor,
-                            ),
+                            borderRadius: const BorderRadius.all(Radius.circular(8)),
+                            border: Border.all(color: AppColors.greyColor),
                           ),
                           child: _selectedImage == null
                               ? Column(
@@ -293,16 +284,11 @@ class _AddUpdateMoveiScreenState extends State<AddUpdateMoveiScreen> with Utilit
                 Container(
                   width: MediaQuery.of(context).size.width,
                   padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
-                    color: AppColors.whiteColor,
-                  ),
+                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(12), color: AppColors.whiteColor),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const TextWidget(
-                        text: "Poster Image",
-                      ),
+                      const TextWidget(text: "Poster Image"),
                       heightBox10(),
                       GestureDetector(
                         onTap: _pickPosterImage,
@@ -310,12 +296,8 @@ class _AddUpdateMoveiScreenState extends State<AddUpdateMoveiScreen> with Utilit
                           width: MediaQuery.of(context).size.width,
                           padding: const EdgeInsets.all(8),
                           decoration: BoxDecoration(
-                            borderRadius: const BorderRadius.all(
-                              Radius.circular(8),
-                            ),
-                            border: Border.all(
-                              color: AppColors.greyColor,
-                            ),
+                            borderRadius: const BorderRadius.all(Radius.circular(8)),
+                            border: Border.all(color: AppColors.greyColor),
                           ),
                           child: _selectedPosterImage == null
                               ? Column(
@@ -344,16 +326,11 @@ class _AddUpdateMoveiScreenState extends State<AddUpdateMoveiScreen> with Utilit
                 Container(
                   width: MediaQuery.of(context).size.width,
                   padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
-                    color: AppColors.whiteColor,
-                  ),
+                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(12), color: AppColors.whiteColor),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const TextWidget(
-                        text: "Select Language",
-                      ),
+                      const TextWidget(text: "Select Language"),
                       heightBox5(),
                       BlocBuilder<GetAllLanguageCubit, GetAllLanguageState>(
                         builder: (context, state) {
@@ -377,9 +354,7 @@ class _AddUpdateMoveiScreenState extends State<AddUpdateMoveiScreen> with Utilit
                         },
                       ),
                       heightBox10(),
-                      const TextWidget(
-                        text: "Select Genre",
-                      ),
+                      const TextWidget(text: "Select Genre"),
                       heightBox5(),
                       BlocBuilder<GetAllGenreCubit, GetAllGenreState>(
                         builder: (context, state) {
@@ -404,9 +379,7 @@ class _AddUpdateMoveiScreenState extends State<AddUpdateMoveiScreen> with Utilit
                       ),
                       heightBox10(),
                       heightBox10(),
-                      const TextWidget(
-                        text: "Select Movie Category",
-                      ),
+                      const TextWidget(text: "Select Movie Category"),
                       heightBox5(),
                       BlocBuilder<GetAllMovieCategoryCubit, GetAllCategoryState>(
                         builder: (context, state) {
@@ -419,8 +392,9 @@ class _AddUpdateMoveiScreenState extends State<AddUpdateMoveiScreen> with Utilit
                               onChanged: (value) {
                                 setState(() {
                                   selectedCategory = value;
-                                  final selectedDatum =
-                                      state.model.categories?.firstWhere((datum) => datum.name == value);
+                                  final selectedDatum = state.model.categories?.firstWhere(
+                                    (datum) => datum.name == value,
+                                  );
                                   selectedCategoryId = selectedDatum?.id;
                                   print("Selected Datum ID: ${selectedDatum?.id}");
                                 });
@@ -431,18 +405,11 @@ class _AddUpdateMoveiScreenState extends State<AddUpdateMoveiScreen> with Utilit
                         },
                       ),
                       heightBox10(),
-                      const TextWidget(
-                        text: "Movie Name",
-                      ),
+                      const TextWidget(text: "Movie Name"),
                       heightBox5(),
-                      TextFormFieldWidget(
-                        controller: movieNameController,
-                        focusNode: movieNameFocusNode,
-                      ),
+                      TextFormFieldWidget(controller: movieNameController, focusNode: movieNameFocusNode),
                       heightBox10(),
-                      const TextWidget(
-                        text: "Movie Upload Type",
-                      ),
+                      const TextWidget(text: "Movie Upload Type"),
                       heightBox5(),
                       CustomDropdown(
                         items: videoUplaodType,
@@ -469,15 +436,10 @@ class _AddUpdateMoveiScreenState extends State<AddUpdateMoveiScreen> with Utilit
                             ? Text("Selected video: ${_selectedVideo!.name}")
                             : const Text("No video selected."),
                         heightBox5(),
-                        CustomOutlinedButton(
-                          onPressed: _pickVideo,
-                          buttonText: "Pick Video",
-                        ),
+                        CustomOutlinedButton(onPressed: _pickVideo, buttonText: "Pick Video"),
                       ],
                       heightBox10(),
-                      const TextWidget(
-                        text: "Tralier Upload Type",
-                      ),
+                      const TextWidget(text: "Tralier Upload Type"),
                       heightBox5(),
                       CustomDropdown(
                         items: videoUplaodType,
@@ -502,15 +464,10 @@ class _AddUpdateMoveiScreenState extends State<AddUpdateMoveiScreen> with Utilit
                             ? Text("Selected video: ${_selectedTrailer!.name}")
                             : const Text("No video selected."),
                         heightBox5(),
-                        CustomOutlinedButton(
-                          onPressed: _pickTralier,
-                          buttonText: "Pick Video",
-                        ),
+                        CustomOutlinedButton(onPressed: _pickTralier, buttonText: "Pick Video"),
                       ],
                       heightBox10(),
-                      const TextWidget(
-                        text: "Quality ON/OFF",
-                      ),
+                      const TextWidget(text: "Quality ON/OFF"),
                       heightBox5(),
                       CustomDropdown(
                         items: yesNoList,
@@ -522,9 +479,7 @@ class _AddUpdateMoveiScreenState extends State<AddUpdateMoveiScreen> with Utilit
                         },
                       ),
                       heightBox10(),
-                      const TextWidget(
-                        text: "Subtitle ON/OFF",
-                      ),
+                      const TextWidget(text: "Subtitle ON/OFF"),
                       heightBox5(),
                       CustomDropdown(
                         items: yesNoList,
@@ -536,18 +491,11 @@ class _AddUpdateMoveiScreenState extends State<AddUpdateMoveiScreen> with Utilit
                         },
                       ),
                       heightBox10(),
-                      const TextWidget(
-                        text: "Released By",
-                      ),
+                      const TextWidget(text: "Released By"),
                       heightBox5(),
-                      TextFormFieldWidget(
-                        focusNode: releasedByFocusNode,
-                        controller: releasedByController,
-                      ),
+                      TextFormFieldWidget(focusNode: releasedByFocusNode, controller: releasedByController),
                       heightBox10(),
-                      const TextWidget(
-                        text: "Released Date",
-                      ),
+                      const TextWidget(text: "Released Date"),
                       heightBox5(),
                       TextFormFieldWidget(
                         focusNode: releasedDateFocusNode,
@@ -555,46 +503,43 @@ class _AddUpdateMoveiScreenState extends State<AddUpdateMoveiScreen> with Utilit
                         readOnly: true,
                         isSuffixIconShow: true,
                         suffixIcon: InkWell(
-                            onTap: () {
-                              selectDate(context, releasedDateController);
-                            },
-                            child: const Icon(Icons.calendar_month_outlined)),
+                          onTap: () {
+                            selectDate(context, releasedDateController);
+                          },
+                          child: const Icon(Icons.calendar_month_outlined),
+                        ),
                       ),
                       heightBox10(),
-                      const TextWidget(
-                        text: "Highlighted",
-                      ),
+                      const TextWidget(text: "Highlighted"),
                       heightBox10(),
                       Switch(
-                          activeColor: AppColors.zGreenColor,
-                          value: isHighlighted,
-                          onChanged: (v) {
-                            setState(() {
-                              isHighlighted = v;
-                            });
-                          }),
-                      heightBox10(),
-                      const TextWidget(
-                        text: "Is Movie On Rent",
+                        activeColor: AppColors.zGreenColor,
+                        value: isHighlighted,
+                        onChanged: (v) {
+                          setState(() {
+                            isHighlighted = v;
+                          });
+                        },
                       ),
                       heightBox10(),
+                      const TextWidget(text: "Is Movie On Rent"),
+                      heightBox10(),
                       Switch(
-                          activeColor: AppColors.zGreenColor,
-                          value: isMovieOnRent,
-                          onChanged: (v) {
-                            setState(() {
-                              isMovieOnRent = v;
-                              showSubscription = false;
-                            });
-                          }),
+                        activeColor: AppColors.zGreenColor,
+                        value: isMovieOnRent,
+                        onChanged: (v) {
+                          setState(() {
+                            isMovieOnRent = v;
+                            showSubscription = false;
+                          });
+                        },
+                      ),
                       heightBox10(),
                       if (isMovieOnRent)
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const TextWidget(
-                              text: "Movie Price",
-                            ),
+                            const TextWidget(text: "Movie Price"),
                             heightBox10(),
                             TextFormFieldWidget(
                               focusNode: moveiPriceFocusNode,
@@ -608,9 +553,7 @@ class _AddUpdateMoveiScreenState extends State<AddUpdateMoveiScreen> with Utilit
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const TextWidget(
-                              text: "Rent Time Days",
-                            ),
+                            const TextWidget(text: "Rent Time Days"),
                             heightBox10(),
                             TextFormFieldWidget(
                               focusNode: rentedTimeFocusNode,
@@ -625,46 +568,39 @@ class _AddUpdateMoveiScreenState extends State<AddUpdateMoveiScreen> with Utilit
                           ],
                         ),
                       heightBox10(),
-                      const TextWidget(
-                        text: "Status",
-                      ),
+                      const TextWidget(text: "Status"),
                       heightBox10(),
                       Switch(
-                          activeColor: AppColors.zGreenColor,
-                          value: status,
-                          onChanged: (v) {
-                            setState(() {
-                              status = v;
-                            });
-                          }),
-                      heightBox10(),
-                      const TextWidget(
-                        text: "Show Subscription",
+                        activeColor: AppColors.zGreenColor,
+                        value: status,
+                        onChanged: (v) {
+                          setState(() {
+                            status = v;
+                          });
+                        },
                       ),
+                      heightBox10(),
+                      const TextWidget(text: "Show Subscription"),
                       heightBox10(),
                       Switch(
-                          activeColor: AppColors.zGreenColor,
-                          value: showSubscription,
-                          onChanged: (v) {
-                            showSubscription = v;
-                            setState(() {});
-                          }),
-                      heightBox10(),
-                      const TextWidget(
-                        text: "Position",
+                        activeColor: AppColors.zGreenColor,
+                        value: showSubscription,
+                        onChanged: (v) {
+                          showSubscription = v;
+                          setState(() {});
+                        },
                       ),
+                      heightBox10(),
+                      const TextWidget(text: "Position"),
                       heightBox5(),
                       TextFormFieldWidget(
                         controller: positionController,
                         focusNode: positionFocusNode,
-                        inputFormater: [
-                          LengthLimitingTextInputFormatter(4),
-                        ],
+                        keyboardType: TextInputType.number,
+                        inputFormater: [LengthLimitingTextInputFormatter(4)],
                       ),
                       heightBox10(),
-                      const TextWidget(
-                        text: "Description",
-                      ),
+                      const TextWidget(text: "Description"),
                       heightBox5(),
                       InkWell(
                         onTap: () {
@@ -675,6 +611,7 @@ class _AddUpdateMoveiScreenState extends State<AddUpdateMoveiScreen> with Utilit
                           positionFocusNode.unfocus();
                           rentedTimeFocusNode.unfocus();
                           moveiPriceFocusNode.unfocus();
+                          Focus.of(context).unfocus();
                         },
                         child: SizedBox(
                           height: 500,
@@ -736,34 +673,33 @@ class _AddUpdateMoveiScreenState extends State<AddUpdateMoveiScreen> with Utilit
                                   }
                                   if (widget.id != null) {
                                     context.read<UpdateMovieCubit>().updateMovies(
-                                          showSubscription: showSubscription,
-                                          id: widget.id ?? "",
-                                          coverImg: _selectedImage != null ? File(_selectedImage!.path) : null,
-                                          description: validHtml,
-                                          isMovieOnRent: isMovieOnRent,
-                                          isHighlighted: isHighlighted,
-                                          movieCategoryId: selectedCategoryId,
-                                          movieLanguage: selectedLanguageId,
-                                          genreId: seletedGenreId,
-                                          movieName: movieNameController.text,
-                                          subtitle: seelctedSubtitle == 'Yes' ? true : false,
-                                          movieRentPrice: moviePriceController.text,
-                                          movieTime: movieTimeController.text,
-                                          movieVideo: _selectedVideo != null ? File(_selectedVideo!.path) : null,
-                                          posterImg:
-                                              _selectedPosterImage != null ? File(_selectedPosterImage!.path) : null,
-                                          quality: selectedQuality == 'Yes' ? true : false,
-                                          releasedBy: releasedByController.text,
-                                          releasedDate: releasedDateController.text,
-                                          status: status,
-                                          trailorVideo: _selectedTrailer != null ? File(_selectedTrailer!.path) : null,
-                                          trailor_video_link: trailerLinkController.text,
-                                          video_link: videoLinkController.text,
-                                          rented_time_days: rentedTimeDaysController.text.isEmpty
-                                              ? null
-                                              : int.tryParse(rentedTimeDaysController.text),
-                                          position: positionController.text.isNotEmpty ? positionController.text : null,
-                                        );
+                                      showSubscription: showSubscription,
+                                      id: widget.id ?? "",
+                                      coverImg: _selectedImage != null ? File(_selectedImage!.path) : null,
+                                      description: validHtml,
+                                      isMovieOnRent: isMovieOnRent,
+                                      isHighlighted: isHighlighted,
+                                      movieCategoryId: selectedCategoryId,
+                                      movieLanguage: selectedLanguageId,
+                                      genreId: seletedGenreId,
+                                      movieName: movieNameController.text,
+                                      subtitle: seelctedSubtitle == 'Yes' ? true : false,
+                                      movieRentPrice: moviePriceController.text,
+                                      movieTime: movieTimeController.text,
+                                      movieVideo: _selectedVideo != null ? File(_selectedVideo!.path) : null,
+                                      posterImg: _selectedPosterImage != null ? File(_selectedPosterImage!.path) : null,
+                                      quality: selectedQuality == 'Yes' ? true : false,
+                                      releasedBy: releasedByController.text,
+                                      releasedDate: releasedDateController.text,
+                                      status: status,
+                                      trailorVideo: _selectedTrailer != null ? File(_selectedTrailer!.path) : null,
+                                      trailor_video_link: trailerLinkController.text,
+                                      video_link: videoLinkController.text,
+                                      rented_time_days: rentedTimeDaysController.text.isEmpty
+                                          ? null
+                                          : int.tryParse(rentedTimeDaysController.text),
+                                      position: positionController.text.isNotEmpty ? positionController.text : null,
+                                    );
                                     return;
                                   }
 
@@ -814,33 +750,32 @@ class _AddUpdateMoveiScreenState extends State<AddUpdateMoveiScreen> with Utilit
                                   }
 
                                   context.read<PostMovieCubit>().postMovies(
-                                        showSubscription: showSubscription,
-                                        coverImg: _selectedImage != null ? File(_selectedImage!.path) : null,
-                                        description: validHtml,
-                                        isHighlighted: isHighlighted,
-                                        movieCategoryId: selectedCategoryId,
-                                        movieLanguage: selectedLanguageId,
-                                        genreId: seletedGenreId,
-                                        movieName: movieNameController.text,
-                                        subtitle: seelctedSubtitle == 'Yes' ? true : false,
-                                        movieRentPrice: moviePriceController.text,
-                                        movieTime: movieTimeController.text,
-                                        movieVideo: _selectedVideo != null ? File(_selectedVideo!.path) : null,
-                                        trailorVideo: _selectedTrailer != null ? File(_selectedTrailer!.path) : null,
-                                        posterImg:
-                                            _selectedPosterImage != null ? File(_selectedPosterImage!.path) : null,
-                                        quality: selectedQuality == 'Yes' ? true : false,
-                                        releasedBy: releasedByController.text,
-                                        releasedDate: releasedDateController.text,
-                                        status: status,
-                                        isMovieOnRent: isMovieOnRent,
-                                        trailor_video_link: trailerLinkController.text,
-                                        video_link: videoLinkController.text,
-                                        rented_time_days: rentedTimeDaysController.text.isEmpty
-                                            ? null
-                                            : int.tryParse(rentedTimeDaysController.text),
-                                        position: (positionController.text.isNotEmpty) ? positionController.text : null,
-                                      );
+                                    showSubscription: showSubscription,
+                                    coverImg: _selectedImage != null ? File(_selectedImage!.path) : null,
+                                    description: validHtml,
+                                    isHighlighted: isHighlighted,
+                                    movieCategoryId: selectedCategoryId,
+                                    movieLanguage: selectedLanguageId,
+                                    genreId: seletedGenreId,
+                                    movieName: movieNameController.text,
+                                    subtitle: seelctedSubtitle == 'Yes' ? true : false,
+                                    movieRentPrice: moviePriceController.text,
+                                    movieTime: movieTimeController.text,
+                                    movieVideo: _selectedVideo != null ? File(_selectedVideo!.path) : null,
+                                    trailorVideo: _selectedTrailer != null ? File(_selectedTrailer!.path) : null,
+                                    posterImg: _selectedPosterImage != null ? File(_selectedPosterImage!.path) : null,
+                                    quality: selectedQuality == 'Yes' ? true : false,
+                                    releasedBy: releasedByController.text,
+                                    releasedDate: releasedDateController.text,
+                                    status: status,
+                                    isMovieOnRent: isMovieOnRent,
+                                    trailor_video_link: trailerLinkController.text,
+                                    video_link: videoLinkController.text,
+                                    rented_time_days: rentedTimeDaysController.text.isEmpty
+                                        ? null
+                                        : int.tryParse(rentedTimeDaysController.text),
+                                    position: (positionController.text.isNotEmpty) ? positionController.text : null,
+                                  );
                                 },
                                 buttonText: widget.id != null ? "Save Movie" : "Upload Movie",
                               );

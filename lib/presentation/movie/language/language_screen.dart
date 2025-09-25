@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:elite_admin/utils/apiurls/api.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -39,28 +40,20 @@ class _LanguageScreenState extends State<LanguageScreen> with Utility {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const TextWidget(
-                text: "Language",
-                fontSize: 15,
-                fontWeight: FontWeight.w600,
-              ),
+              const TextWidget(text: "Language", fontSize: 15, fontWeight: FontWeight.w600),
               heightBox15(),
               Row(
                 children: [
                   Expanded(
-                      child: TextFormFieldWidget(
-                    controller: searchController,
-                    isSuffixIconShow: true,
-                    onChanged: (p0) {
-                      context.read<GetAllLanguageCubit>().getAllLanguage(
-                            name: p0,
-                          );
-                    },
-                    suffixIcon: const Icon(
-                      Icons.search,
-                      color: AppColors.blackColor,
+                    child: TextFormFieldWidget(
+                      controller: searchController,
+                      isSuffixIconShow: true,
+                      onChanged: (p0) {
+                        context.read<GetAllLanguageCubit>().getAllLanguage(name: p0);
+                      },
+                      suffixIcon: const Icon(Icons.search, color: AppColors.blackColor),
                     ),
-                  )),
+                  ),
                   widthBox10(),
                   InkWell(
                     onTap: () {
@@ -69,24 +62,14 @@ class _LanguageScreenState extends State<LanguageScreen> with Utility {
                     child: Container(
                       padding: const EdgeInsets.all(14),
                       decoration: const BoxDecoration(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(12),
-                        ),
-                        gradient: LinearGradient(
-                          colors: AppColors.blueGradientList,
-                        ),
+                        borderRadius: BorderRadius.all(Radius.circular(12)),
+                        gradient: LinearGradient(colors: AppColors.blueGradientList),
                       ),
                       child: Row(
                         children: [
-                          const TextWidget(
-                            text: "Add",
-                            color: AppColors.whiteColor,
-                          ),
+                          const TextWidget(text: "Add", color: AppColors.whiteColor),
                           widthBox5(),
-                          const Icon(
-                            Icons.add_circle_rounded,
-                            color: AppColors.whiteColor,
-                          )
+                          const Icon(Icons.add_circle_rounded, color: AppColors.whiteColor),
                         ],
                       ),
                     ),
@@ -121,22 +104,16 @@ class _LanguageScreenState extends State<LanguageScreen> with Utility {
                   child: BlocBuilder<GetAllLanguageCubit, GetAllLanguageState>(
                     builder: (context, state) {
                       if (state is GetAllLanguageLoadingState) {
-                        return const Center(
-                          child: CustomCircularProgressIndicator(),
-                        );
+                        return const Center(child: CustomCircularProgressIndicator());
                       }
 
                       if (state is GetAllLanguageErrorState) {
-                        return const Center(
-                          child: CustomErrorWidget(),
-                        );
+                        return const Center(child: CustomErrorWidget());
                       }
 
                       if (state is GetAllLanguageLoadedState) {
                         return state.model.data?.isEmpty ?? true
-                            ? const Center(
-                                child: CustomEmptyWidget(),
-                              )
+                            ? const Center(child: CustomEmptyWidget())
                             : ListView.builder(
                                 physics: const NeverScrollableScrollPhysics(),
                                 shrinkWrap: true,
@@ -151,7 +128,7 @@ class _LanguageScreenState extends State<LanguageScreen> with Utility {
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
                                           CachedNetworkImage(
-                                            imageUrl: data?.coverImg ?? "",
+                                            imageUrl: "${AppUrls.baseUrl}/${data?.coverImg ?? ""}",
                                             height: 70,
                                             width: 70,
                                             errorWidget: (context, url, error) {
@@ -192,24 +169,25 @@ class _LanguageScreenState extends State<LanguageScreen> with Utility {
                                                   ),
                                                   widthBox5(),
                                                   InkWell(
-                                                      onTap: () {
-                                                        showDialog(
-                                                          context: context,
-                                                          builder: (context) {
-                                                            return DeleteDialog(
-                                                              onCancelPressed: () {
-                                                                Navigator.pop(context);
-                                                              },
-                                                              onDeletePressed: () {
-                                                                context
-                                                                    .read<DeleteLanguageCubit>()
-                                                                    .deleteLanguage(data?.id ?? "");
-                                                              },
-                                                            );
-                                                          },
-                                                        );
-                                                      },
-                                                      child: svgAsset(assetName: AppImages.deleteSvg)),
+                                                    onTap: () {
+                                                      showDialog(
+                                                        context: context,
+                                                        builder: (context) {
+                                                          return DeleteDialog(
+                                                            onCancelPressed: () {
+                                                              Navigator.pop(context);
+                                                            },
+                                                            onDeletePressed: () {
+                                                              context.read<DeleteLanguageCubit>().deleteLanguage(
+                                                                data?.id ?? "",
+                                                              );
+                                                            },
+                                                          );
+                                                        },
+                                                      );
+                                                    },
+                                                    child: svgAsset(assetName: AppImages.deleteSvg),
+                                                  ),
                                                 ],
                                               ),
                                               Switch(
@@ -219,9 +197,10 @@ class _LanguageScreenState extends State<LanguageScreen> with Utility {
                                                 ),
                                                 value: data?.status ?? false,
                                                 onChanged: (value) {
-                                                  context
-                                                      .read<UpdateLanguageCubit>()
-                                                      .updateLanguage(id: data?.id, status: value);
+                                                  context.read<UpdateLanguageCubit>().updateLanguage(
+                                                    id: data?.id,
+                                                    status: value,
+                                                  );
                                                 },
                                               ),
                                             ],
@@ -265,152 +244,133 @@ class _LanguageScreenState extends State<LanguageScreen> with Utility {
       builder: (context) {
         return Dialog(
           child: SingleChildScrollView(
-            child: StatefulBuilder(builder: (context, setState) {
-              return Padding(
-                padding: const EdgeInsets.all(12.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const TextWidget(
-                          text: "Language Title",
-                          fontWeight: FontWeight.w700,
-                          fontSize: 15,
-                        ),
-                        InkWell(
-                          onTap: () {
-                            Navigator.pop(context);
-                          },
-                          child: Container(
-                            decoration: const BoxDecoration(
-                              color: AppColors.greyColor,
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(12),
+            child: StatefulBuilder(
+              builder: (context, setState) {
+                return Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const TextWidget(text: "Language Title", fontWeight: FontWeight.w700, fontSize: 15),
+                          InkWell(
+                            onTap: () {
+                              Navigator.pop(context);
+                            },
+                            child: Container(
+                              decoration: const BoxDecoration(
+                                color: AppColors.greyColor,
+                                borderRadius: BorderRadius.all(Radius.circular(12)),
                               ),
-                            ),
-                            child: const Icon(
-                              Icons.close,
-                              color: AppColors.whiteColor,
+                              child: const Icon(Icons.close, color: AppColors.whiteColor),
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                    heightBox15(),
-                    const TextWidget(
-                      text: "Language Title",
-                      color: AppColors.blackColor,
-                    ),
-                    heightBox10(),
-                    TextFormFieldWidget(
-                      controller: titleController,
-                    ),
-                    heightBox10(),
-                    const TextWidget(
-                      text: "Image",
-                      color: AppColors.blackColor,
-                    ),
-                    heightBox10(),
-                    GestureDetector(
-                      onTap: () => _pickImage(setState),
-                      child: Container(
-                        height: 120,
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Colors.grey),
-                          borderRadius: BorderRadius.circular(8),
-                          color: Colors.grey.shade100,
-                        ),
-                        child: _selectedImage == null
-                            ? const Center(
-                                child: Text(
-                                  "Tap to select image",
-                                  style: TextStyle(color: Colors.grey),
-                                ),
-                              )
-                            : ClipRRect(
-                                borderRadius: BorderRadius.circular(8),
-                                child: Image.file(
-                                  File(_selectedImage!.path),
-                                  fit: BoxFit.cover,
-                                  width: double.infinity,
-                                ),
-                              ),
+                        ],
                       ),
-                    ),
-                    const TextWidget(
-                      text: "Status",
-                    ),
-                    heightBox10(),
-                    Switch(
+                      heightBox15(),
+                      const TextWidget(text: "Language Title", color: AppColors.blackColor),
+                      heightBox10(),
+                      TextFormFieldWidget(controller: titleController),
+                      heightBox10(),
+                      const TextWidget(text: "Image", color: AppColors.blackColor),
+                      heightBox10(),
+                      GestureDetector(
+                        onTap: () => _pickImage(setState),
+                        child: Container(
+                          height: 120,
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey),
+                            borderRadius: BorderRadius.circular(8),
+                            color: Colors.grey.shade100,
+                          ),
+                          child: _selectedImage == null
+                              ? const Center(
+                                  child: Text("Tap to select image", style: TextStyle(color: Colors.grey)),
+                                )
+                              : ClipRRect(
+                                  borderRadius: BorderRadius.circular(8),
+                                  child: Image.file(
+                                    File(_selectedImage!.path),
+                                    fit: BoxFit.cover,
+                                    width: double.infinity,
+                                  ),
+                                ),
+                        ),
+                      ),
+                      const TextWidget(text: "Status"),
+                      heightBox10(),
+                      Switch(
                         activeColor: AppColors.zGreenColor,
                         value: isActive,
                         onChanged: (value) {
                           setState(() {
                             isActive = value;
                           });
-                        }),
-                    heightBox10(),
-                    BlocConsumer<UpdateLanguageCubit, UpdateLanguageState>(
-                      listener: (context, state) {
-                        if (state is UpdateLanguageErrorState) {
-                          Fluttertoast.showToast(msg: state.error);
-                          return;
-                        }
+                        },
+                      ),
+                      heightBox10(),
+                      BlocConsumer<UpdateLanguageCubit, UpdateLanguageState>(
+                        listener: (context, state) {
+                          if (state is UpdateLanguageErrorState) {
+                            Fluttertoast.showToast(msg: state.error);
+                            return;
+                          }
 
-                        if (state is UpdateLanguageLoadedState) {
-                          Fluttertoast.showToast(msg: "Update Sucessfully");
-                          context.read<GetAllLanguageCubit>().getAllLanguage();
-                          Navigator.pop(context);
-                        }
-                      },
-                      builder: (context, updateState) {
-                        return BlocConsumer<PostLanguageCubit, PostLanguageState>(
-                          listener: (context, state) {
-                            if (state is PostLanguageErrorState) {
-                              Fluttertoast.showToast(msg: state.error);
-                              return;
-                            }
+                          if (state is UpdateLanguageLoadedState) {
+                            Fluttertoast.showToast(msg: "Update Sucessfully");
+                            context.read<GetAllLanguageCubit>().getAllLanguage();
+                            Navigator.pop(context);
+                          }
+                        },
+                        builder: (context, updateState) {
+                          return BlocConsumer<PostLanguageCubit, PostLanguageState>(
+                            listener: (context, state) {
+                              if (state is PostLanguageErrorState) {
+                                Fluttertoast.showToast(msg: state.error);
+                                return;
+                              }
 
-                            if (state is PostLanguageLoadedState) {
-                              Fluttertoast.showToast(msg: "Post Sucessfully");
-                              context.read<GetAllLanguageCubit>().getAllLanguage();
-                              Navigator.pop(context);
-                            }
-                          },
-                          builder: (context, state) {
-                            return CustomOutlinedButton(
-                              inProgress:
-                                  (state is PostLanguageLoadingState || updateState is UpdateLanguageLoadingState),
-                              onPressed: () {
-                                if (id != null) {
-                                  context.read<UpdateLanguageCubit>().updateLanguage(
-                                        id: id,
-                                        name: titleController.text,
-                                        status: isActive,
-                                        coverImg: _selectedImage != null ? File(_selectedImage!.path) : null,
-                                      );
-                                  return;
-                                }
-
-                                context.read<PostLanguageCubit>().postLanguage(
+                              if (state is PostLanguageLoadedState) {
+                                Fluttertoast.showToast(msg: "Post Sucessfully");
+                                context.read<GetAllLanguageCubit>().getAllLanguage();
+                                Navigator.pop(context);
+                              }
+                            },
+                            builder: (context, state) {
+                              return CustomOutlinedButton(
+                                inProgress:
+                                    (state is PostLanguageLoadingState || updateState is UpdateLanguageLoadingState),
+                                onPressed: () {
+                                  if (id != null) {
+                                    context.read<UpdateLanguageCubit>().updateLanguage(
+                                      id: id,
                                       name: titleController.text,
                                       status: isActive,
                                       coverImg: _selectedImage != null ? File(_selectedImage!.path) : null,
                                     );
-                              },
-                              buttonText: id != null ? 'Save Language' : 'Add Language',
-                            );
-                          },
-                        );
-                      },
-                    ),
-                  ],
-                ),
-              );
-            }),
+                                    return;
+                                  }
+
+                                  context.read<PostLanguageCubit>().postLanguage(
+                                    name: titleController.text,
+                                    status: isActive,
+                                    coverImg: _selectedImage != null ? File(_selectedImage!.path) : null,
+                                  );
+                                },
+                                buttonText: id != null ? 'Save Language' : 'Add Language',
+                              );
+                            },
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
           ),
         );
       },

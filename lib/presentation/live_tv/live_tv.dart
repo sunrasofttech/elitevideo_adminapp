@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:elite_admin/utils/apiurls/api.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -199,7 +200,7 @@ class _LiveTvScreenState extends State<LiveTvScreen> with Utility {
                                   return Container(
                                       decoration: BoxDecoration(
                                         image: DecorationImage(
-                                          image: NetworkImage("${item?.coverImg}"),
+                                          image: NetworkImage("${AppUrls.baseUrl}/${item?.coverImg}"),
                                           fit: BoxFit.cover,
                                         ),
                                         borderRadius: BorderRadius.circular(12),
