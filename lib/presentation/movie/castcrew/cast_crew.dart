@@ -3,11 +3,12 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:elite_admin/utils/apiurls/api.dart';
+import 'package:elite_admin/utils/toast.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:elite_admin/bloc/movie/cast_crew/create_castcrew/create_castcrew_cubit.dart';
@@ -199,24 +200,24 @@ class _CastCrewScreenState extends State<CastCrewScreen> with Utility {
               BlocListener<UpdateCastCrewCubit, UpdateCastCrewState>(
                 listener: (context, state) {
                   if (state is UpdateCastCrewErrorState) {
-                    Fluttertoast.showToast(msg: state.error);
+                   showMessage(context,  state.error);
                     return;
                   }
 
                   if (state is UpdateCastCrewLoadedState) {
-                    Fluttertoast.showToast(msg: "Update castCrew Sucessfully");
+                   showMessage(context,  "Update castCrew Sucessfully");
                     context.read<GetAllCastcrewCubit>().getAllCastCrew(page: currentPage);
                   }
                 },
                 child: BlocListener<DeleteCastCrewCubit, DeleteCastCrewState>(
                   listener: (context, state) {
                     if (state is DeleteCastCrewErrorState) {
-                      Fluttertoast.showToast(msg: state.error);
+                     showMessage(context,  state.error);
                       return;
                     }
 
                     if (state is DeleteCastCrewLaodedState) {
-                      Fluttertoast.showToast(msg: "Delete Sucessfully");
+                     showMessage(context,  "Delete Sucessfully");
                       Navigator.pop(context);
                       context.read<GetAllCastcrewCubit>().getAllCastCrew(page: currentPage);
                     }
@@ -614,12 +615,12 @@ class _CastCrewScreenState extends State<CastCrewScreen> with Utility {
                     BlocConsumer<UpdateCastCrewCubit, UpdateCastCrewState>(
                       listener: (context, state) {
                         if (state is UpdateCastCrewErrorState) {
-                          Fluttertoast.showToast(msg: state.error);
+                         showMessage(context,  state.error);
                           return;
                         }
 
                         if (state is UpdateCastCrewLoadedState) {
-                          Fluttertoast.showToast(msg: "Update Sucessfully");
+                         showMessage(context,  "Update Sucessfully");
                           context.read<GetAllCastcrewCubit>().getAllCastCrew(page: currentPage);
                           Navigator.pop(context);
                         }
@@ -628,12 +629,12 @@ class _CastCrewScreenState extends State<CastCrewScreen> with Utility {
                         return BlocConsumer<CreateCastcrewCubit, CreateCastcrewState>(
                           listener: (context, state) {
                             if (state is CreateCastcrewErrorState) {
-                              Fluttertoast.showToast(msg: state.error);
+                             showMessage(context,  state.error);
                               return;
                             }
 
                             if (state is CreateCastcrewLoadedState) {
-                              Fluttertoast.showToast(msg: "Post castCrew Successfully");
+                             showMessage(context,  "Post castCrew Successfully");
                               context.read<GetAllCastcrewCubit>().getAllCastCrew();
                               Navigator.pop(context);
                             }

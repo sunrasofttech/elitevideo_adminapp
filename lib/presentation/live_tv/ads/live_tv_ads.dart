@@ -1,7 +1,8 @@
 import 'package:dropdown_search/dropdown_search.dart';
+import 'package:elite_admin/utils/toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+
 import 'package:elite_admin/bloc/ads/get_all_ads/get_all_ads_cubit.dart';
 import 'package:elite_admin/bloc/ads/get_all_ads/get_all_ads_model.dart';
 import 'package:elite_admin/bloc/livetv/ads/delete_live_tv_ads/delete_live_tv_ads_cubit.dart';
@@ -83,12 +84,12 @@ class _LiveTVAdsScreenState extends State<LiveTVAdsScreen> with Utility {
               BlocListener<DeleteLiveTvAdsCubit, DeleteLiveTvAdsState>(
                 listener: (context, state) {
                   if (state is DeleteLiveTvAdsErrorState) {
-                    Fluttertoast.showToast(msg: state.error);
+                   showMessage(context, state.error);
                     return;
                   }
 
                   if (state is DeleteLiveTvAdsLoadedState) {
-                    Fluttertoast.showToast(msg: "Delete Successfully");
+                   showMessage(context, "Delete Successfully");
                     context.read<GetAllLiveTvAdsCubit>().getAllLiveTvAds();
                   }
                 },
@@ -438,12 +439,12 @@ class _LiveTVAdsScreenState extends State<LiveTVAdsScreen> with Utility {
                           BlocConsumer<UpdateLiveTvAdsCubit, UpdateLiveTvAdsState>(
                             listener: (context, state) {
                               if (state is UpdateLiveTvAdsErrorState) {
-                                Fluttertoast.showToast(msg: state.error);
+                               showMessage(context, state.error);
                                 return;
                               }
 
                               if (state is UpdateLiveTvAdsLoadedState) {
-                                Fluttertoast.showToast(msg: "Update Sucessfully");
+                               showMessage(context, "Update Sucessfully");
                                 context.read<GetAllLiveTvAdsCubit>().getAllLiveTvAds();
                                 Navigator.pop(context);
                               }
@@ -452,12 +453,12 @@ class _LiveTVAdsScreenState extends State<LiveTVAdsScreen> with Utility {
                               return BlocConsumer<PostLiveTvAdsCubit, PostLiveTvAdsState>(
                                 listener: (context, state) {
                                   if (state is PostLiveTvAdsErrorState) {
-                                    Fluttertoast.showToast(msg: state.error);
+                                   showMessage(context, state.error);
                                     return;
                                   }
 
                                   if (state is PostLiveTvAdsLoadedState) {
-                                    Fluttertoast.showToast(msg: "Post Web Ads Successfully");
+                                   showMessage(context, "Post Web Ads Successfully");
                                     context.read<GetAllLiveTvAdsCubit>().getAllLiveTvAds();
                                     Navigator.pop(context);
                                   }

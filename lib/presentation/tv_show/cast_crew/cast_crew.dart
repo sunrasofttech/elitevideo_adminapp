@@ -2,11 +2,12 @@ import 'dart:developer';
 import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dropdown_search/dropdown_search.dart';
+import 'package:elite_admin/utils/toast.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:elite_admin/bloc/tv_show/castcrew/create_cast_crew/create_cast_crew_webseries_cubit.dart';
@@ -198,24 +199,24 @@ class _CastCrewScreenState extends State<TvShowCastCrewScreen> with Utility {
               BlocListener<UpdateCastCrewTvShowCubit, UpdateCastCrewTvShowState>(
                 listener: (context, state) {
                   if (state is UpdateCastCrewTvShowErrorState) {
-                    Fluttertoast.showToast(msg: state.error);
+                   showMessage(context, state.error);
                     return;
                   }
 
                   if (state is UpdateCastCrewTvShowLoadedState) {
-                    Fluttertoast.showToast(msg: "Update castCrew Sucessfully");
+                   showMessage(context, "Update castCrew Sucessfully");
                     context.read<GetAllCastCrewTvShowCubit>().getAllCastCrew(page: currentPage);
                   }
                 },
                 child: BlocListener<DeleteTvShowCastcrewCubit, DeleteTvShowCastcrewState>(
                   listener: (context, state) {
                     if (state is DeleteTvShowCastcrewErrorState) {
-                      Fluttertoast.showToast(msg: state.error);
+                     showMessage(context, state.error);
                       return;
                     }
 
                     if (state is DeleteTvShowCastcrewLoadedState) {
-                      Fluttertoast.showToast(msg: "Delete Sucessfully");
+                     showMessage(context, "Delete Sucessfully");
                       context.read<GetAllCastCrewTvShowCubit>().getAllCastCrew(page: 1);
                     }
                   },
@@ -610,12 +611,12 @@ class _CastCrewScreenState extends State<TvShowCastCrewScreen> with Utility {
                     BlocConsumer<UpdateCastCrewTvShowCubit, UpdateCastCrewTvShowState>(
                       listener: (context, state) {
                         if (state is UpdateCastCrewTvShowErrorState) {
-                          Fluttertoast.showToast(msg: state.error);
+                         showMessage(context, state.error);
                           return;
                         }
 
                         if (state is UpdateCastCrewTvShowLoadedState) {
-                          Fluttertoast.showToast(msg: "Update Sucessfully");
+                         showMessage(context, "Update Sucessfully");
                           context.read<GetAllCastCrewTvShowCubit>().getAllCastCrew(page: 1);
                           Navigator.pop(context);
                         }
@@ -624,12 +625,12 @@ class _CastCrewScreenState extends State<TvShowCastCrewScreen> with Utility {
                         return BlocConsumer<CreateCastCrewTvShowCubit, CreateCastCrewTvShowState>(
                           listener: (context, state) {
                             if (state is CreateCastCrewTvShowErrorState) {
-                              Fluttertoast.showToast(msg: state.error);
+                             showMessage(context, state.error);
                               return;
                             }
 
                             if (state is CreateCastCrewTvShowLoadedState) {
-                              Fluttertoast.showToast(msg: "Post castCrew Successfully");
+                             showMessage(context, "Post castCrew Successfully");
                               context.read<GetAllCastCrewTvShowCubit>().getAllCastCrew(page: 1);
                               Navigator.pop(context);
                             }

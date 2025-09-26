@@ -3,11 +3,11 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:elite_admin/utils/apiurls/api.dart';
+import 'package:elite_admin/utils/toast.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:elite_admin/bloc/short_film/castcrew/create_short_film/create_short_film_castcrew_cubit.dart';
@@ -171,24 +171,24 @@ class _CastCrewScreenState extends State<ShortFilmCastCrewScreen> with Utility {
               BlocListener<UpdateCastCrewShortFilmCubit, UpdateCastCrewShortFilmState>(
                 listener: (context, state) {
                   if (state is UpdateCastCrewShortFilmErrorState) {
-                    Fluttertoast.showToast(msg: state.error);
+                    showMessage(context, state.error);
                     return;
                   }
 
                   if (state is UpdateCastCrewShortFilmLaodedState) {
-                    Fluttertoast.showToast(msg: "Update castCrew Sucessfully");
+                    showMessage(context, "Update castCrew Sucessfully");
                     context.read<GetAllCastCrewShortFilmCubit>().getAllCastCrew(page: currentPage);
                   }
                 },
                 child: BlocListener<DeleteCastcrewShortfilmCubit, DeleteCastcrewShortfilmState>(
                   listener: (context, state) {
                     if (state is DeleteCastcrewShortfilmErrorState) {
-                      Fluttertoast.showToast(msg: state.error);
+                      showMessage(context, state.error);
                       return;
                     }
 
                     if (state is DeleteCastcrewShortfilmLoadedState) {
-                      Fluttertoast.showToast(msg: "Delete Sucessfully");
+                      showMessage(context, "Delete Sucessfully");
                       context.read<GetAllCastCrewShortFilmCubit>().getAllCastCrew(page: 1);
                     }
                   },
@@ -512,12 +512,12 @@ class _CastCrewScreenState extends State<ShortFilmCastCrewScreen> with Utility {
                       BlocConsumer<UpdateCastCrewShortFilmCubit, UpdateCastCrewShortFilmState>(
                         listener: (context, state) {
                           if (state is UpdateCastCrewShortFilmErrorState) {
-                            Fluttertoast.showToast(msg: state.error);
+                            showMessage(context, state.error);
                             return;
                           }
 
                           if (state is UpdateCastCrewShortFilmLaodedState) {
-                            Fluttertoast.showToast(msg: "Update Sucessfully");
+                            showMessage(context, "Update Sucessfully");
                             context.read<GetAllCastCrewShortFilmCubit>().getAllCastCrew(page: 1);
                             Navigator.pop(context);
                           }
@@ -526,12 +526,12 @@ class _CastCrewScreenState extends State<ShortFilmCastCrewScreen> with Utility {
                           return BlocConsumer<CreateShortFilmCastcrewCubit, CreateShortFilmCastcrewState>(
                             listener: (context, state) {
                               if (state is CreateShortFilmCastcrewErrorState) {
-                                Fluttertoast.showToast(msg: state.error);
+                                showMessage(context, state.error);
                                 return;
                               }
 
                               if (state is CreateShortFilmCastcrewLoadedState) {
-                                Fluttertoast.showToast(msg: "Post castCrew Successfully");
+                                showMessage(context, "Post castCrew Successfully");
                                 context.read<GetAllCastCrewShortFilmCubit>().getAllCastCrew(page: 1);
                                 Navigator.pop(context);
                               }

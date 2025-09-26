@@ -1,6 +1,6 @@
+import 'package:elite_admin/utils/toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:elite_admin/bloc/notification/send_notification/send_notification_cubit.dart';
 import 'package:elite_admin/bloc/setting/get_setting/get_setting_cubit.dart';
 import 'package:elite_admin/bloc/setting/update_setting/update_setting_cubit.dart';
@@ -139,10 +139,10 @@ class _SettingUiState extends State<SettingUi> with Utility {
                       BlocConsumer<UpdateSettingCubit, UpdateSettingState>(
                         listener: (context, state) {
                           if (state is UpdateSettingErrorState) {
-                            Fluttertoast.showToast(msg: state.error);
+                           showMessage(context,  state.error);
                           }
                           if (state is UpdateSettingLoadedState) {
-                            Fluttertoast.showToast(msg: "Update Succesfully");
+                           showMessage(context,  "Update Succesfully");
                             context.read<GetSettingCubit>().getSetting();
                           }
                         },
@@ -307,14 +307,14 @@ class _SendNotificationUiState extends State<SendNotificationUi> with Utility {
                   BlocConsumer<SendNotificationCubit, SendNotificationState>(
                     listener: (context, state) {
                       if (state is SendNotificationErrorState) {
-                        Fluttertoast.showToast(msg: state.error);
+                       showMessage(context,  state.error);
                         return;
                       }
         
                       if (state is SendNotificationLoadedState) {
                         titleController.clear();
                         mesageController.clear();
-                        Fluttertoast.showToast(msg: "Message Send Sucessfully ...");
+                       showMessage(context,  "Message Send Sucessfully ...");
                       }
                     },
                     builder: (context, state) {

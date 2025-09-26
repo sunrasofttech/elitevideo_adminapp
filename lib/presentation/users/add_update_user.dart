@@ -1,7 +1,7 @@
+import 'package:elite_admin/utils/toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:elite_admin/bloc/users/get_all_user/get_all_user_cubit.dart';
 import 'package:elite_admin/bloc/users/get_all_user/get_all_user_model.dart';
 import 'package:elite_admin/bloc/users/post_user/post_user_cubit.dart';
@@ -58,74 +58,43 @@ class _AddUpdateUserScreenState extends State<AddUpdateUserScreen> with Utility 
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               heightBox20(),
-              TextWidget(
-                text: widget.id != null ? "Edit User" : "Add User",
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
-              ),
+              TextWidget(text: widget.id != null ? "Edit User" : "Add User", fontSize: 14, fontWeight: FontWeight.w600),
               heightBox15(),
               Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 12,
-                ),
-                decoration: BoxDecoration(
-                  color: AppColors.whiteColor,
-                  borderRadius: BorderRadius.circular(12),
-                ),
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                decoration: BoxDecoration(color: AppColors.whiteColor, borderRadius: BorderRadius.circular(12)),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const TextWidget(
-                      text: "Name",
-                      fontSize: 14,
-                    ),
+                    const TextWidget(text: "Name", fontSize: 14),
                     heightBox10(),
-                    TextFormFieldWidget(
-                      controller: nameController,
-                    ),
+                    TextFormFieldWidget(controller: nameController),
                     heightBox15(),
-                    const TextWidget(
-                      text: "Email",
-                      fontSize: 14,
-                    ),
+                    const TextWidget(text: "Email", fontSize: 14),
                     heightBox10(),
-                    TextFormFieldWidget(
-                      controller: emailController,
-                    ),
+                    TextFormFieldWidget(controller: emailController),
                     heightBox15(),
-                    const TextWidget(
-                      text: "Mobile",
-                      fontSize: 14,
-                    ),
+                    const TextWidget(text: "Mobile", fontSize: 14),
                     heightBox10(),
                     TextFormFieldWidget(
                       controller: mobileNoController,
-                      inputFormater: [
-                        LengthLimitingTextInputFormatter(10),
-                        FilteringTextInputFormatter.digitsOnly,
-                      ],
+                      inputFormater: [LengthLimitingTextInputFormatter(10), FilteringTextInputFormatter.digitsOnly],
                     ),
                     heightBox15(),
-                    const TextWidget(
-                      text: "Password",
-                      fontSize: 14,
-                    ),
+                    const TextWidget(text: "Password", fontSize: 14),
                     heightBox10(),
-                    TextFormFieldWidget(
-                      controller: passwordController,
-                    ),
+                    TextFormFieldWidget(controller: passwordController),
                     heightBox15(),
                     BlocConsumer<UpdateUserCubit, UpdateUserState>(
                       listener: (context, state) {
                         if (state is UpdateUserLoadedState) {
                           Navigator.pop(context);
-                          Fluttertoast.showToast(msg: "Update Successfully");
+                          showMessage(context, "Update Successfully");
                           context.read<GetAllUserCubit>().getAllUser();
                         }
 
                         if (state is UpdateUserErrorState) {
-                          Fluttertoast.showToast(msg: state.error);
+                          showMessage(context, state.error);
                           return;
                         }
                       },
@@ -134,12 +103,12 @@ class _AddUpdateUserScreenState extends State<AddUpdateUserScreen> with Utility 
                           listener: (context, state) {
                             if (state is PostUserLoadedState) {
                               Navigator.pop(context);
-                              Fluttertoast.showToast(msg: "Post Successfully");
+                              showMessage(context, "Post Successfully");
                               context.read<GetAllUserCubit>().getAllUser();
                             }
 
                             if (state is PostUserErrorState) {
-                              Fluttertoast.showToast(msg: state.error);
+                              showMessage(context, state.error);
                               return;
                             }
                           },
@@ -149,21 +118,21 @@ class _AddUpdateUserScreenState extends State<AddUpdateUserScreen> with Utility 
                               onPressed: () {
                                 if (widget.id != null) {
                                   context.read<UpdateUserCubit>().updateUser(
-                                        id: widget.id,
-                                        email: emailController.text,
-                                        mobileNo: mobileNoController.text,
-                                        name: nameController.text,
-                                        password: passwordController.text,
-                                      );
+                                    id: widget.id,
+                                    email: emailController.text,
+                                    mobileNo: mobileNoController.text,
+                                    name: nameController.text,
+                                    password: passwordController.text,
+                                  );
                                   return;
                                 }
 
                                 context.read<PostUserCubit>().postUser(
-                                      email: emailController.text,
-                                      mobileNo: mobileNoController.text,
-                                      name: nameController.text,
-                                      password: passwordController.text,
-                                    );
+                                  email: emailController.text,
+                                  mobileNo: mobileNoController.text,
+                                  name: nameController.text,
+                                  password: passwordController.text,
+                                );
                               },
                               buttonText: widget.id != null ? 'Save' : 'Add',
                             );

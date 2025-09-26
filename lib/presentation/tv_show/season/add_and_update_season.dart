@@ -1,7 +1,8 @@
+import 'package:elite_admin/utils/toast.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+
 import 'package:elite_admin/bloc/tv_show/season_tv_show/get_all_season/get_all_season_cubit.dart';
 import 'package:elite_admin/bloc/tv_show/season_tv_show/post_season/post_season_cubit.dart';
 import 'package:elite_admin/bloc/tv_show/season_tv_show/update_season/update_season_cubit.dart';
@@ -140,12 +141,12 @@ class _TvShowSeasonAddUpdateScreenState extends State<TvShowSeasonAddUpdateScree
                 BlocListener<UpdateTvShowSeasonCubit, UpdateSeasonState>(
                   listener: (context, state) {
                     if (state is UpdateSeasonErrorState) {
-                      Fluttertoast.showToast(msg: state.error);
+                     showMessage(context, state.error);
                       return;
                     }
 
                     if (state is UpdateSeasonLoadedState) {
-                      Fluttertoast.showToast(msg: "Update Successfully");
+                     showMessage(context, "Update Successfully");
                       Navigator.pop(context);
                       context.read<GetAllTvShowSeasonCubit>().getAllSeason();
                     }
@@ -217,12 +218,12 @@ class _TvShowSeasonAddUpdateScreenState extends State<TvShowSeasonAddUpdateScree
                 BlocConsumer<PostTvShowSeasonCubit, PostSeasonState>(
                   listener: (context, state) {
                     if (state is PostSeasonErrorState) {
-                      Fluttertoast.showToast(msg: "${state.error} ❌");
+                     showMessage(context, "${state.error} ❌");
                       return;
                     }
                     if (state is PostSeasonLoadedState) {
                       context.read<GetAllTvShowSeasonCubit>().getAllSeason();
-                      Fluttertoast.showToast(msg: "Post Sucessfully ✅");
+                     showMessage(context, "Post Sucessfully ✅");
                       Navigator.pop(context);
                     }
                   },

@@ -1,9 +1,10 @@
 import 'dart:ui';
 
+import 'package:elite_admin/utils/toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+
 import 'package:elite_admin/bloc/movie/category/get_all_category/get_all_category_cubit.dart';
 import 'package:elite_admin/bloc/movie/language/get_all_language/get_all_language_cubit.dart';
 import 'package:elite_admin/bloc/tv_show/tv_show/delete_tv_show/delete_tv_show_cubit.dart';
@@ -57,59 +58,36 @@ class _TvShowScreenState extends State<TvShowScreen> with Utility {
         padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 12),
         child: ListView(
           children: [
-            const TextWidget(
-              text: "Manage Tv Show",
-              fontSize: 15,
-              fontWeight: FontWeight.w600,
-            ),
+            const TextWidget(text: "Manage Tv Show", fontSize: 15, fontWeight: FontWeight.w600),
             heightBox15(),
             Row(
               children: [
                 Expanded(
-                    child: TextFormFieldWidget(
-                  controller: searchController,
-                  onChanged: (p0) {
-                    context.read<GetAllTvShowSeriesCubit>().getAllSeries(
-                          search: p0,
-                        );
-                  },
-                  isSuffixIconShow: true,
-                  suffixIcon: const Icon(
-                    Icons.search,
-                    color: AppColors.blackColor,
+                  child: TextFormFieldWidget(
+                    controller: searchController,
+                    onChanged: (p0) {
+                      context.read<GetAllTvShowSeriesCubit>().getAllSeries(search: p0);
+                    },
+                    isSuffixIconShow: true,
+                    suffixIcon: const Icon(Icons.search, color: AppColors.blackColor),
                   ),
-                )),
+                ),
                 widthBox10(),
                 InkWell(
                   onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const AddUpdateTvShowScreen(),
-                      ),
-                    );
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => const AddUpdateTvShowScreen()));
                   },
                   child: Container(
                     padding: const EdgeInsets.all(14),
                     decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(12),
-                      ),
-                      gradient: LinearGradient(
-                        colors: AppColors.blueGradientList,
-                      ),
+                      borderRadius: BorderRadius.all(Radius.circular(12)),
+                      gradient: LinearGradient(colors: AppColors.blueGradientList),
                     ),
                     child: Row(
                       children: [
-                        const TextWidget(
-                          text: "Add",
-                          color: AppColors.whiteColor,
-                        ),
+                        const TextWidget(text: "Add", color: AppColors.whiteColor),
                         widthBox5(),
-                        const Icon(
-                          Icons.add_circle_rounded,
-                          color: AppColors.whiteColor,
-                        )
+                        const Icon(Icons.add_circle_rounded, color: AppColors.whiteColor),
                       ],
                     ),
                   ),
@@ -135,9 +113,7 @@ class _TvShowScreenState extends State<TvShowScreen> with Utility {
                               final selectedDatum = state.model.data?.firstWhere((datum) => datum.name == value);
                               print("Selected Datum ID: ${selectedDatum?.id}");
                               selectedLanguageId = selectedDatum?.id;
-                              context.read<GetAllTvShowSeriesCubit>().getAllSeries(
-                                    languageId: selectedLanguageId,
-                                  );
+                              context.read<GetAllTvShowSeriesCubit>().getAllSeries(languageId: selectedLanguageId);
                             });
                           },
                         );
@@ -163,9 +139,7 @@ class _TvShowScreenState extends State<TvShowScreen> with Utility {
                               final selectedDatum = state.model.categories?.firstWhere((datum) => datum.name == value);
                               selectedCategoryId = selectedDatum?.id;
                               print("Selected Datum ID: ${selectedDatum?.id}");
-                              context.read<GetAllTvShowSeriesCubit>().getAllSeries(
-                                    categoryId: selectedCategoryId,
-                                  );
+                              context.read<GetAllTvShowSeriesCubit>().getAllSeries(categoryId: selectedCategoryId);
                             });
                           },
                         );
@@ -186,9 +160,7 @@ class _TvShowScreenState extends State<TvShowScreen> with Utility {
                         child: Row(
                           children: [
                             Checkbox(
-                              fillColor: const WidgetStatePropertyAll(
-                                AppColors.whiteColor,
-                              ),
+                              fillColor: const WidgetStatePropertyAll(AppColors.whiteColor),
                               side: const BorderSide(color: AppColors.greyColor),
                               value: isSelectAll,
                               checkColor: AppColors.blackColor,
@@ -204,11 +176,7 @@ class _TvShowScreenState extends State<TvShowScreen> with Utility {
                                 });
                               },
                             ),
-                            const TextWidget(
-                              text: "Select All",
-                              fontSize: 13,
-                              fontWeight: FontWeight.w500,
-                            ),
+                            const TextWidget(text: "Select All", fontSize: 13, fontWeight: FontWeight.w500),
                             widthBox10(),
                             if (selectedMovieIds.isNotEmpty)
                               Expanded(
@@ -227,10 +195,7 @@ class _TvShowScreenState extends State<TvShowScreen> with Utility {
                                       ),
                                     );
                                   },
-                                  child: const Icon(
-                                    Icons.delete,
-                                    color: Colors.red,
-                                  ),
+                                  child: const Icon(Icons.delete, color: Colors.red),
                                 ),
                               ),
                             widthBox10(),
@@ -262,61 +227,55 @@ class _TvShowScreenState extends State<TvShowScreen> with Utility {
             BlocListener<DeleteTvShowSeriesCubit, DeleteSeriesState>(
               listener: (context, state) {
                 if (state is DeleteSeriesErrorState) {
-                  Fluttertoast.showToast(msg: state.error);
+                  showMessage(context, state.error);
                   return;
                 }
 
                 if (state is DeleteSeriesLoadedState) {
-                  Fluttertoast.showToast(msg: "Delete Successfully");
+                  showMessage(context, "Delete Successfully");
                   context.read<GetAllTvShowSeriesCubit>().getAllSeries();
                 }
               },
               child: BlocListener<UpdateTvShowSeriesCubit, UpdateSeriesState>(
                 listener: (context, state) {
                   if (state is UpdateSeriesErrorState) {
-                    Fluttertoast.showToast(msg: state.error);
+                    showMessage(context, state.error);
                     return;
                   }
 
                   if (state is UpdateSeriesLoadedState) {
-                    Fluttertoast.showToast(msg: "Update Series Succesfully");
+                    showMessage(context, "Update Series Succesfully");
                     context.read<GetAllTvShowSeriesCubit>().getAllSeries();
                   }
                 },
-                child: BlocBuilder<GetAllTvShowSeriesCubit, GetAllSeriesState>(builder: (context, state) {
-                  if (state is GetAllSeriesLoadingState) {
-                    return const Center(
-                      child: CustomCircularProgressIndicator(),
-                    );
-                  }
-                  if (state is GetAllSeriesErrorState) {
-                    return const CustomErrorWidget();
-                  }
+                child: BlocBuilder<GetAllTvShowSeriesCubit, GetAllSeriesState>(
+                  builder: (context, state) {
+                    if (state is GetAllSeriesLoadingState) {
+                      return const Center(child: CustomCircularProgressIndicator());
+                    }
+                    if (state is GetAllSeriesErrorState) {
+                      return const CustomErrorWidget();
+                    }
 
-                  if (state is GetAllSeriesLoadedState) {
-                    return state.model.data?.isEmpty ?? true
-                        ? const Center(
-                            child: CustomEmptyWidget(),
-                          )
-                        : GridView.builder(
-                            itemCount: state.model.data?.length,
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2,
-                              crossAxisSpacing: 5,
-                              mainAxisSpacing: 5,
-                              childAspectRatio: 1,
-                              mainAxisExtent: 230,
-                            ),
-                            itemBuilder: (context, index) {
-                              final item = state.model.data?[index];
-                              return Container(
+                    if (state is GetAllSeriesLoadedState) {
+                      return state.model.data?.isEmpty ?? true
+                          ? const Center(child: CustomEmptyWidget())
+                          : GridView.builder(
+                              itemCount: state.model.data?.length,
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2,
+                                crossAxisSpacing: 5,
+                                mainAxisSpacing: 5,
+                                childAspectRatio: 1,
+                                mainAxisExtent: 230,
+                              ),
+                              itemBuilder: (context, index) {
+                                final item = state.model.data?[index];
+                                return Container(
                                   decoration: BoxDecoration(
-                                    image: DecorationImage(
-                                      image: NetworkImage("${item?.coverImg}"),
-                                      fit: BoxFit.cover,
-                                    ),
+                                    image: DecorationImage(image: NetworkImage("${item?.coverImg}"), fit: BoxFit.cover),
                                     borderRadius: BorderRadius.circular(12),
                                   ),
                                   child: Padding(
@@ -331,28 +290,25 @@ class _TvShowScreenState extends State<TvShowScreen> with Utility {
                                               height: 40,
                                               width: 40,
                                               child: Checkbox(
-                                                  side: const BorderSide(
-                                                    color: AppColors.whiteColor,
-                                                  ),
-                                                  shape: const CircleBorder(
-                                                    side: BorderSide(
-                                                      color: AppColors.whiteColor,
-                                                    ),
-                                                  ),
-                                                  fillColor: const WidgetStatePropertyAll(AppColors.greyColor),
-                                                  focusColor: AppColors.whiteColor,
-                                                  value: selectedMovieIds.contains(item?.id),
-                                                  onChanged: (value) {
-                                                    setState(() {
-                                                      if (value == true) {
-                                                        selectedMovieIds.add(item!.id!);
-                                                      } else {
-                                                        selectedMovieIds.remove(item!.id!);
-                                                      }
-                                                      final totalMovies = state.model.data?.length ?? 0;
-                                                      isSelectAll = selectedMovieIds.length == totalMovies;
-                                                    });
-                                                  }),
+                                                side: const BorderSide(color: AppColors.whiteColor),
+                                                shape: const CircleBorder(
+                                                  side: BorderSide(color: AppColors.whiteColor),
+                                                ),
+                                                fillColor: const WidgetStatePropertyAll(AppColors.greyColor),
+                                                focusColor: AppColors.whiteColor,
+                                                value: selectedMovieIds.contains(item?.id),
+                                                onChanged: (value) {
+                                                  setState(() {
+                                                    if (value == true) {
+                                                      selectedMovieIds.add(item!.id!);
+                                                    } else {
+                                                      selectedMovieIds.remove(item!.id!);
+                                                    }
+                                                    final totalMovies = state.model.data?.length ?? 0;
+                                                    isSelectAll = selectedMovieIds.length == totalMovies;
+                                                  });
+                                                },
+                                              ),
                                             ),
                                             const Spacer(),
                                             Switch(
@@ -362,9 +318,9 @@ class _TvShowScreenState extends State<TvShowScreen> with Utility {
                                               value: item?.status ?? false,
                                               onChanged: (value) {
                                                 context.read<UpdateTvShowSeriesCubit>().updateSeries(
-                                                      id: item?.id ?? "",
-                                                      status: value,
-                                                    );
+                                                  id: item?.id ?? "",
+                                                  status: value,
+                                                );
                                               },
                                             ),
                                           ],
@@ -409,10 +365,9 @@ class _TvShowScreenState extends State<TvShowScreen> with Utility {
                                                       child: InkWell(
                                                         onTap: () {
                                                           context.read<UpdateTvShowSeriesCubit>().updateSeries(
-                                                                id: item?.id ?? "",
-                                                                isHighlighted:
-                                                                    item?.isHighlighted == true ? false : true,
-                                                              );
+                                                            id: item?.id ?? "",
+                                                            isHighlighted: item?.isHighlighted == true ? false : true,
+                                                          );
                                                         },
                                                         child: Container(
                                                           padding: const EdgeInsets.all(8),
@@ -444,10 +399,8 @@ class _TvShowScreenState extends State<TvShowScreen> with Utility {
                                                           Navigator.push(
                                                             context,
                                                             MaterialPageRoute(
-                                                              builder: (context) => AddUpdateTvShowScreen(
-                                                                id: item?.id,
-                                                                item: item,
-                                                              ),
+                                                              builder: (context) =>
+                                                                  AddUpdateTvShowScreen(id: item?.id, item: item),
                                                             ),
                                                           );
                                                         },
@@ -481,9 +434,9 @@ class _TvShowScreenState extends State<TvShowScreen> with Utility {
                                                                 Navigator.pop(context);
                                                               },
                                                               onDeletePressed: () {
-                                                                context
-                                                                    .read<DeleteTvShowSeriesCubit>()
-                                                                    .deleteSeries([item?.id ?? ""]);
+                                                                context.read<DeleteTvShowSeriesCubit>().deleteSeries([
+                                                                  item?.id ?? "",
+                                                                ]);
                                                                 Navigator.pop(context);
                                                               },
                                                             );
@@ -511,15 +464,17 @@ class _TvShowScreenState extends State<TvShowScreen> with Utility {
                                               ],
                                             ),
                                           ],
-                                        )
+                                        ),
                                       ],
                                     ),
-                                  ));
-                            },
-                          );
-                  }
-                  return const SizedBox();
-                }),
+                                  ),
+                                );
+                              },
+                            );
+                    }
+                    return const SizedBox();
+                  },
+                ),
               ),
             ),
             heightBox15(),
@@ -527,16 +482,15 @@ class _TvShowScreenState extends State<TvShowScreen> with Utility {
               builder: (context, state) {
                 if (state is GetAllSeriesLoadedState) {
                   return CustomPagination(
-                      currentPage: currentPage,
-                      totalPages: state.model.pagination?.totalPages ?? 0,
-                      onPageChanged: (e) {
-                        setState(() {
-                          currentPage = e;
-                        });
-                        context.read<GetAllTvShowSeriesCubit>().getAllSeries(
-                              page: currentPage,
-                            );
+                    currentPage: currentPage,
+                    totalPages: state.model.pagination?.totalPages ?? 0,
+                    onPageChanged: (e) {
+                      setState(() {
+                        currentPage = e;
                       });
+                      context.read<GetAllTvShowSeriesCubit>().getAllSeries(page: currentPage);
+                    },
+                  );
                 }
                 return const SizedBox();
               },
@@ -562,11 +516,7 @@ class _TvShowScreenState extends State<TvShowScreen> with Utility {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       heightBox15(),
-                      const TextWidget(
-                        text: 'Add Rating',
-                        fontWeight: FontWeight.w700,
-                        fontSize: 16,
-                      ),
+                      const TextWidget(text: 'Add Rating', fontWeight: FontWeight.w700, fontSize: 16),
                       heightBox30(),
                       InkWell(
                         onTap: () {
@@ -575,25 +525,17 @@ class _TvShowScreenState extends State<TvShowScreen> with Utility {
                         child: Container(
                           decoration: const BoxDecoration(
                             color: AppColors.greyColor,
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(12),
-                            ),
+                            borderRadius: BorderRadius.all(Radius.circular(12)),
                           ),
-                          child: const Icon(
-                            Icons.close,
-                            color: AppColors.whiteColor,
-                          ),
+                          child: const Icon(Icons.close, color: AppColors.whiteColor),
                         ),
                       ),
                       heightBox30(),
                     ],
                   ),
                   RatingBar.builder(
-                    itemBuilder: (context, index) => Icon(
-                      Icons.star,
-                      color: index <= rating ? Colors.orange : Colors.grey,
-                      size: 100,
-                    ),
+                    itemBuilder: (context, index) =>
+                        Icon(Icons.star, color: index <= rating ? Colors.orange : Colors.grey, size: 100),
                     onRatingUpdate: (ratingvalue) {
                       setState(() {
                         rating = ratingvalue;

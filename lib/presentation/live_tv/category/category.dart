@@ -1,9 +1,10 @@
 import 'dart:io';
 
+import 'package:elite_admin/utils/toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:elite_admin/bloc/livetv/category/create_live_category/create_live_category_cubit.dart';
@@ -104,24 +105,24 @@ class _LiveTvCategoryScreenState extends State<LiveTvCategoryScreen> with Utilit
               BlocListener<UpdateLiveCategoryCubit, UpdateLiveCategoryState>(
                 listener: (context, state) {
                   if (state is UpdateLiveCategoryErrorState) {
-                    Fluttertoast.showToast(msg: state.error);
+                   showMessage(context,  state.error);
                     return;
                   }
 
                   if (state is UpdateLiveCategoryLoadedState) {
-                    Fluttertoast.showToast(msg: "LiveTv category Update successfully.");
+                   showMessage(context,  "LiveTv category Update successfully.");
                     context.read<GetLiveCategoryCubit>().getAllLiveCategory();
                   }
                 },
                 child: BlocListener<DeleteLiveCategoryCubit, DeleteLiveCategoryState>(
                   listener: (context, state) {
                     if (state is DeleteLiveCategoryErrorState) {
-                      Fluttertoast.showToast(msg: state.error);
+                     showMessage(context,  state.error);
                       return;
                     }
 
                     if (state is DeleteLiveCategoryLoadedState) {
-                      Fluttertoast.showToast(msg: "Delete Successfully");
+                     showMessage(context,  "Delete Successfully");
                       context.read<GetLiveCategoryCubit>().getAllLiveCategory();
                       Navigator.pop(context);
                     }
@@ -366,13 +367,13 @@ class _LiveTvCategoryScreenState extends State<LiveTvCategoryScreen> with Utilit
                     BlocConsumer<CreateLiveCategoryCubit, CreateLiveCategoryState>(
                       listener: (context, state) {
                         if (state is CreateLiveCategoryErrorState) {
-                          Fluttertoast.showToast(msg: state.error);
+                         showMessage(context,  state.error);
                           return;
                         }
 
                         if (state is CreateLiveCategoryLoadedState) {
                           Navigator.pop(context);
-                          Fluttertoast.showToast(msg: "LiveTv category created successfully.");
+                         showMessage(context,  "LiveTv category created successfully.");
                           context.read<GetLiveCategoryCubit>().getAllLiveCategory();
                         }
                       },
@@ -380,13 +381,13 @@ class _LiveTvCategoryScreenState extends State<LiveTvCategoryScreen> with Utilit
                         return BlocConsumer<UpdateLiveCategoryCubit, UpdateLiveCategoryState>(
                           listener: (context, postState) {
                             if (postState is UpdateLiveCategoryErrorState) {
-                              Fluttertoast.showToast(msg: postState.error);
+                             showMessage(context,  postState.error);
                               return;
                             }
 
                             if (postState is UpdateLiveCategoryLoadedState) {
                               Navigator.pop(context);
-                              Fluttertoast.showToast(msg: "LiveTv category Update successfully.");
+                             showMessage(context,  "LiveTv category Update successfully.");
                               context.read<GetLiveCategoryCubit>();
                             }
                           },
@@ -396,7 +397,7 @@ class _LiveTvCategoryScreenState extends State<LiveTvCategoryScreen> with Utilit
                                   state is UpdateLiveCategoryLoadingState),
                               onPressed: () {
                                 if (nameController.text.isEmpty) {
-                                  Fluttertoast.showToast(msg: "Add title");
+                                 showMessage(context,  "Add title");
                                   return;
                                 }
                                 if (id != null) {

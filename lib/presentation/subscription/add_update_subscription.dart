@@ -1,7 +1,8 @@
+import 'package:elite_admin/utils/toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+
 import 'package:elite_admin/bloc/subscription/create_subscription/create_subscription_cubit.dart';
 import 'package:elite_admin/bloc/subscription/get_subscription/get_subscription_cubit.dart';
 import 'package:elite_admin/bloc/subscription/get_subscription/get_subscription_model.dart';
@@ -182,11 +183,11 @@ class _AddUpdateSubscriptionScreenState extends State<AddUpdateSubscriptionScree
                     BlocConsumer<CreateSubscriptionCubit, CreateSubscriptionState>(
                       listener: (context, state) {
                         if (state is CreateSubscriptionErrorState) {
-                          Fluttertoast.showToast(msg: state.error);
+                         showMessage(context,  state.error);
                           return;
                         }
                         if (state is CreateSubscriptionLoadedState) {
-                          Fluttertoast.showToast(msg: "Create Sucessfully");
+                         showMessage(context,  "Create Sucessfully");
                           Navigator.pop(context);
                           context.read<GetSubscriptionCubit>().getAllSub();
                         }
@@ -195,12 +196,12 @@ class _AddUpdateSubscriptionScreenState extends State<AddUpdateSubscriptionScree
                         return BlocConsumer<UpdateSubscriptionCubit, UpdateSubscriptionState>(
                           listener: (context, state) {
                             if (state is UpdateSubscriptionErrorState) {
-                              Fluttertoast.showToast(msg: state.error);
+                             showMessage(context,  state.error);
                               return;
                             }
 
                             if (state is UpdateSubscriptionLoadedState) {
-                              Fluttertoast.showToast(msg: "Update Successfully");
+                             showMessage(context,  "Update Successfully");
                               Navigator.pop(context);
                               context.read<GetSubscriptionCubit>().getAllSub();
                             }
@@ -230,7 +231,7 @@ class _AddUpdateSubscriptionScreenState extends State<AddUpdateSubscriptionScree
                                 final price = planPriceController.text.trim();
 
                                 if (planName.isEmpty || price.isEmpty) {
-                                  Fluttertoast.showToast(msg: "Plan Name and Price are required.");
+                                 showMessage(context,  "Plan Name and Price are required.");
                                   return;
                                 }
 

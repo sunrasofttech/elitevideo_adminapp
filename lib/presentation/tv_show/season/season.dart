@@ -1,6 +1,7 @@
+import 'package:elite_admin/utils/toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+
 import 'package:elite_admin/bloc/tv_show/season_tv_show/delete_season/delete_season_cubit.dart';
 import 'package:elite_admin/bloc/tv_show/season_tv_show/get_all_season/get_all_season_cubit.dart';
 import 'package:elite_admin/constant/color.dart';
@@ -102,12 +103,12 @@ class _TvShowSeasonScreenState extends State<TvShowSeasonScreen> with Utility {
                 BlocConsumer<DeleteTvShowSeasonCubit, DeleteSeasonState>(
                   listener: (context, state) {
                     if (state is DeleteSeasonErrorState) {
-                      Fluttertoast.showToast(msg: state.error);
+                     showMessage(context, state.error);
                       return;
                     }
 
                     if (state is DeleteSeasonLoadedState) {
-                      Fluttertoast.showToast(msg: "Delete Successfully ✅");
+                     showMessage(context, "Delete Successfully ✅");
                       Navigator.pop(context);
                       context.read<GetAllTvShowSeasonCubit>().getAllSeason();
                     }

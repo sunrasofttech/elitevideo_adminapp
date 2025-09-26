@@ -1,9 +1,9 @@
 import 'dart:ui';
 
+import 'package:elite_admin/utils/toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:elite_admin/bloc/auth/login/login_cubit.dart';
 import 'package:elite_admin/constant/color.dart';
@@ -117,12 +117,12 @@ class _LoginScreenState extends State<LoginScreen> with Utility {
                       BlocConsumer<LoginCubit, LoginState>(
                         listener: (context, state) {
                           if (state is LoginErrorState) {
-                            Fluttertoast.showToast(msg: state.error);
+                           showMessage(context, state.error);
                             return;
                           }
 
                           if (state is LoginLoadededState) {
-                            Fluttertoast.showToast(msg: state.model.message.toString());
+                           showMessage(context, state.model.message.toString());
                             String token = state.model.token ?? "";
                             LocalStorageUtils.saveToken(token);
                             JwtModel decodedToken = JwtModel.fromJson(JwtDecoder.decode(token));

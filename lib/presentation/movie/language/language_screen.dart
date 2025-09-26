@@ -2,9 +2,9 @@ import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:elite_admin/utils/apiurls/api.dart';
+import 'package:elite_admin/utils/toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:elite_admin/bloc/movie/language/delete_language/delete_language_cubit.dart';
 import 'package:elite_admin/bloc/movie/language/get_all_language/get_all_language_cubit.dart';
@@ -80,23 +80,23 @@ class _LanguageScreenState extends State<LanguageScreen> with Utility {
               BlocListener<UpdateLanguageCubit, UpdateLanguageState>(
                 listener: (context, state) {
                   if (state is UpdateLanguageErrorState) {
-                    Fluttertoast.showToast(msg: state.error);
+                   showMessage(context, state.error);
                     return;
                   }
                   if (state is UpdateLanguageLoadedState) {
-                    Fluttertoast.showToast(msg: "Update Sucessfully");
+                   showMessage(context, "Update Sucessfully");
                     context.read<GetAllLanguageCubit>().getAllLanguage();
                   }
                 },
                 child: BlocListener<DeleteLanguageCubit, DeleteLanguageState>(
                   listener: (context, state) {
                     if (state is DeleteLanguageErrorState) {
-                      Fluttertoast.showToast(msg: state.error);
+                     showMessage(context, state.error);
                       return;
                     }
 
                     if (state is DeleteLanguageLoadedState) {
-                      Fluttertoast.showToast(msg: "Delete Sucessfully");
+                     showMessage(context, "Delete Sucessfully");
                       Navigator.pop(context);
                       context.read<GetAllLanguageCubit>().getAllLanguage();
                     }
@@ -315,12 +315,12 @@ class _LanguageScreenState extends State<LanguageScreen> with Utility {
                       BlocConsumer<UpdateLanguageCubit, UpdateLanguageState>(
                         listener: (context, state) {
                           if (state is UpdateLanguageErrorState) {
-                            Fluttertoast.showToast(msg: state.error);
+                           showMessage(context, state.error);
                             return;
                           }
 
                           if (state is UpdateLanguageLoadedState) {
-                            Fluttertoast.showToast(msg: "Update Sucessfully");
+                           showMessage(context, "Update Sucessfully");
                             context.read<GetAllLanguageCubit>().getAllLanguage();
                             Navigator.pop(context);
                           }
@@ -329,12 +329,12 @@ class _LanguageScreenState extends State<LanguageScreen> with Utility {
                           return BlocConsumer<PostLanguageCubit, PostLanguageState>(
                             listener: (context, state) {
                               if (state is PostLanguageErrorState) {
-                                Fluttertoast.showToast(msg: state.error);
+                               showMessage(context, state.error);
                                 return;
                               }
 
                               if (state is PostLanguageLoadedState) {
-                                Fluttertoast.showToast(msg: "Post Sucessfully");
+                               showMessage(context, "Post Sucessfully");
                                 context.read<GetAllLanguageCubit>().getAllLanguage();
                                 Navigator.pop(context);
                               }

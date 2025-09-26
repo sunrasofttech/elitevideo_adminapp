@@ -1,8 +1,8 @@
 import 'dart:developer';
 import 'dart:io';
+import 'package:elite_admin/utils/toast.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:html/parser.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -148,7 +148,7 @@ class _AddUpdateMoveiScreenState extends State<AddUpdateMoveiScreen> with Utilit
     String hours = twoDigits(duration.inHours);
     String minutes = twoDigits(duration.inMinutes.remainder(60));
     String seconds = twoDigits(duration.inSeconds.remainder(60));
-    Fluttertoast.showToast(msg: " VideoDuration $hours:$minutes:$seconds - $duration");
+    showMessage(context, " VideoDuration $hours:$minutes:$seconds - $duration");
 
     if (duration.inHours > 0) {
       return "$hours:$minutes:$seconds";
@@ -186,12 +186,12 @@ class _AddUpdateMoveiScreenState extends State<AddUpdateMoveiScreen> with Utilit
   Future<void> _pickVideo() async {
     final pickedFile = await ImagePicker().pickVideo(source: ImageSource.gallery);
     if (pickedFile == null) {
-      Fluttertoast.showToast(msg: "No video selected.");
+      showMessage(context, "No video selected.");
       return;
     }
 
     if (!pickedFile.path.toLowerCase().endsWith('.mp4')) {
-      Fluttertoast.showToast(msg: "File Not Supported. Please select an MP4 video.");
+      showMessage(context, "File Not Supported. Please select an MP4 video.");
       return;
     }
 
@@ -635,12 +635,12 @@ class _AddUpdateMoveiScreenState extends State<AddUpdateMoveiScreen> with Utilit
                       BlocConsumer<UpdateMovieCubit, UpdateMovieState>(
                         listener: (context, state) {
                           if (state is UpdateMovieErrorState) {
-                            Fluttertoast.showToast(msg: state.error);
+                            showMessage(context, state.error);
                             return;
                           }
 
                           if (state is UpdateMovieLoadedState) {
-                            Fluttertoast.showToast(msg: "Update Sucessfully");
+                            showMessage(context, "Update Sucessfully");
                             Navigator.pop(context);
                             context.read<GetAllMovieCubit>().getAllMovie();
                           }
@@ -649,12 +649,12 @@ class _AddUpdateMoveiScreenState extends State<AddUpdateMoveiScreen> with Utilit
                           return BlocConsumer<PostMovieCubit, PostMovieState>(
                             listener: (context, state) {
                               if (state is PostMovieErrorState) {
-                                Fluttertoast.showToast(msg: state.error);
+                                showMessage(context, state.error);
                                 return;
                               }
 
                               if (state is PostMovieLoadedState) {
-                                Fluttertoast.showToast(msg: "Post Sucessfully");
+                                showMessage(context, "Post Sucessfully");
                                 Navigator.pop(context);
                                 context.read<GetAllMovieCubit>().getAllMovie();
                               }
@@ -704,48 +704,48 @@ class _AddUpdateMoveiScreenState extends State<AddUpdateMoveiScreen> with Utilit
                                   }
 
                                   if (selectedCategory == null) {
-                                    Fluttertoast.showToast(msg: "Select Movie Category");
+                                    showMessage(context, "Select Movie Category");
                                     return;
                                   }
 
                                   // if (selectedGenre == null) {
-                                  //   Fluttertoast.showToast(msg: "Select Movie Genre");
+                                  //  showMessage(context, "Select Movie Genre");
                                   //   return;
                                   // }
 
                                   if (selectedLanguage == null) {
-                                    Fluttertoast.showToast(msg: "Select Movie Langiage");
+                                    showMessage(context, "Select Movie Langiage");
                                     return;
                                   }
 
                                   if (movieNameController.text.isEmpty) {
-                                    Fluttertoast.showToast(msg: "Movie Name is required");
+                                    showMessage(context, "Movie Name is required");
                                     return;
                                   }
                                   if (selectedLanguage == null) {
-                                    Fluttertoast.showToast(msg: "Movie Language is required");
+                                    showMessage(context, "Movie Language is required");
                                     return;
                                   }
                                   // if (selectedGenre == null) {
-                                  //   Fluttertoast.showToast(msg: "Genre is required");
+                                  //  showMessage(context, "Genre is required");
                                   //   return;
                                   // }
 
                                   if (releasedByController.text.isEmpty) {
-                                    Fluttertoast.showToast(msg: "Released By is required");
+                                    showMessage(context, "Released By is required");
                                     return;
                                   }
                                   if (releasedDateController.text.isEmpty) {
-                                    Fluttertoast.showToast(msg: "Released Date is required");
+                                    showMessage(context, "Released Date is required");
                                     return;
                                   }
                                   if (await descriptionController.getText() == '') {
-                                    Fluttertoast.showToast(msg: "Description is required");
+                                    showMessage(context, "Description is required");
                                     return;
                                   }
 
                                   if (_selectedVideo == null && videoLinkController.text.isEmpty) {
-                                    Fluttertoast.showToast(msg: "Video file or video link is required");
+                                    showMessage(context, "Video file or video link is required");
                                     return;
                                   }
 

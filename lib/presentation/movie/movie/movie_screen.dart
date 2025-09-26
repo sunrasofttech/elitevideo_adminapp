@@ -1,8 +1,8 @@
 import 'dart:ui';
+import 'package:elite_admin/utils/toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:elite_admin/bloc/movie/category/get_all_category/get_all_category_cubit.dart';
 import 'package:elite_admin/bloc/movie/language/get_all_language/get_all_language_cubit.dart';
 import 'package:elite_admin/bloc/movie/upload_movie/delete_movie/delete_movie_cubit.dart';
@@ -101,9 +101,9 @@ class _MovieScreenState extends State<MovieScreen> with Utility {
                     onTap: () async {
                       // bool isOn = await OrientationHelper.isAutoRotateOn();
                       // if (isOn) {
-                      //   Fluttertoast.showToast(msg: "✅ Auto-rotate is ON");
+                      //  showMessage(context, "✅ Auto-rotate is ON");
                       // } else {
-                      //   Fluttertoast.showToast(msg: "❌ Auto-rotate is OFF");
+                      //  showMessage(context, "❌ Auto-rotate is OFF");
                       // }
                       Navigator.push(context, MaterialPageRoute(builder: (context) => const AddUpdateMoveiScreen()));
                     },
@@ -257,19 +257,19 @@ class _MovieScreenState extends State<MovieScreen> with Utility {
               BlocListener<UpdateMovieCubit, UpdateMovieState>(
                 listener: (context, state) {
                   if (state is UpdateMovieErrorState) {
-                    Fluttertoast.showToast(msg: state.error);
+                   showMessage(context, state.error);
                     return;
                   }
 
                   if (state is UpdateMovieLoadedState) {
-                    Fluttertoast.showToast(msg: "Update Movie Successfully");
+                   showMessage(context, "Update Movie Successfully");
                     context.read<GetAllMovieCubit>().getAllMovie();
                   }
                 },
                 child: BlocListener<DeleteMovieCubit, DeleteMovieState>(
                   listener: (context, state) {
                     if (state is DeleteMovieErrorState) {
-                      Fluttertoast.showToast(msg: state.error);
+                     showMessage(context, state.error);
                       return;
                     }
 
@@ -277,7 +277,7 @@ class _MovieScreenState extends State<MovieScreen> with Utility {
                       selectedMovieIds.clear();
                       isSelectAll = false;
                       setState(() {});
-                      Fluttertoast.showToast(msg: "Delete Successfully");
+                     showMessage(context, "Delete Successfully");
                       context.read<GetAllMovieCubit>().getAllMovie();
                       Navigator.pop(context);
                     }

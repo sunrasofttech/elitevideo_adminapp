@@ -1,10 +1,11 @@
 import 'dart:developer';
 import 'dart:io';
+import 'package:elite_admin/utils/toast.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:elite_admin/bloc/tv_show/episode_tv_show/get_all_episode/get_all_episode_cubit.dart';
@@ -302,25 +303,25 @@ class _AddUpdateTvShowEpisodeScreenState extends State<AddUpdateTvShowEpisodeScr
                       BlocConsumer<UpdateTvShowEpisodeCubit, UpdateEpisodeState>(
                         listener: (context, state) {
                           if (state is UpdateEpisodeErrorState) {
-                            Fluttertoast.showToast(msg: state.error);
+                           showMessage(context,  state.error);
                             return;
                           }
                           if (state is UpdateEpisodeLoadedState) {
                             Navigator.pop(context);
-                            Fluttertoast.showToast(msg: "Update Successfully ✅");
+                           showMessage(context,  "Update Successfully ✅");
                           }
                         },
                         builder: (context, updateState) {
                           return BlocConsumer<PostTvShowEpisodeCubit, PostEpisodeState>(
                             listener: (context, state) {
                               if (state is PostEpisodeErrorState) {
-                                Fluttertoast.showToast(msg: "${state.error} ❌");
+                               showMessage(context,  "${state.error} ❌");
                                 return;
                               }
 
                               if (state is PostEpisodeLoadedState) {
                                 Navigator.pop(context);
-                                Fluttertoast.showToast(msg: "Post Successfully ✅");
+                               showMessage(context,  "Post Successfully ✅");
                                 context.read<GetAllTvShowEpisodeCubit>().getAllEpisode();
                               }
                             },
@@ -347,35 +348,35 @@ class _AddUpdateTvShowEpisodeScreenState extends State<AddUpdateTvShowEpisodeScr
                                   }
 
                                   if (_selectedImage == null) {
-                                    Fluttertoast.showToast(msg: "Upload Cover Image");
+                                   showMessage(context,  "Upload Cover Image");
                                     return;
                                   }
                                   if (episodeController.text.isEmpty) {
-                                    Fluttertoast.showToast(msg: "Please Enter Episode name");
+                                   showMessage(context,  "Please Enter Episode name");
                                     return;
                                   }
                                   if (episodeNoController.text.isEmpty) {
-                                    Fluttertoast.showToast(msg: "Please Enter Episode No");
+                                   showMessage(context,  "Please Enter Episode No");
                                     return;
                                   }
 
                                   if (_releasedDateController.text.isEmpty) {
-                                    Fluttertoast.showToast(msg: "Please Enter Episode No");
+                                   showMessage(context,  "Please Enter Episode No");
                                     return;
                                   }
 
                                   if (selectedSeasonId == null) {
-                                    Fluttertoast.showToast(msg: "Select season id");
+                                   showMessage(context,  "Select season id");
                                     return;
                                   }
 
                                   if (selectedSeriesId == null) {
-                                    Fluttertoast.showToast(msg: "Select series id");
+                                   showMessage(context,  "Select series id");
                                     return;
                                   }
 
                                   if (_selectedVideo == null && videoLinkController.text.isEmpty) {
-                                    Fluttertoast.showToast(msg: "Select either a video file or provide a video link");
+                                   showMessage(context,  "Select either a video file or provide a video link");
                                     return;
                                   }
 

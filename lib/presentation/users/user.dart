@@ -1,6 +1,6 @@
+import 'package:elite_admin/utils/toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:elite_admin/bloc/users/delete_user/delete_user_cubit.dart';
 import 'package:elite_admin/bloc/users/get_all_user/get_all_user_cubit.dart';
 import 'package:elite_admin/constant/color.dart';
@@ -33,12 +33,7 @@ class _UserScreenState extends State<UserScreen> with Utility {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const TextWidget(
-              text: "User",
-              color: AppColors.blackColor,
-              fontSize: 16,
-              fontWeight: FontWeight.w500,
-            ),
+            const TextWidget(text: "User", color: AppColors.blackColor, fontSize: 16, fontWeight: FontWeight.w500),
             heightBox15(),
             Row(
               children: [
@@ -50,15 +45,9 @@ class _UserScreenState extends State<UserScreen> with Utility {
                       final input = value.trim();
                       if (input.isEmpty) return;
                       if (RegExp(r'^\d+$').hasMatch(input)) {
-                        context.read<GetAllUserCubit>().getAllUser(
-                              mobileNo: input,
-                              name: null,
-                            );
+                        context.read<GetAllUserCubit>().getAllUser(mobileNo: input, name: null);
                       } else {
-                        context.read<GetAllUserCubit>().getAllUser(
-                              name: input,
-                              mobileNo: null,
-                            );
+                        context.read<GetAllUserCubit>().getAllUser(name: input, mobileNo: null);
                       }
                     },
                     hintText: "search user...",
@@ -69,34 +58,19 @@ class _UserScreenState extends State<UserScreen> with Utility {
                 widthBox10(),
                 InkWell(
                   onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const AddUpdateUserScreen(),
-                      ),
-                    );
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => const AddUpdateUserScreen()));
                   },
                   child: Container(
                     padding: const EdgeInsets.all(14),
                     decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(12),
-                      ),
-                      gradient: LinearGradient(
-                        colors: AppColors.blueGradientList,
-                      ),
+                      borderRadius: BorderRadius.all(Radius.circular(12)),
+                      gradient: LinearGradient(colors: AppColors.blueGradientList),
                     ),
                     child: Row(
                       children: [
-                        const TextWidget(
-                          text: "Add",
-                          color: AppColors.whiteColor,
-                        ),
+                        const TextWidget(text: "Add", color: AppColors.whiteColor),
                         widthBox5(),
-                        const Icon(
-                          Icons.add_circle_rounded,
-                          color: AppColors.whiteColor,
-                        )
+                        const Icon(Icons.add_circle_rounded, color: AppColors.whiteColor),
                       ],
                     ),
                   ),
@@ -107,11 +81,11 @@ class _UserScreenState extends State<UserScreen> with Utility {
             BlocListener<DeleteUserCubit, DeleteUserState>(
               listener: (context, state) {
                 if (state is DeleteUserErrorState) {
-                  Fluttertoast.showToast(msg: state.error);
+                  showMessage(context, state.error);
                   return;
                 }
                 if (state is DeleteUserLoadedState) {
-                  Fluttertoast.showToast(msg: "Delete Sucessfully");
+                  showMessage(context, "Delete Sucessfully");
                   Navigator.pop(context);
                   context.read<GetAllUserCubit>().getAllUser();
                 }
@@ -119,9 +93,7 @@ class _UserScreenState extends State<UserScreen> with Utility {
               child: BlocBuilder<GetAllUserCubit, GetAllUserState>(
                 builder: (context, state) {
                   if (state is GetAllUserLoadingState) {
-                    return const Center(
-                      child: CustomCircularProgressIndicator(),
-                    );
+                    return const Center(child: CustomCircularProgressIndicator());
                   }
 
                   if (state is GetAllUserErrorState) {
@@ -156,59 +128,66 @@ class _UserScreenState extends State<UserScreen> with Utility {
                                         DataColumn(label: Text('Status')),
                                         DataColumn(label: Text('Action')),
                                       ],
-                                      rows: state.model.users?.map((e) {
-                                            return DataRow(cells: [
-                                              DataCell(Text(e.name ?? '')),
-                                              DataCell(Text(e.email ?? '')),
-                                              DataCell(Text(e.mobileNo ?? '')),
-                                              DataCell(Text(e.createdAt.toString())),
-                                              DataCell(Text(e.isPaidMember.toString())),
-                                              DataCell(
-                                                Switch(
-                                                  activeColor: const Color.fromRGBO(208, 249, 254, 1),
-                                                  thumbColor: const WidgetStatePropertyAll(
-                                                    Color.fromRGBO(65, 160, 255, 1),
+                                      rows:
+                                          state.model.users?.map((e) {
+                                            return DataRow(
+                                              cells: [
+                                                DataCell(Text(e.name ?? '')),
+                                                DataCell(Text(e.email ?? '')),
+                                                DataCell(Text(e.mobileNo ?? '')),
+                                                DataCell(Text(e.createdAt.toString())),
+                                                DataCell(Text(e.isPaidMember.toString())),
+                                                DataCell(
+                                                  Switch(
+                                                    activeColor: const Color.fromRGBO(208, 249, 254, 1),
+                                                    thumbColor: const WidgetStatePropertyAll(
+                                                      Color.fromRGBO(65, 160, 255, 1),
+                                                    ),
+                                                    value: e.isBlock ?? false,
+                                                    onChanged: (value) {},
                                                   ),
-                                                  value: e.isBlock ?? false,
-                                                  onChanged: (value) {},
                                                 ),
-                                              ),
-                                              DataCell(Row(
-                                                children: [
-                                                  InkWell(
-                                                      onTap: () {
-                                                        Navigator.push(
-                                                          context,
-                                                          MaterialPageRoute(
-                                                            builder: (context) => AddUpdateUserScreen(
-                                                              id: e.id ?? "",
-                                                              user: e,
+                                                DataCell(
+                                                  Row(
+                                                    children: [
+                                                      InkWell(
+                                                        onTap: () {
+                                                          Navigator.push(
+                                                            context,
+                                                            MaterialPageRoute(
+                                                              builder: (context) =>
+                                                                  AddUpdateUserScreen(id: e.id ?? "", user: e),
                                                             ),
-                                                          ),
-                                                        );
-                                                      },
-                                                      child: svgAsset(assetName: AppImages.editSvg)),
-                                                  widthBox10(),
-                                                  InkWell(
-                                                      onTap: () {
-                                                        showDialog(
-                                                          context: context,
-                                                          builder: (context) {
-                                                            return DeleteDialog(
-                                                              onCancelPressed: () {
-                                                                Navigator.pop(context);
-                                                              },
-                                                              onDeletePressed: () {
-                                                                context.read<DeleteUserCubit>().deleteUser(e.id ?? "");
-                                                              },
-                                                            );
-                                                          },
-                                                        );
-                                                      },
-                                                      child: svgAsset(assetName: AppImages.deleteSvg)),
-                                                ],
-                                              )),
-                                            ]);
+                                                          );
+                                                        },
+                                                        child: svgAsset(assetName: AppImages.editSvg),
+                                                      ),
+                                                      widthBox10(),
+                                                      InkWell(
+                                                        onTap: () {
+                                                          showDialog(
+                                                            context: context,
+                                                            builder: (context) {
+                                                              return DeleteDialog(
+                                                                onCancelPressed: () {
+                                                                  Navigator.pop(context);
+                                                                },
+                                                                onDeletePressed: () {
+                                                                  context.read<DeleteUserCubit>().deleteUser(
+                                                                    e.id ?? "",
+                                                                  );
+                                                                },
+                                                              );
+                                                            },
+                                                          );
+                                                        },
+                                                        child: svgAsset(assetName: AppImages.deleteSvg),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ],
+                                            );
                                           }).toList() ??
                                           [],
                                     ),
@@ -227,16 +206,15 @@ class _UserScreenState extends State<UserScreen> with Utility {
               builder: (context, state) {
                 if (state is GetAllUserLoadedState) {
                   return CustomPagination(
-                      currentPage: currentPage,
-                      totalPages: state.model.pages ?? 0,
-                      onPageChanged: (e) {
-                        setState(() {
-                          currentPage = e;
-                        });
-                        context.read<GetAllUserCubit>().getAllUser(
-                              page: currentPage,
-                            );
+                    currentPage: currentPage,
+                    totalPages: state.model.pages ?? 0,
+                    onPageChanged: (e) {
+                      setState(() {
+                        currentPage = e;
                       });
+                      context.read<GetAllUserCubit>().getAllUser(page: currentPage);
+                    },
+                  );
                 }
                 return const SizedBox();
               },

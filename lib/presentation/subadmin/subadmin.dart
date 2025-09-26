@@ -1,6 +1,7 @@
+import 'package:elite_admin/utils/toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+
 import 'package:elite_admin/bloc/auth/delete_admin/delete_admin_cubit.dart';
 import 'package:elite_admin/bloc/subadmin/get_subadmin/get_subadmin_cubit.dart';
 import 'package:elite_admin/constant/color.dart';
@@ -100,12 +101,12 @@ class _SubAdminScreenState extends State<SubAdminScreen> with Utility {
                       child: BlocListener<DeleteAdminCubit, DeleteAdminState>(
                         listener: (context, state) {
                           if (state is DeleteAdminErrorState) {
-                            Fluttertoast.showToast(msg: state.error);
+                           showMessage(context,  state.error);
                             return;
                           }
 
                           if (state is DeleteAdminLoadedState) {
-                            Fluttertoast.showToast(msg: "Delete Sucessfully");
+                           showMessage(context,  "Delete Sucessfully");
                             context.read<GetSubadminCubit>().getSubAdmins();
                           }
                         },

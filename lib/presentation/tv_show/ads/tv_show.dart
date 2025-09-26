@@ -1,7 +1,8 @@
 import 'package:dropdown_search/dropdown_search.dart';
+import 'package:elite_admin/utils/toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+
 import 'package:elite_admin/bloc/ads/get_all_ads/get_all_ads_cubit.dart';
 import 'package:elite_admin/bloc/ads/get_all_ads/get_all_ads_model.dart';
 import 'package:elite_admin/bloc/tv_show/ads/delete_web_ads/delete_web_ads_cubit.dart';
@@ -82,12 +83,12 @@ class _TvShowAdsScreenState extends State<TvShowAdsScreen> with Utility {
               BlocListener<DeleteTvShowWebAdsCubit, DeleteWebAdsState>(
                 listener: (context, state) {
                   if (state is DeleteWebAdsErrorState) {
-                    Fluttertoast.showToast(msg: state.error);
+                   showMessage(context,  state.error);
                     return;
                   }
 
                   if (state is DeleteWebAdsLoadedState) {
-                    Fluttertoast.showToast(msg: "Delete Successfully");
+                   showMessage(context,  "Delete Successfully");
                     context.read<GetTvShowWebAdsCubit>().getAllWebAds();
                   }
                 },
@@ -441,12 +442,12 @@ class _TvShowAdsScreenState extends State<TvShowAdsScreen> with Utility {
                           BlocConsumer<UpdateTvShowWebAdsCubit, UpdateTvShowWebAdsState>(
                             listener: (context, state) {
                               if (state is UpdateWebAdsErrorState) {
-                                Fluttertoast.showToast(msg: state.error);
+                               showMessage(context,  state.error);
                                 return;
                               }
 
                               if (state is UpdateWebAdsLoadedState) {
-                                Fluttertoast.showToast(msg: "Update Sucessfully");
+                               showMessage(context,  "Update Sucessfully");
                                 context.read<GetTvShowWebAdsCubit>().getAllWebAds();
                                 Navigator.pop(context);
                               }
@@ -455,12 +456,12 @@ class _TvShowAdsScreenState extends State<TvShowAdsScreen> with Utility {
                               return BlocConsumer<PostTvShowWebAdsCubit, PostTvShowWebAdsState>(
                                 listener: (context, state) {
                                   if (state is PostWebAdsErrorState) {
-                                    Fluttertoast.showToast(msg: state.error);
+                                   showMessage(context,  state.error);
                                     return;
                                   }
 
                                   if (state is PostWebAdsLoadedState) {
-                                    Fluttertoast.showToast(msg: "Post Web Ads Successfully");
+                                   showMessage(context,  "Post Web Ads Successfully");
                                     context.read<GetTvShowWebAdsCubit>().getAllWebAds();
                                     Navigator.pop(context);
                                   }

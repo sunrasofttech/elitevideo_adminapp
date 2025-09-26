@@ -1,10 +1,10 @@
 import 'dart:ui';
 
 import 'package:elite_admin/utils/apiurls/api.dart';
+import 'package:elite_admin/utils/toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:elite_admin/bloc/movie/category/get_all_category/get_all_category_cubit.dart';
 import 'package:elite_admin/bloc/movie/language/get_all_language/get_all_language_cubit.dart';
 import 'package:elite_admin/bloc/web_series/series/delete_series/delete_series_cubit.dart';
@@ -227,24 +227,24 @@ class _WebSeriesScreenState extends State<WebSeriesScreen> with Utility {
             BlocListener<DeleteSeriesCubit, DeleteSeriesState>(
               listener: (context, state) {
                 if (state is DeleteSeriesErrorState) {
-                  Fluttertoast.showToast(msg: state.error);
+                  showMessage(context, state.error);
                   return;
                 }
 
                 if (state is DeleteSeriesLoadedState) {
-                  Fluttertoast.showToast(msg: "Delete Successfully");
+                  showMessage(context, "Delete Successfully");
                   context.read<GetAllSeriesCubit>().getAllSeries();
                 }
               },
               child: BlocListener<UpdateSeriesCubit, UpdateSeriesState>(
                 listener: (context, state) {
                   if (state is UpdateSeriesErrorState) {
-                    Fluttertoast.showToast(msg: state.error);
+                    showMessage(context, state.error);
                     return;
                   }
 
                   if (state is UpdateSeriesLoadedState) {
-                    Fluttertoast.showToast(msg: "Update Series Succesfully");
+                    showMessage(context, "Update Series Succesfully");
                     context.read<GetAllSeriesCubit>().getAllSeries();
                   }
                 },

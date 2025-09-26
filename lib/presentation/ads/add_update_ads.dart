@@ -1,9 +1,9 @@
 import 'dart:io';
 
+import 'package:elite_admin/utils/toast.dart' show showMessage;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:elite_admin/bloc/ads/create_ads/create_ads_cubit.dart';
 import 'package:elite_admin/bloc/ads/get_all_ads/get_all_ads_cubit.dart';
@@ -176,12 +176,12 @@ class _AdsAddUpdateScreenState extends State<AdsAddUpdateScreen> with Utility {
                       BlocConsumer<UpdateAdsCubit, UpdateAdsState>(
                         listener: (context, state) {
                           if (state is UpdateAdsErrorState) {
-                            Fluttertoast.showToast(msg: state.error);
+                           showMessage(context,  state.error);
                             return;
                           }
 
                           if (state is UpdateAdsLoadedState) {
-                            Fluttertoast.showToast(msg: "Update Sucessfully");
+                           showMessage(context,  "Update Sucessfully");
                             Navigator.pop(context);
                             context.read<GetAllAdsCubit>().getAllAds();
                           }
@@ -190,12 +190,12 @@ class _AdsAddUpdateScreenState extends State<AdsAddUpdateScreen> with Utility {
                           return BlocConsumer<CreateAdsCubit, CreateAdsState>(
                             listener: (context, state) {
                               if (state is CreateAdsErrorState) {
-                                Fluttertoast.showToast(msg: state.error);
+                               showMessage(context,  state.error);
                                 return;
                               }
 
                               if (state is CreateAdsLaodedState) {
-                                Fluttertoast.showToast(msg: "Post Successfully");
+                               showMessage(context,  "Post Successfully");
                                 Navigator.pop(context);
                                 context.read<GetAllAdsCubit>().getAllAds();
                               }

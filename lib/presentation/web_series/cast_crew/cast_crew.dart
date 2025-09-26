@@ -2,11 +2,11 @@ import 'dart:developer';
 import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dropdown_search/dropdown_search.dart';
+import 'package:elite_admin/utils/toast.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:elite_admin/bloc/web_series/castcrew/create_cast_crew/create_cast_crew_webseries_cubit.dart';
@@ -198,24 +198,24 @@ class _CastCrewScreenState extends State<WebScreenCastCrewScreen> with Utility {
               BlocListener<UpdateCastCrewWebseriesCubit, UpdateCastCrewWebseriesState>(
                 listener: (context, state) {
                   if (state is UpdateCastCrewWebseriesErrorState) {
-                    Fluttertoast.showToast(msg: state.error);
+                   showMessage(context, state.error);
                     return;
                   }
 
                   if (state is UpdateCastCrewWebseriesLoadedState) {
-                    Fluttertoast.showToast(msg: "Update castCrew Sucessfully");
+                   showMessage(context, "Update castCrew Sucessfully");
                     context.read<GetAllCastCrewWebseriesCubit>().getAllCastCrew(page: currentPage);
                   }
                 },
                 child: BlocListener<DeleteWebseriesCastcrewCubit, DeleteWebseriesCastcrewState>(
                   listener: (context, state) {
                     if (state is DeleteWebseriesCastcrewErrorState) {
-                      Fluttertoast.showToast(msg: state.error);
+                     showMessage(context, state.error);
                       return;
                     }
 
                     if (state is DeleteWebseriesCastcrewLoadedState) {
-                      Fluttertoast.showToast(msg: "Delete Sucessfully");
+                     showMessage(context, "Delete Sucessfully");
                       context.read<GetAllCastCrewWebseriesCubit>().getAllCastCrew(page: 1);
                     }
                   },
@@ -610,12 +610,12 @@ class _CastCrewScreenState extends State<WebScreenCastCrewScreen> with Utility {
                     BlocConsumer<UpdateCastCrewWebseriesCubit, UpdateCastCrewWebseriesState>(
                       listener: (context, state) {
                         if (state is UpdateCastCrewWebseriesErrorState) {
-                          Fluttertoast.showToast(msg: state.error);
+                         showMessage(context, state.error);
                           return;
                         }
 
                         if (state is UpdateCastCrewWebseriesLoadedState) {
-                          Fluttertoast.showToast(msg: "Update Sucessfully");
+                         showMessage(context, "Update Sucessfully");
                           context.read<GetAllCastCrewWebseriesCubit>().getAllCastCrew(page: 1);
                           Navigator.pop(context);
                         }
@@ -624,12 +624,12 @@ class _CastCrewScreenState extends State<WebScreenCastCrewScreen> with Utility {
                         return BlocConsumer<CreateCastCrewWebseriesCubit, CreateCastCrewWebseriesState>(
                           listener: (context, state) {
                             if (state is CreateCastCrewWebseriesErrorState) {
-                              Fluttertoast.showToast(msg: state.error);
+                             showMessage(context, state.error);
                               return;
                             }
 
                             if (state is CreateCastCrewWebseriesLoadedState) {
-                              Fluttertoast.showToast(msg: "Post castCrew Successfully");
+                             showMessage(context, "Post castCrew Successfully");
                               context.read<GetAllCastCrewWebseriesCubit>().getAllCastCrew(page: 1);
                               Navigator.pop(context);
                             }

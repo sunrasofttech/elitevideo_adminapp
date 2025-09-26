@@ -1,11 +1,10 @@
 import 'dart:developer';
 import 'dart:io';
-
+import 'package:elite_admin/utils/toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:html/parser.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
 import 'package:image_cropper/image_cropper.dart';
@@ -602,15 +601,15 @@ class _AddUpdateShortFlimScreenState extends State<AddUpdateShortFlimScreen> wit
                       BlocConsumer<UpdateFilmCubit, UpdateFilmState>(
                         listener: (context, state) {
                           if (state is UpdateFilmLoadingState) {
-                            Fluttertoast.showToast(msg: "It take time to update a shortfilm");
+                           showMessage(context, "It take time to update a shortfilm");
                           }
                           if (state is UpdateFilmErrorState) {
-                            Fluttertoast.showToast(msg: state.error);
+                           showMessage(context, state.error);
                             return;
                           }
 
                           if (state is UpdateFilmLoadedState) {
-                            Fluttertoast.showToast(msg: "Update Sucessfully");
+                           showMessage(context, "Update Sucessfully");
                             Navigator.pop(context);
                             context.read<GetAllShortFilmCubit>().getAllShortFilm();
                           }
@@ -619,15 +618,15 @@ class _AddUpdateShortFlimScreenState extends State<AddUpdateShortFlimScreen> wit
                           return BlocConsumer<PostFilmCubit, PostFilmState>(
                             listener: (context, state) {
                               if (state is PostFilmLoadingState) {
-                                Fluttertoast.showToast(msg: "It take time to upload a shortfilm");
+                               showMessage(context, "It take time to upload a shortfilm");
                               }
                               if (state is PostFilmErrorState) {
-                                Fluttertoast.showToast(msg: state.error);
+                               showMessage(context, state.error);
                                 return;
                               }
 
                               if (state is PostFilmLoadedState) {
-                                Fluttertoast.showToast(msg: "Post Sucessfully");
+                               showMessage(context, "Post Sucessfully");
                                 Navigator.pop(context);
                                 context.read<GetAllShortFilmCubit>().getAllShortFilm();
                               }
@@ -676,51 +675,51 @@ class _AddUpdateShortFlimScreenState extends State<AddUpdateShortFlimScreen> wit
                                   }
 
                                   if (selectedCategory == null) {
-                                    Fluttertoast.showToast(msg: "Select Movie Category");
+                                   showMessage(context, "Select Movie Category");
                                     return;
                                   }
 
                                   // if (selectedGenre == null) {
-                                  //   Fluttertoast.showToast(msg: "Select Movie Genre");
+                                  //  showMessage(context, "Select Movie Genre");
                                   //   return;
                                   // }
 
                                   if (selectedLanguage == null) {
-                                    Fluttertoast.showToast(msg: "Select Movie Langiage");
+                                   showMessage(context, "Select Movie Langiage");
                                     return;
                                   }
 
                                   if (movieNameController.text.isEmpty) {
-                                    Fluttertoast.showToast(msg: "Movie Name is required");
+                                   showMessage(context, "Movie Name is required");
                                     return;
                                   }
                                   if (selectedLanguage == null) {
-                                    Fluttertoast.showToast(msg: "Movie Language is required");
+                                   showMessage(context, "Movie Language is required");
                                     return;
                                   }
                                   // if (selectedGenre == null) {
-                                  //   Fluttertoast.showToast(msg: "Genre is required");
+                                  //  showMessage(context, "Genre is required");
                                   //   return;
                                   // }
                                   if (movieTimeController.text.isEmpty) {
-                                    Fluttertoast.showToast(msg: "Movie Time is required");
+                                   showMessage(context, "Movie Time is required");
                                     return;
                                   }
                                   if (releasedByController.text.isEmpty) {
-                                    Fluttertoast.showToast(msg: "Released By is required");
+                                   showMessage(context, "Released By is required");
                                     return;
                                   }
                                   if (releasedDateController.text.isEmpty) {
-                                    Fluttertoast.showToast(msg: "Released Date is required");
+                                   showMessage(context, "Released Date is required");
                                     return;
                                   }
                                   if (await descriptionController.getText() == '') {
-                                    Fluttertoast.showToast(msg: "Description is required");
+                                   showMessage(context, "Description is required");
                                     return;
                                   }
 
                                   if (_selectedVideo == null && videoLinkController.text.isEmpty) {
-                                    Fluttertoast.showToast(msg: "Video file or video link is required");
+                                   showMessage(context, "Video file or video link is required");
                                     return;
                                   }
 

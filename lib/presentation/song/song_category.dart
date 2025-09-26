@@ -1,8 +1,9 @@
 import 'dart:io';
 
+import 'package:elite_admin/utils/toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+
 import 'package:image_picker/image_picker.dart';
 import 'package:elite_admin/bloc/music/category/delete_music_catrgory/delete_music_category_cubit.dart';
 import 'package:elite_admin/bloc/music/category/get_all_music_category/get_all_music_category_cubit.dart';
@@ -105,12 +106,12 @@ class _SongCategoryScreenState extends State<SongCategoryScreen> with Utility {
               BlocListener<DeleteMusicCategoryCubit, DeleteMusicCategoryState>(
                 listener: (context, state) {
                   if (state is DeleteMusicCategoryLoadedState) {
-                    Fluttertoast.showToast(msg: "Delete Successfully");
+                   showMessage(context, "Delete Successfully");
                     context.read<GetAllMusicCategoryCubit>().getAllMusic();
                   }
 
                   if (state is DeleteMusicCategoryErrorState) {
-                    Fluttertoast.showToast(msg: state.error);
+                   showMessage(context, state.error);
                     return;
                   }
                 },
@@ -294,11 +295,11 @@ class _SongCategoryScreenState extends State<SongCategoryScreen> with Utility {
                     BlocConsumer<UpdateMusicCategoryCubit, UpdateMusicCategoryState>(
                       listener: (context, state) {
                         if (state is UpdateMusicCategoryErrorState) {
-                          Fluttertoast.showToast(msg: state.error);
+                         showMessage(context, state.error);
                           return;
                         }
                         if (state is UpdateMusicCategoryLoadedState) {
-                          Fluttertoast.showToast(msg: "Update Succesfully");
+                         showMessage(context, "Update Succesfully");
                           Navigator.pop(context);
                           context.read<GetAllMusicCategoryCubit>().getAllMusic();
                         }
@@ -307,7 +308,7 @@ class _SongCategoryScreenState extends State<SongCategoryScreen> with Utility {
                         return BlocConsumer<PostMusicCategoryCubit, PostMusicCategoryState>(
                           listener: (context, state) {
                             if (state is PostMusicCategoryLoadedState) {
-                              Fluttertoast.showToast(msg: "Post Sucessfully");
+                             showMessage(context, "Post Sucessfully");
                               Navigator.pop(context);
                               context.read<GetAllMusicCategoryCubit>().getAllMusic();
                             }

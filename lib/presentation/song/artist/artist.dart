@@ -2,9 +2,9 @@ import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:elite_admin/utils/apiurls/api.dart';
+import 'package:elite_admin/utils/toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:elite_admin/bloc/music/artist/delete_artist/delete_artist_cubit.dart';
 import 'package:elite_admin/bloc/music/artist/get_artist/get_artist_cubit.dart';
@@ -91,12 +91,12 @@ class _ArtistScreenState extends State<ArtistScreen> with Utility {
               BlocListener<DeleteArtistCubit, DeleteArtistState>(
                 listener: (context, state) {
                   if (state is DeleteArtistLoadedState) {
-                    Fluttertoast.showToast(msg: "Delete Successfully");
+                   showMessage(context, "Delete Successfully");
                     context.read<GetArtistCubit>().getAllArtist();
                   }
 
                   if (state is DeleteArtistErrorState) {
-                    Fluttertoast.showToast(msg: state.error);
+                   showMessage(context, state.error);
                     return;
                   }
                 },
@@ -290,11 +290,11 @@ class _ArtistScreenState extends State<ArtistScreen> with Utility {
                       BlocConsumer<UpdateArtistCubit, UpdateArtistState>(
                         listener: (context, state) {
                           if (state is UpdateArtistErrorState) {
-                            Fluttertoast.showToast(msg: state.error);
+                           showMessage(context, state.error);
                             return;
                           }
                           if (state is UpdateArtistLoadedState) {
-                            Fluttertoast.showToast(msg: "Update Succesfully");
+                           showMessage(context, "Update Succesfully");
                             Navigator.pop(context);
                             context.read<GetArtistCubit>().getAllArtist();
                           }
@@ -303,7 +303,7 @@ class _ArtistScreenState extends State<ArtistScreen> with Utility {
                           return BlocConsumer<PostArtistCubit, PostArtistState>(
                             listener: (context, state) {
                               if (state is PostArtistLoadedState) {
-                                Fluttertoast.showToast(msg: "Post Sucessfully");
+                               showMessage(context, "Post Sucessfully");
                                 Navigator.pop(context);
                                 context.read<GetArtistCubit>().getAllArtist();
                               }

@@ -1,8 +1,8 @@
 import 'dart:ui';
 import 'package:elite_admin/utils/apiurls/api.dart';
+import 'package:elite_admin/utils/toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:elite_admin/bloc/movie/genre/get_all_genre/get_all_genre_cubit.dart';
 import 'package:elite_admin/bloc/movie/language/get_all_language/get_all_language_cubit.dart';
 import 'package:elite_admin/bloc/short_film/delete_film/delete_film_cubit.dart';
@@ -173,24 +173,24 @@ class _ShortFilmsScreenState extends State<ShortFilmsScreen> with Utility {
               BlocListener<UpdateFilmCubit, UpdateFilmState>(
                 listener: (context, state) {
                   if (state is UpdateFilmErrorState) {
-                    Fluttertoast.showToast(msg: state.error);
+                   showMessage(context, state.error);
                     return;
                   }
 
                   if (state is UpdateFilmLoadedState) {
-                    Fluttertoast.showToast(msg: "Update Movie Successfully");
+                   showMessage(context, "Update Movie Successfully");
                     context.read<GetAllShortFilmCubit>().getAllShortFilm();
                   }
                 },
                 child: BlocListener<DeleteFilmCubit, DeleteFilmState>(
                   listener: (context, state) {
                     if (state is DeleteFilmErrorState) {
-                      Fluttertoast.showToast(msg: state.error);
+                     showMessage(context, state.error);
                       return;
                     }
 
                     if (state is DeleteFilmLoadedState) {
-                      Fluttertoast.showToast(msg: "Delete Successfully");
+                     showMessage(context, "Delete Successfully");
                       context.read<GetAllShortFilmCubit>().getAllShortFilm();
                       Navigator.pop(context);
                     }

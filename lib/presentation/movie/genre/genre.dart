@@ -1,10 +1,11 @@
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:elite_admin/utils/toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:elite_admin/bloc/movie/genre/delete_genre/delete_genre_cubit.dart';
@@ -120,24 +121,24 @@ class _GenreScreenState extends State<GenreScreen> with Utility {
               BlocListener<UpdateGenreCubit, UpdateGenreState>(
                 listener: (context, state) {
                   if (state is UpdateGenreErrorState) {
-                    Fluttertoast.showToast(msg: state.error);
+                   showMessage(context,  state.error);
                     return;
                   }
 
                   if (state is UpdateGenreLoadedState) {
-                    Fluttertoast.showToast(msg: "Update Genre Sucessfully");
+                   showMessage(context,  "Update Genre Sucessfully");
                     context.read<GetAllGenreCubit>().getGenre();
                   }
                 },
                 child: BlocListener<DeleteGenreCubit, DeleteGenreState>(
                   listener: (context, state) {
                     if (state is DeleteGenreErrorState) {
-                      Fluttertoast.showToast(msg: state.error);
+                     showMessage(context,  state.error);
                       return;
                     }
 
                     if (state is DeleteGenreLoadedState) {
-                      Fluttertoast.showToast(msg: "Delete Sucessfully");
+                     showMessage(context,  "Delete Sucessfully");
                       Navigator.pop(context);
                       context.read<GetAllGenreCubit>().getGenre();
                     }
@@ -407,12 +408,12 @@ class _GenreScreenState extends State<GenreScreen> with Utility {
                     BlocConsumer<UpdateGenreCubit, UpdateGenreState>(
                       listener: (context, state) {
                         if (state is UpdateGenreErrorState) {
-                          Fluttertoast.showToast(msg: state.error);
+                         showMessage(context,  state.error);
                           return;
                         }
 
                         if (state is UpdateGenreLoadedState) {
-                          Fluttertoast.showToast(msg: "Update Sucessfully");
+                         showMessage(context,  "Update Sucessfully");
                           context.read<GetAllGenreCubit>().getGenre();
                           Navigator.pop(context);
                         }
@@ -421,12 +422,12 @@ class _GenreScreenState extends State<GenreScreen> with Utility {
                         return BlocConsumer<PostGenreCubit, PostGenreState>(
                           listener: (context, state) {
                             if (state is PostGenreErrorState) {
-                              Fluttertoast.showToast(msg: state.error);
+                             showMessage(context,  state.error);
                               return;
                             }
 
                             if (state is PostGenreLaodedState) {
-                              Fluttertoast.showToast(msg: "Post Genre Successfully");
+                             showMessage(context,  "Post Genre Successfully");
                               context.read<GetAllGenreCubit>().getGenre();
                               Navigator.pop(context);
                             }

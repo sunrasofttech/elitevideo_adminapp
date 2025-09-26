@@ -1,7 +1,7 @@
+import 'package:elite_admin/utils/toast.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:elite_admin/bloc/web_series/season/get_all_season/get_all_season_cubit.dart';
 import 'package:elite_admin/bloc/web_series/season/post_season/post_season_cubit.dart';
 import 'package:elite_admin/bloc/web_series/season/update_season/update_season_cubit.dart';
@@ -16,11 +16,7 @@ import 'package:elite_admin/utils/widget/textwidget.dart';
 import '../../../bloc/web_series/season/get_all_season/get_all_season_model.dart';
 
 class SeasonAddUpdateScreen extends StatefulWidget {
-  const SeasonAddUpdateScreen({
-    super.key,
-    this.id,
-    this.data,
-  });
+  const SeasonAddUpdateScreen({super.key, this.id, this.data});
   final String? id;
   final Datum? data;
 
@@ -87,10 +83,10 @@ class _SeasonAddUpdateScreenState extends State<SeasonAddUpdateScreen> with Util
     final releasedDate = _releasedDateController.text.trim();
     if (widget.id != null) {
       context.read<UpdateSeasonCubit>().updateSeason(
-            seasonName: _seasonController.text,
-            status: status,
-            id: widget.id ?? "",
-          );
+        seasonName: _seasonController.text,
+        status: status,
+        id: widget.id ?? "",
+      );
       return;
     }
     if (name.isEmpty || releasedDate.isEmpty || selectedSeasonId == null) return;
@@ -100,7 +96,7 @@ class _SeasonAddUpdateScreenState extends State<SeasonAddUpdateScreen> with Util
       status: status,
       seriesId: selectedSeasonId!,
       releasedDate: releasedDate,
-        showType: "series"
+      showType: "series",
     );
 
     setState(() {
@@ -132,19 +128,17 @@ class _SeasonAddUpdateScreenState extends State<SeasonAddUpdateScreen> with Util
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 heightBox50(),
-                const TextWidget(
-                  text: "Select Series",
-                ),
+                const TextWidget(text: "Select Series"),
                 const SizedBox(height: 10),
                 BlocListener<UpdateSeasonCubit, UpdateSeasonState>(
                   listener: (context, state) {
                     if (state is UpdateSeasonErrorState) {
-                      Fluttertoast.showToast(msg: state.error);
+                      showMessage(context, state.error);
                       return;
                     }
 
                     if (state is UpdateSeasonLoadedState) {
-                      Fluttertoast.showToast(msg: "Update Successfully");
+                      showMessage(context, "Update Successfully");
                       Navigator.pop(context);
                       context.read<GetAllSeasonCubit>().getAllSeason();
                     }
@@ -174,19 +168,12 @@ class _SeasonAddUpdateScreenState extends State<SeasonAddUpdateScreen> with Util
                   ),
                 ),
                 const SizedBox(height: 10),
-                const TextWidget(
-                  text: "Season Name",
-                ),
+                const TextWidget(text: "Season Name"),
                 const SizedBox(height: 5),
-                TextFormFieldWidget(
-                  controller: _seasonController,
-                  focusNode: _seasonFocusNode,
-                ),
+                TextFormFieldWidget(controller: _seasonController, focusNode: _seasonFocusNode),
                 const SizedBox(height: 10),
                 heightBox10(),
-                const TextWidget(
-                  text: "Released Date",
-                ),
+                const TextWidget(text: "Released Date"),
                 heightBox5(),
                 TextFormFieldWidget(
                   focusNode: _releasedDateFocusNode,
@@ -194,35 +181,35 @@ class _SeasonAddUpdateScreenState extends State<SeasonAddUpdateScreen> with Util
                   readOnly: true,
                   isSuffixIconShow: true,
                   suffixIcon: InkWell(
-                      onTap: () {
-                        selectDate(context, _releasedDateController);
-                      },
-                      child: const Icon(Icons.calendar_month_outlined)),
+                    onTap: () {
+                      selectDate(context, _releasedDateController);
+                    },
+                    child: const Icon(Icons.calendar_month_outlined),
+                  ),
                 ),
                 heightBox10(),
-                const TextWidget(
-                  text: "Status",
-                ),
+                const TextWidget(text: "Status"),
                 heightBox10(),
                 Switch(
-                    activeColor: AppColors.zGreenColor,
-                    value: status,
-                    onChanged: (v) {
-                      setState(() {
-                        status = v;
-                      });
-                    }),
+                  activeColor: AppColors.zGreenColor,
+                  value: status,
+                  onChanged: (v) {
+                    setState(() {
+                      status = v;
+                    });
+                  },
+                ),
                 heightBox10(),
                 BlocConsumer<PostSeasonCubit, PostSeasonState>(
                   listener: (context, state) {
                     if (state is PostSeasonErrorState) {
-                      Fluttertoast.showToast(msg: "${state.error} ❌");
+                      showMessage(context, "${state.error} ❌");
                       return;
                     }
                     if (state is PostSeasonLoadedState) {
                       Navigator.pop(context);
                       context.read<GetAllSeasonCubit>().getAllSeason();
-                      Fluttertoast.showToast(msg: "Post Sucessfully ✅");
+                      showMessage(context, "Post Sucessfully ✅");
                     }
                   },
                   builder: (context, state) {
@@ -232,8 +219,8 @@ class _SeasonAddUpdateScreenState extends State<SeasonAddUpdateScreen> with Util
                       buttonText: widget.id != null
                           ? "Update Season"
                           : editingIndex != null
-                              ? 'Update'
-                              : 'Add',
+                          ? 'Update'
+                          : 'Add',
                     );
                   },
                 ),
@@ -285,17 +272,13 @@ class _SeasonAddUpdateScreenState extends State<SeasonAddUpdateScreen> with Util
                                 onPressed: () => onDelete(index),
                               ),
                             ],
-                          )
+                          ),
                         ],
                       ),
                     );
                   },
                 ),
-                if (seasonList.isNotEmpty)
-                  CustomOutlinedButton(
-                    onPressed: uploadSeasons,
-                    buttonText: "Upload",
-                  ),
+                if (seasonList.isNotEmpty) CustomOutlinedButton(onPressed: uploadSeasons, buttonText: "Upload"),
                 heightBox20(),
                 backButton(context),
               ],

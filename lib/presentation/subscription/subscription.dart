@@ -1,6 +1,7 @@
+import 'package:elite_admin/utils/toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+
 import 'package:elite_admin/bloc/subscription/delete_subscription/delete_subscription_cubit.dart';
 import 'package:elite_admin/bloc/subscription/get_subscription/get_subscription_cubit.dart';
 import 'package:elite_admin/constant/color.dart';
@@ -90,12 +91,12 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> with Utility {
               BlocListener<DeleteSubscriptionCubit, DeleteSubscriptionState>(
                 listener: (context, state) {
                   if (state is DeleteSubscriptionErrorState) {
-                    Fluttertoast.showToast(msg: state.error);
+                   showMessage(context,  state.error);
                     return;
                   }
 
                   if (state is DeleteSubscriptionLoadedState) {
-                    Fluttertoast.showToast(msg: "Delete Successfully");
+                   showMessage(context,  "Delete Successfully");
                     context.read<GetSubscriptionCubit>().getAllSub();
                     Navigator.pop(context);
                   }

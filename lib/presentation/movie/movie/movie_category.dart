@@ -1,9 +1,9 @@
 import 'dart:io';
 
+import 'package:elite_admin/utils/toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:elite_admin/bloc/movie/category/delete_category/delete_category_cubit.dart';
@@ -112,24 +112,24 @@ class _MovieCategoryScreenState extends State<MovieCategoryScreen> with Utility 
               BlocListener<UpdateCategoryCubit, UpdateCategoryState>(
                 listener: (context, state) {
                   if (state is UpdateCategoryErrorState) {
-                    Fluttertoast.showToast(msg: state.error);
+                   showMessage(context,  state.error);
                     return;
                   }
 
                   if (state is UpdateCategoryLoadedState) {
-                    Fluttertoast.showToast(msg: "Movie category Update successfully.");
+                   showMessage(context,  "Movie category Update successfully.");
                     context.read<GetAllMovieCategoryCubit>().getAllMovieCategory();
                   }
                 },
                 child: BlocListener<DeleteCategoryCubit, DeleteCategoryState>(
                   listener: (context, state) {
                     if (state is DeleteCategoryErrorState) {
-                      Fluttertoast.showToast(msg: state.error);
+                     showMessage(context,  state.error);
                       return;
                     }
 
                     if (state is DeleteCategoryLoadedState) {
-                      Fluttertoast.showToast(msg: "Delete Successfully");
+                     showMessage(context,  "Delete Successfully");
                       context.read<GetAllMovieCategoryCubit>().getAllMovieCategory();
                       Navigator.pop(context);
                     }
@@ -383,13 +383,13 @@ class _MovieCategoryScreenState extends State<MovieCategoryScreen> with Utility 
                     BlocConsumer<PostCategoryCubit, PostCategoryState>(
                       listener: (context, state) {
                         if (state is PostCategoryErrorState) {
-                          Fluttertoast.showToast(msg: state.error);
+                         showMessage(context,  state.error);
                           return;
                         }
 
                         if (state is PostCategoryLoadedState) {
                           Navigator.pop(context);
-                          Fluttertoast.showToast(msg: "Movie category created successfully.");
+                         showMessage(context,  "Movie category created successfully.");
                           context.read<GetAllMovieCategoryCubit>().getAllMovieCategory();
                         }
                       },
@@ -397,13 +397,13 @@ class _MovieCategoryScreenState extends State<MovieCategoryScreen> with Utility 
                         return BlocConsumer<UpdateCategoryCubit, UpdateCategoryState>(
                           listener: (context, postState) {
                             if (postState is UpdateCategoryErrorState) {
-                              Fluttertoast.showToast(msg: postState.error);
+                             showMessage(context,  postState.error);
                               return;
                             }
 
                             if (postState is UpdateCategoryLoadedState) {
                               Navigator.pop(context);
-                              Fluttertoast.showToast(msg: "Movie category Update successfully.");
+                             showMessage(context,  "Movie category Update successfully.");
                               context.read<GetAllMovieCategoryCubit>().getAllMovieCategory();
                             }
                           },
@@ -413,7 +413,7 @@ class _MovieCategoryScreenState extends State<MovieCategoryScreen> with Utility 
                                   (postState is PostCategoryLoadingState || state is UpdateCategoryLoadingState),
                               onPressed: () {
                                 if (nameController.text.isEmpty) {
-                                  Fluttertoast.showToast(msg: "Add title");
+                                 showMessage(context,  "Add title");
                                   return;
                                 }
                                 if (id != null) {

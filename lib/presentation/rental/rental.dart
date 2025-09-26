@@ -1,6 +1,6 @@
+import 'package:elite_admin/utils/toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:elite_admin/bloc/rental/delete_rentals/delete_rentals_cubit.dart';
 import 'package:elite_admin/bloc/rental/get_rentals/get_rentals_cubit.dart';
@@ -84,13 +84,13 @@ class _RentalTabView extends StatelessWidget with Utility {
     return BlocListener<DeleteRentalsCubit, DeleteRentalsState>(
       listener: (context, state) {
         if (state is DeleteRentalsloadedState) {
-          Fluttertoast.showToast(msg: "Delete Sucessfully");
+         showMessage(context,  "Delete Sucessfully");
           context.read<GetRentalsCubit>().getRentals(type: type);
           Navigator.pop(context);
         }
 
         if (state is DeleteRentalsErrorState) {
-          Fluttertoast.showToast(msg: state.error);
+         showMessage(context,  state.error);
           return;
         }
       },

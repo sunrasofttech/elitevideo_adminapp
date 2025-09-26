@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
@@ -5,21 +7,27 @@ import 'package:image_picker/image_picker.dart';
 class ImagePickerUtil {
   static final ImagePicker _picker = ImagePicker();
 
-  static Future<XFile?> pickImageFromGallery(
-      {CropAspectRatio? aspectRatio, CropAspectRatioPresetData? initAspectRatio}) async {
+  static Future<XFile?> pickImageFromGallery({
+    CropAspectRatio? aspectRatio,
+    CropAspectRatioPresetData? initAspectRatio,
+  }) async {
     final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+    if (Platform.isWindows) return pickedFile;
     return await _cropImage(pickedFile, aspectRatio, initAspectRatio);
   }
 
-  static Future<XFile?> pickImageFromCamera(
-      {CropAspectRatio? aspectRatio, CropAspectRatioPresetData? initAspectRatio}) async {
+  static Future<XFile?> pickImageFromCamera({
+    CropAspectRatio? aspectRatio,
+    CropAspectRatioPresetData? initAspectRatio,
+  }) async {
     final pickedFile = await _picker.pickImage(source: ImageSource.camera);
+    if (Platform.isWindows) return pickedFile;
     return await _cropImage(pickedFile, aspectRatio, initAspectRatio);
   }
 
   static Future<XFile?> pickVideoFromGallery(BuildContext context) async {
     final pickedFile = await _picker.pickVideo(source: ImageSource.gallery);
-    
+
     return pickedFile;
   }
 
@@ -29,7 +37,10 @@ class ImagePickerUtil {
   }
 
   static Future<XFile?> _cropImage(
-      XFile? pickedFile, CropAspectRatio? aspectRatio, CropAspectRatioPresetData? initAspectRatio) async {
+    XFile? pickedFile,
+    CropAspectRatio? aspectRatio,
+    CropAspectRatioPresetData? initAspectRatio,
+  ) async {
     if (pickedFile == null) return null;
 
     final croppedFile = await ImageCropper().cropImage(
@@ -44,14 +55,10 @@ class ImagePickerUtil {
           lockAspectRatio: true,
           initAspectRatio: initAspectRatio ?? CropAspectRatioPreset.original,
         ),
-        IOSUiSettings(
-          title: 'Crop Image',
-          aspectRatioLockEnabled: true,
-        ),
+        IOSUiSettings(title: 'Crop Image', aspectRatioLockEnabled: true),
       ],
     );
 
     return croppedFile != null ? XFile(croppedFile.path) : null;
   }
-
 }

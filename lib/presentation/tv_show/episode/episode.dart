@@ -1,7 +1,8 @@
 import 'dart:ui';
+import 'package:elite_admin/utils/toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+
 import 'package:elite_admin/bloc/tv_show/episode_tv_show/delete_episode/delete_episode_cubit.dart';
 import 'package:elite_admin/bloc/tv_show/episode_tv_show/get_all_episode/get_all_episode_cubit.dart';
 import 'package:elite_admin/bloc/tv_show/episode_tv_show/update_episode/update_episode_cubit.dart';
@@ -239,24 +240,24 @@ class _TvShowEpisodeScreenState extends State<TvShowEpisodeScreen> with Utility 
               BlocListener<UpdateTvShowEpisodeCubit, UpdateEpisodeState>(
                 listener: (context, state) {
                   if (state is UpdateEpisodeErrorState) {
-                    Fluttertoast.showToast(msg: state.error);
+                   showMessage(context, state.error);
                     return;
                   }
 
                   if (state is UpdateEpisodeLoadedState) {
                     context.read<GetAllTvShowEpisodeCubit>().getAllEpisode();
-                    Fluttertoast.showToast(msg: "Update Successfully");
+                   showMessage(context, "Update Successfully");
                   }
                 },
                 child: BlocListener<DeleteTvShowEpisodeCubit, DeleteEpisodeState>(
                   listener: (context, state) {
                     if (state is DeleteEpisodeErrorState) {
-                      Fluttertoast.showToast(msg: state.error);
+                     showMessage(context, state.error);
                       return;
                     }
 
                     if (state is DeleteEpisodeLaodedState) {
-                      Fluttertoast.showToast(msg: "Delete Sucessfully");
+                     showMessage(context, "Delete Sucessfully");
                       context.read<GetAllTvShowEpisodeCubit>().getAllEpisode();
                     }
                   },

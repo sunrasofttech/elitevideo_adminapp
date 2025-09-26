@@ -1,8 +1,8 @@
 import 'dart:developer';
 import 'dart:io';
+import 'package:elite_admin/utils/toast.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:html/parser.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -421,13 +421,13 @@ class _AddUpdateSeriesScreenState extends State<AddUpdateSeriesScreen> with Util
                       BlocConsumer<UpdateSeriesCubit, UpdateSeriesState>(
                         listener: (context, state) {
                           if (state is UpdateSeriesErrorState) {
-                            Fluttertoast.showToast(msg: state.error);
+                            showMessage(context, state.error);
                             return;
                           }
 
                           if (state is UpdateSeriesLoadedState) {
                             Navigator.pop(context);
-                            Fluttertoast.showToast(msg: "Update Successfully");
+                            showMessage(context, "Update Successfully");
                             context.read<GetAllSeriesCubit>().getAllSeries();
                           }
                         },
@@ -435,12 +435,12 @@ class _AddUpdateSeriesScreenState extends State<AddUpdateSeriesScreen> with Util
                           return BlocConsumer<PostSeriesCubit, PostSeriesState>(
                             listener: (context, state) {
                               if (state is PostSeriesErrorState) {
-                                Fluttertoast.showToast(msg: state.error);
+                                showMessage(context, state.error);
                                 return;
                               }
 
                               if (state is PostSeriesLoadedState) {
-                                Fluttertoast.showToast(msg: "Post Sucessdfully ✅");
+                                showMessage(context, "Post Sucessdfully ✅");
                                 Navigator.pop(context);
                                 context.read<GetAllSeriesCubit>().getAllSeries();
                               }
@@ -482,27 +482,27 @@ class _AddUpdateSeriesScreenState extends State<AddUpdateSeriesScreen> with Util
                                   }
 
                                   if (_selectedPosterImage == null) {
-                                    Fluttertoast.showToast(msg: "Upload Poster Image");
+                                    showMessage(context, "Upload Poster Image");
                                     return;
                                   }
 
                                   if (selectedCategoryId == null) {
-                                    Fluttertoast.showToast(msg: "Select Category");
+                                    showMessage(context, "Select Category");
                                     return;
                                   }
 
                                   if (selectedLanguageId == null) {
-                                    Fluttertoast.showToast(msg: "Select Language");
+                                    showMessage(context, "Select Language");
                                     return;
                                   }
 
                                   if (movieNameController.text.isEmpty) {
-                                    Fluttertoast.showToast(msg: "please enter movie name");
+                                    showMessage(context, "please enter movie name");
                                     return;
                                   }
 
                                   if (_selectedPosterImage == null) {
-                                    Fluttertoast.showToast(msg: "upload poster is required");
+                                    showMessage(context, "upload poster is required");
                                     return;
                                   }
 

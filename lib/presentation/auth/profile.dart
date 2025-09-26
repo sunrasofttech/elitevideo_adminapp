@@ -1,8 +1,8 @@
 import 'dart:io';
+import 'package:elite_admin/utils/toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:elite_admin/bloc/auth/get_profile/get_profile_cubit.dart';
@@ -155,12 +155,12 @@ class _ProfileScreenState extends State<ProfileScreen> with Utility {
                         BlocConsumer<UpdateProfileCubit, UpdateProfileState>(
                           listener: (context, state) {
                             if (state is UpdateProfileErrorState) {
-                              Fluttertoast.showToast(msg: state.error);
+                             showMessage(context,  state.error);
                               return;
                             }
 
                             if (state is UpdateProfileLoadedState) {
-                              Fluttertoast.showToast(msg: "Update Sucessfully");
+                             showMessage(context,  "Update Sucessfully");
                               Navigator.pop(context);
                               context.read<GetProfileCubit>().getProfile(context);
                             }

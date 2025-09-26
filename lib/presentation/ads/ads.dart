@@ -1,6 +1,6 @@
+import 'package:elite_admin/utils/toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:elite_admin/bloc/ads/delete_ads/delete_ads_cubit.dart';
 import 'package:elite_admin/bloc/ads/get_all_ads/get_all_ads_cubit.dart';
 import 'package:elite_admin/constant/color.dart';
@@ -86,12 +86,12 @@ class _AdsScreenState extends State<AdsScreen> with Utility {
             BlocListener<DeleteAdsCubit, DeleteAdsState>(
               listener: (context, state) {
                 if (state is DeleteAdsErrorState) {
-                  Fluttertoast.showToast(msg: state.error);
+                 showMessage(context, state.error);
                   return;
                 }
 
                 if (state is DeleteAdsLaodedState) {
-                  Fluttertoast.showToast(msg: "Delete Succesfully");
+                 showMessage(context, "Delete Succesfully");
                   Navigator.pop(context);
                   context.read<GetAllAdsCubit>().getAllAds();
                 }

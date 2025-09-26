@@ -1,10 +1,11 @@
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:elite_admin/utils/toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+
 import 'package:html/parser.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
 import 'package:image_cropper/image_cropper.dart';
@@ -110,16 +111,11 @@ class _AddUpdateLiveTvScreenState extends State<AddUpdateLiveTvScreen> with Util
                 Container(
                   width: MediaQuery.of(context).size.width,
                   padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
-                    color: AppColors.whiteColor,
-                  ),
+                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(12), color: AppColors.whiteColor),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const TextWidget(
-                        text: "Cover Image",
-                      ),
+                      const TextWidget(text: "Cover Image"),
                       heightBox10(),
                       GestureDetector(
                         onTap: _pickImage,
@@ -127,12 +123,8 @@ class _AddUpdateLiveTvScreenState extends State<AddUpdateLiveTvScreen> with Util
                           width: MediaQuery.of(context).size.width,
                           padding: const EdgeInsets.all(8),
                           decoration: BoxDecoration(
-                            borderRadius: const BorderRadius.all(
-                              Radius.circular(8),
-                            ),
-                            border: Border.all(
-                              color: AppColors.greyColor,
-                            ),
+                            borderRadius: const BorderRadius.all(Radius.circular(8)),
+                            border: Border.all(color: AppColors.greyColor),
                           ),
                           child: _selectedImage == null
                               ? Column(
@@ -161,16 +153,11 @@ class _AddUpdateLiveTvScreenState extends State<AddUpdateLiveTvScreen> with Util
                 Container(
                   width: MediaQuery.of(context).size.width,
                   padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
-                    color: AppColors.whiteColor,
-                  ),
+                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(12), color: AppColors.whiteColor),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const TextWidget(
-                        text: "Poster Image",
-                      ),
+                      const TextWidget(text: "Poster Image"),
                       heightBox10(),
                       GestureDetector(
                         onTap: _pickPosterImage,
@@ -178,12 +165,8 @@ class _AddUpdateLiveTvScreenState extends State<AddUpdateLiveTvScreen> with Util
                           width: MediaQuery.of(context).size.width,
                           padding: const EdgeInsets.all(8),
                           decoration: BoxDecoration(
-                            borderRadius: const BorderRadius.all(
-                              Radius.circular(8),
-                            ),
-                            border: Border.all(
-                              color: AppColors.greyColor,
-                            ),
+                            borderRadius: const BorderRadius.all(Radius.circular(8)),
+                            border: Border.all(color: AppColors.greyColor),
                           ),
                           child: _selectedPosterImage == null
                               ? Column(
@@ -212,23 +195,18 @@ class _AddUpdateLiveTvScreenState extends State<AddUpdateLiveTvScreen> with Util
                 Container(
                   width: MediaQuery.of(context).size.width,
                   padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
-                    color: AppColors.whiteColor,
-                  ),
+                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(12), color: AppColors.whiteColor),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const TextWidget(
-                        text: "Select Live Category Id",
-                      ),
+                      const TextWidget(text: "Select Live Category Id"),
                       heightBox5(),
                       BlocBuilder<GetLiveCategoryCubit, GetLiveCategoryState>(
                         builder: (context, state) {
                           if (state is GetLiveCategoryLoadedState) {
                             final languageNames =
                                 state.model.data?.categories?.map((datum) => datum.name).whereType<String>().toList() ??
-                                    [];
+                                [];
                             return CustomDropdown(
                               items: languageNames,
                               hinttext: "select language",
@@ -236,8 +214,9 @@ class _AddUpdateLiveTvScreenState extends State<AddUpdateLiveTvScreen> with Util
                               onChanged: (value) {
                                 setState(() {
                                   selectedLanguage = value;
-                                  final selectedDatum =
-                                      state.model.data?.categories?.firstWhere((datum) => datum.name == value);
+                                  final selectedDatum = state.model.data?.categories?.firstWhere(
+                                    (datum) => datum.name == value,
+                                  );
                                   print("Selected Datum ID: ${selectedDatum?.id}");
                                   selectedLanguageId = selectedDatum?.id;
                                 });
@@ -248,62 +227,43 @@ class _AddUpdateLiveTvScreenState extends State<AddUpdateLiveTvScreen> with Util
                         },
                       ),
                       heightBox10(),
-                      const TextWidget(
-                        text: "Live TV Name",
-                      ),
+                      const TextWidget(text: "Live TV Name"),
                       heightBox5(),
-                      TextFormFieldWidget(
-                        focusNode: nameFocus,
-                        controller: nameController,
-                      ),
+                      TextFormFieldWidget(focusNode: nameFocus, controller: nameController),
                       heightBox10(),
-                      const TextWidget(
-                        text: "Android Channel Url",
-                      ),
+                      const TextWidget(text: "Android Channel Url"),
                       heightBox5(),
-                      TextFormFieldWidget(
-                        focusNode: androidUrlFocus,
-                        controller: androidUrlController,
-                      ),
+                      TextFormFieldWidget(focusNode: androidUrlFocus, controller: androidUrlController),
                       heightBox10(),
-                      const TextWidget(
-                        text: "IOS Channel Url",
-                      ),
+                      const TextWidget(text: "IOS Channel Url"),
                       heightBox5(),
-                      TextFormFieldWidget(
-                        focusNode: iosUrlFocus,
-                        controller: iosUrlController,
-                      ),
+                      TextFormFieldWidget(focusNode: iosUrlFocus, controller: iosUrlController),
                       heightBox10(),
-                      const TextWidget(
-                        text: "Status",
-                      ),
+                      const TextWidget(text: "Status"),
                       heightBox10(),
                       Switch(
-                          activeColor: AppColors.zGreenColor,
-                          value: status,
-                          onChanged: (v) {
-                            setState(() {
-                              status = v;
-                            });
-                          }),
-                      heightBox10(),
-                      const TextWidget(
-                        text: "Show Subscrpiton",
+                        activeColor: AppColors.zGreenColor,
+                        value: status,
+                        onChanged: (v) {
+                          setState(() {
+                            status = v;
+                          });
+                        },
                       ),
+                      heightBox10(),
+                      const TextWidget(text: "Show Subscrpiton"),
                       heightBox10(),
                       Switch(
-                          activeColor: AppColors.zGreenColor,
-                          value: showSubscrption,
-                          onChanged: (v) {
-                            setState(() {
-                              showSubscrption = v;
-                            });
-                          }),
-                      heightBox10(),
-                      const TextWidget(
-                        text: "Description",
+                        activeColor: AppColors.zGreenColor,
+                        value: showSubscrption,
+                        onChanged: (v) {
+                          setState(() {
+                            showSubscrption = v;
+                          });
+                        },
                       ),
+                      heightBox10(),
+                      const TextWidget(text: "Description"),
                       heightBox5(),
                       SizedBox(
                         height: 500,
@@ -333,12 +293,12 @@ class _AddUpdateLiveTvScreenState extends State<AddUpdateLiveTvScreen> with Util
                       BlocConsumer<UpdateLiveTvCubit, UpdateLiveTvState>(
                         listener: (context, state) {
                           if (state is UpdateLiveTvErrorState) {
-                            Fluttertoast.showToast(msg: state.error);
+                            showMessage(context, state.error);
                             return;
                           }
 
                           if (state is UpdateLiveTvLoadedState) {
-                            Fluttertoast.showToast(msg: "Update Sucessfully");
+                            showMessage(context, "Update Sucessfully");
                             Navigator.pop(context);
                             context.read<GetLiveTvCubit>().getAllLiveCategory();
                           }
@@ -347,12 +307,12 @@ class _AddUpdateLiveTvScreenState extends State<AddUpdateLiveTvScreen> with Util
                           return BlocConsumer<CreatelivetvCubit, CreatelivetvState>(
                             listener: (context, state) {
                               if (state is CreatelivetvErrorState) {
-                                Fluttertoast.showToast(msg: state.error);
+                                showMessage(context, state.error);
                                 return;
                               }
 
                               if (state is CreatelivetvLoadedState) {
-                                Fluttertoast.showToast(msg: "Post Sucessfully");
+                                showMessage(context, "Post Sucessfully");
                                 Navigator.pop(context);
                                 context.read<GetLiveTvCubit>().getAllLiveCategory();
                               }
@@ -372,55 +332,53 @@ class _AddUpdateLiveTvScreenState extends State<AddUpdateLiveTvScreen> with Util
                                   }
                                   if (widget.id != null) {
                                     context.read<UpdateLiveTvCubit>().updateLiveTV(
-                                          id: widget.id ?? "",
-                                          coverImg: _selectedImage != null ? File(_selectedImage!.path) : null,
-                                          description: validHtml,
-                                          posterImg:
-                                              _selectedPosterImage != null ? File(_selectedPosterImage!.path) : null,
-                                          status: status,
-                                          androidChannelUrl: androidUrlController.text,
-                                          iosChannelUrl: iosUrlController.text,
-                                          liveCategoryId: selectedLanguageId,
-                                          name: nameController.text,
-                                          is_livetv_on_rent: showSubscrption
-                                        );
+                                      id: widget.id ?? "",
+                                      coverImg: _selectedImage != null ? File(_selectedImage!.path) : null,
+                                      description: validHtml,
+                                      posterImg: _selectedPosterImage != null ? File(_selectedPosterImage!.path) : null,
+                                      status: status,
+                                      androidChannelUrl: androidUrlController.text,
+                                      iosChannelUrl: iosUrlController.text,
+                                      liveCategoryId: selectedLanguageId,
+                                      name: nameController.text,
+                                      is_livetv_on_rent: showSubscrption,
+                                    );
                                     return;
                                   }
 
                                   if (selectedLanguageId == null) {
-                                    Fluttertoast.showToast(msg: "Select Live TV Category");
+                                    showMessage(context, "Select Live TV Category");
                                     return;
                                   }
 
                                   if (nameController.text.isEmpty) {
-                                    Fluttertoast.showToast(msg: "Name is required");
+                                    showMessage(context, "Name is required");
                                     return;
                                   }
                                   if (androidUrlController.text.isEmpty) {
-                                    Fluttertoast.showToast(msg: "Android Url is required");
+                                    showMessage(context, "Android Url is required");
                                     return;
                                   }
                                   if (iosUrlController.text.isEmpty) {
-                                    Fluttertoast.showToast(msg: "Ios Url is required");
+                                    showMessage(context, "Ios Url is required");
                                     return;
                                   }
                                   if (selectedLanguage == null) {
-                                    Fluttertoast.showToast(msg: "Movie Language is required");
+                                    showMessage(context, "Movie Language is required");
                                     return;
                                   }
 
                                   context.read<CreatelivetvCubit>().createLiveTV(
-                                        coverImg: _selectedImage != null ? File(_selectedImage!.path) : null,
-                                        description: validHtml,
-                                        posterImg:
-                                            _selectedPosterImage != null ? File(_selectedPosterImage!.path) : null,
-                                        status: status,
-                                        androidChannelUrl: androidUrlController.text,
-                                        iosChannelUrl: iosUrlController.text,
-                                        liveCategoryId: selectedLanguageId,
-                                        name: nameController.text,
-                                        is_livetv_on_rent: showSubscrption,
-                                      );
+                                    coverImg: _selectedImage != null ? File(_selectedImage!.path) : null,
+                                    description: validHtml,
+                                    posterImg: _selectedPosterImage != null ? File(_selectedPosterImage!.path) : null,
+                                    status: status,
+                                    androidChannelUrl: androidUrlController.text,
+                                    iosChannelUrl: iosUrlController.text,
+                                    liveCategoryId: selectedLanguageId,
+                                    name: nameController.text,
+                                    is_livetv_on_rent: showSubscrption,
+                                  );
                                 },
                                 buttonText: widget.id != null ? "Save Live TV" : "Upload Live TV",
                               );

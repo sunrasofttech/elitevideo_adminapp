@@ -1,7 +1,8 @@
 import 'package:dropdown_search/dropdown_search.dart';
+import 'package:elite_admin/utils/toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+
 import 'package:elite_admin/bloc/ads/get_all_ads/get_all_ads_cubit.dart';
 import 'package:elite_admin/bloc/ads/get_all_ads/get_all_ads_model.dart';
 import 'package:elite_admin/bloc/movie/movie%20ads/delete_movie_ads/delete_movie_ads_cubit.dart';
@@ -82,12 +83,12 @@ class _MovieAdsScreenState extends State<MovieAdsScreen> with Utility {
               BlocListener<DeleteMovieAdsCubit, DeleteMovieAdsState>(
                 listener: (context, state) {
                   if (state is DeleteMovieAdsErrorState) {
-                    Fluttertoast.showToast(msg: state.error);
+                   showMessage(context,  state.error);
                     return;
                   }
 
                   if (state is DeleteMovieAdsLoadedState) {
-                    Fluttertoast.showToast(msg: "Delete Successfully");
+                   showMessage(context,  "Delete Successfully");
                     context.read<GetAllMovieAdsCubit>().getAllMovies(page: currentPage);
                   }
                 },
@@ -437,12 +438,12 @@ class _MovieAdsScreenState extends State<MovieAdsScreen> with Utility {
                           BlocConsumer<UpdateMovieAdsCubit, UpdateMovieAdsState>(
                             listener: (context, state) {
                               if (state is UpdateMovieAdsErrorState) {
-                                Fluttertoast.showToast(msg: state.error);
+                               showMessage(context,  state.error);
                                 return;
                               }
 
                               if (state is UpdateMovieAdsLaodedState) {
-                                Fluttertoast.showToast(msg: "Update Sucessfully");
+                               showMessage(context,  "Update Sucessfully");
                                 context.read<GetAllMovieAdsCubit>().getAllMovies(page: currentPage);
                                 Navigator.pop(context);
                               }
@@ -451,12 +452,12 @@ class _MovieAdsScreenState extends State<MovieAdsScreen> with Utility {
                               return BlocConsumer<PostMovieAdsCubit, PostMovieAdsState>(
                                 listener: (context, state) {
                                   if (state is PostMovieAdsErrorState) {
-                                    Fluttertoast.showToast(msg: state.error);
+                                   showMessage(context,  state.error);
                                     return;
                                   }
 
                                   if (state is PostMovieAdsLoadedState) {
-                                    Fluttertoast.showToast(msg: "Post castCrew Successfully");
+                                   showMessage(context,  "Post castCrew Successfully");
                                     context.read<GetAllMovieAdsCubit>().getAllMovies();
                                     Navigator.pop(context);
                                   }

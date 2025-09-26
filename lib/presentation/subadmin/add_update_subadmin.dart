@@ -1,7 +1,8 @@
+import 'package:elite_admin/utils/toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+
 import 'package:elite_admin/bloc/auth/update_profile/update_profile_cubit.dart';
 import 'package:elite_admin/bloc/subadmin/create_subadmin/create_subadmin_cubit.dart';
 import 'package:elite_admin/bloc/subadmin/get_subadmin/get_subadmin_cubit.dart';
@@ -122,12 +123,12 @@ class _AddUpdateSubAdminScreenState extends State<AddUpdateSubAdminScreen> with 
                     BlocConsumer<CreateSubadminCubit, CreateSubadminState>(
                       listener: (context, state) {
                         if (state is CreateSubadminErrorState) {
-                          Fluttertoast.showToast(msg: state.erorr);
+                         showMessage(context, state.erorr);
                           return;
                         }
 
                         if (state is CreateSubadminLoadedState) {
-                          Fluttertoast.showToast(msg: "Sub Admin Created Successfully");
+                         showMessage(context, "Sub Admin Created Successfully");
                           Navigator.pop(context);
                           context.read<GetSubadminCubit>().getSubAdmins();
                         }
@@ -136,10 +137,10 @@ class _AddUpdateSubAdminScreenState extends State<AddUpdateSubAdminScreen> with 
                         return BlocConsumer<UpdateProfileCubit, UpdateProfileState>(
                           listener: (context, state) {
                             if (state is UpdateProfileErrorState) {
-                              Fluttertoast.showToast(msg: state.error);
+                             showMessage(context, state.error);
                             }
                             if (state is UpdateProfileLoadedState) {
-                              Fluttertoast.showToast(msg: "Update Sucessfully");
+                             showMessage(context, "Update Sucessfully");
                               context.read<GetSubadminCubit>().getSubAdmins();
                               Navigator.pop(context);
                             }

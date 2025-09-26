@@ -1,8 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:elite_admin/utils/apiurls/api.dart';
+import 'package:elite_admin/utils/toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:elite_admin/bloc/music/upload_music/delete_music/delete_music_cubit.dart';
 import 'package:elite_admin/bloc/music/upload_music/get_all_music/get_all_music_cubit.dart';
 import 'package:elite_admin/constant/color.dart';
@@ -86,12 +86,12 @@ class _SongScreenState extends State<SongScreen> with Utility {
               BlocListener<DeleteMusicCubit, DeleteMusicState>(
                 listener: (context, state) {
                   if (state is DeleteMusicErrorState) {
-                    Fluttertoast.showToast(msg: state.error);
+                   showMessage(context,  state.error);
                     return;
                   }
 
                   if (state is DeleteMusicLoadedState) {
-                    Fluttertoast.showToast(msg: "Delete Successfully");
+                   showMessage(context,  "Delete Successfully");
                     context.read<GetAllMusicCubit>().getAllMusic();
                     Navigator.pop(context);
                   }
