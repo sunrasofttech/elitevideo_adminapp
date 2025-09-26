@@ -77,7 +77,7 @@ class _RentalScreenState extends State<RentalScreen> with SingleTickerProviderSt
 
 class _RentalTabView extends StatelessWidget with Utility {
   final String type;
-  const _RentalTabView({super.key, required this.type});
+  const _RentalTabView({required this.type});
 
   @override
   Widget build(BuildContext context) {

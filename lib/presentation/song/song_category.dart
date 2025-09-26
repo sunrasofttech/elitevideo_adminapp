@@ -1,16 +1,16 @@
-import 'dart:io';
+// import 'dart:io';
 
 import 'package:elite_admin/utils/toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:image_picker/image_picker.dart';
+// import 'package:image_picker/image_picker.dart';
 import 'package:elite_admin/bloc/music/category/delete_music_catrgory/delete_music_category_cubit.dart';
 import 'package:elite_admin/bloc/music/category/get_all_music_category/get_all_music_category_cubit.dart';
 import 'package:elite_admin/bloc/music/category/post_music_category/post_music_category_cubit.dart';
 import 'package:elite_admin/bloc/music/category/update_music_category/update_music_category_cubit.dart';
 import 'package:elite_admin/constant/image.dart';
-import 'package:elite_admin/constant/image_picker_utils.dart';
+// import 'package:elite_admin/constant/image_picker_utils.dart';
 import 'package:elite_admin/utils/utility_mixin.dart';
 import 'package:elite_admin/utils/widget/custom_empty_widget.dart';
 import 'package:elite_admin/utils/widget/custom_error_widget.dart';
@@ -205,16 +205,16 @@ class _SongCategoryScreenState extends State<SongCategoryScreen> with Utility {
 
   _addUpdateMusicCategoryPopUp({String? id, String? name}) {
     final titleController = TextEditingController(text: name ?? "");
-    XFile? _selectedImage;
+    // XFile? _selectedImage;
 
-    Future<void> _pickImage() async {
-      final pickedFile = await ImagePickerUtil.pickImageFromGallery(context: context);
-      if (pickedFile != null) {
-        setState(() {
-          _selectedImage = pickedFile;
-        });
-      }
-    }
+    // Future<void> _pickImage() async {
+    //   final pickedFile = await ImagePickerUtil.pickImageFromGallery(context: context);
+    //   if (pickedFile != null) {
+    //     setState(() {
+    //       _selectedImage = pickedFile;
+    //     });
+    //   }
+    // }
 
     return showDialog(
       context: context,
@@ -286,7 +286,7 @@ class _SongCategoryScreenState extends State<SongCategoryScreen> with Utility {
                                     context.read<UpdateMusicCategoryCubit>().updateMusic(
                                       titleController.text,
                                       id,
-                                      _selectedImage != null ? File(_selectedImage!.path) : null,
+                 null                   //  _selectedImage != null ? File(_selectedImage!.path) : null,
                                     );
                                     return;
                                   }

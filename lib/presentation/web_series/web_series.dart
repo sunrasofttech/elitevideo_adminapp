@@ -4,7 +4,6 @@ import 'package:elite_admin/utils/apiurls/api.dart';
 import 'package:elite_admin/utils/toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:elite_admin/bloc/movie/category/get_all_category/get_all_category_cubit.dart';
 import 'package:elite_admin/bloc/movie/language/get_all_language/get_all_language_cubit.dart';
 import 'package:elite_admin/bloc/web_series/series/delete_series/delete_series_cubit.dart';
@@ -505,60 +504,60 @@ class _WebSeriesScreenState extends State<WebSeriesScreen> with Utility {
     );
   }
 
-  _showRatingDialog() {
-    return showDialog(
-      context: context,
-      builder: (context) {
-        return Dialog(
-          child: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      heightBox15(),
-                      const TextWidget(text: 'Add Rating', fontWeight: FontWeight.w700, fontSize: 16),
-                      heightBox30(),
-                      InkWell(
-                        onTap: () {
-                          Navigator.pop(context);
-                        },
-                        child: Container(
-                          decoration: const BoxDecoration(
-                            color: AppColors.greyColor,
-                            borderRadius: BorderRadius.all(Radius.circular(12)),
-                          ),
-                          child: const Icon(Icons.close, color: AppColors.whiteColor),
-                        ),
-                      ),
-                      heightBox30(),
-                    ],
-                  ),
-                  RatingBar.builder(
-                    itemBuilder: (context, index) =>
-                        Icon(Icons.star, color: index <= rating ? Colors.orange : Colors.grey, size: 100),
-                    onRatingUpdate: (ratingvalue) {
-                      setState(() {
-                        rating = ratingvalue;
-                      });
-                    },
-                    initialRating: rating,
-                    allowHalfRating: true,
-                    minRating: 0.5,
-                    itemCount: 5,
-                    itemSize: 30,
-                    updateOnDrag: true,
-                  ),
-                  Text("(${rating.toString()})"),
-                  heightBox30(),
-                ],
-              ),
-            ),
-          ),
-        );
-      },
-    );
-  }
+  // _showRatingDialog() {
+  //   return showDialog(
+  //     context: context,
+  //     builder: (context) {
+  //       return Dialog(
+  //         child: SingleChildScrollView(
+  //           child: Padding(
+  //             padding: const EdgeInsets.all(8.0),
+  //             child: Column(
+  //               children: [
+  //                 Row(
+  //                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //                   children: [
+  //                     heightBox15(),
+  //                     const TextWidget(text: 'Add Rating', fontWeight: FontWeight.w700, fontSize: 16),
+  //                     heightBox30(),
+  //                     InkWell(
+  //                       onTap: () {
+  //                         Navigator.pop(context);
+  //                       },
+  //                       child: Container(
+  //                         decoration: const BoxDecoration(
+  //                           color: AppColors.greyColor,
+  //                           borderRadius: BorderRadius.all(Radius.circular(12)),
+  //                         ),
+  //                         child: const Icon(Icons.close, color: AppColors.whiteColor),
+  //                       ),
+  //                     ),
+  //                     heightBox30(),
+  //                   ],
+  //                 ),
+  //                 RatingBar.builder(
+  //                   itemBuilder: (context, index) =>
+  //                       Icon(Icons.star, color: index <= rating ? Colors.orange : Colors.grey, size: 100),
+  //                   onRatingUpdate: (ratingvalue) {
+  //                     setState(() {
+  //                       rating = ratingvalue;
+  //                     });
+  //                   },
+  //                   initialRating: rating,
+  //                   allowHalfRating: true,
+  //                   minRating: 0.5,
+  //                   itemCount: 5,
+  //                   itemSize: 30,
+  //                   updateOnDrag: true,
+  //                 ),
+  //                 Text("(${rating.toString()})"),
+  //                 heightBox30(),
+  //               ],
+  //             ),
+  //           ),
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
 }
