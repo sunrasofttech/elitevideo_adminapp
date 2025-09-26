@@ -12,6 +12,13 @@ final class PostEpisodeLoadingState extends PostEpisodeState {
   List<Object?> get props => [];
 }
 
+final class PostEpisodeProgressState extends PostEpisodeState {
+  final int percent;
+  PostEpisodeProgressState({required this.percent});
+  @override
+  List<Object?> get props => [percent];
+}
+
 final class PostEpisodeLoadedState extends PostEpisodeState {
   @override
   List<Object?> get props => [];

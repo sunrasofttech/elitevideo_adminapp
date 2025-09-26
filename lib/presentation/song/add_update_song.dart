@@ -319,11 +319,26 @@ class _AddUpdateSongScreenState extends State<AddUpdateSongScreen> with Utility 
                               }
                             },
                             builder: (context, state) {
+                              int? progressPercent;
+                              if (state is CreateMusicProgressState) {
+                                progressPercent = state.percent;
+                              }
+
+                              if (updateState is UpdateMusicProgressState) {
+                                progressPercent = updateState.percent;
+                              }
                               return CustomOutlinedButton(
+                                progress: progressPercent,
                                 inProgress:
-                                    (updateState is UpdateMusicLoadingState || state is CreateMusicLoadingState),
+                                    (updateState is UpdateMusicLoadingState ||
+                                    state is CreateMusicLoadingState ||
+                                    state is CreateMusicProgressState ||
+                                    updateState is UpdateMusicProgressState),
                                 onPressed: () async {
-                                  if (updateState is UpdateMusicLoadingState || state is CreateMusicLoadingState) {
+                                  if (updateState is UpdateMusicLoadingState ||
+                                      state is CreateMusicLoadingState ||
+                                      state is CreateMusicProgressState ||
+                                      updateState is UpdateMusicProgressState) {
                                     return;
                                   }
                                   final contentData = await descriptionController.getText();

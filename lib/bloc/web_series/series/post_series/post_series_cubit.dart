@@ -1,10 +1,10 @@
-import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 import 'package:bloc/bloc.dart';
+import 'package:dio/dio.dart';
+import 'package:elite_admin/main.dart';
 import 'package:equatable/equatable.dart';
 import 'package:elite_admin/utils/apiurls/api.dart';
-import 'package:http/http.dart';
 import 'package:mime/mime.dart';
 import 'package:http_parser/http_parser.dart';
 part 'post_series_state.dart';
@@ -12,7 +12,7 @@ part 'post_series_state.dart';
 class PostSeriesCubit extends Cubit<PostSeriesState> {
   PostSeriesCubit() : super(PostSeriesInitial());
 
-  postSeries({
+  Future<void> postSeries({
     String? movieName,
     bool? status,
     String? movieLanguage,
@@ -29,69 +29,75 @@ class PostSeriesCubit extends Cubit<PostSeriesState> {
     bool? isSeriesOnRent,
     bool? isHighlighted,
   }) async {
-    log("message = = = =${rentedTimeDays}");
     emit(PostSeriesLoadingState());
     try {
-      var uri = Uri.parse(AppUrls.seriesUrl);
-      var request = MultipartRequest("POST", uri);
+      FormData formData = FormData();
 
-      request.headers.addAll(headers);
-
-      Future<void> addFile(String fieldName, File? file) async {
+      void addFile(String fieldName, File? file) {
         if (file != null) {
-          final mimeType = lookupMimeType(file.path);
-          if (mimeType != null) {
-            request.files.add(
-              await MultipartFile.fromPath(
-                fieldName,
+          final mimeType = lookupMimeType(file.path)?.split("/") ?? ["application", "octet-stream"];
+          formData.files.add(
+            MapEntry(
+              fieldName,
+              MultipartFile.fromFileSync(
                 file.path,
-                contentType: MediaType.parse(mimeType),
+                filename: file.path.split("/").last,
+                contentType: MediaType(mimeType[0], mimeType[1]),
               ),
-            );
-          } else {
-            log("Unable to determine MIME type for file: ${file.path}");
-          }
+            ),
+          );
         }
       }
 
-      await addFile("cover_img", coverImg);
-      await addFile("poster_img", posterImg);
+      addFile("cover_img", coverImg);
+      addFile("poster_img", posterImg);
 
-      Map<String, String> fields = {
-        if (movieName != null) "series_name": movieName,
-        if (status != null) "status": status.toString(),
-        if (movieLanguage != null) "movie_language": movieLanguage,
-        if (genreId != null) "genre_id": genreId,
-        if (description != null) "description": description,
-        if (releasedBy != null) "released_by": releasedBy,
-        if (releasedDate != null) "released_date": releasedDate,
-        if (movieCategoryId != null) "movie_category": movieCategoryId,
-        if (showSubscription != null) "show_subscription": showSubscription.toString(),
-        if (seriesRentPrice != null) "series_rent_price": seriesRentPrice,
-        if (isSeriesOnRent != null) "is_series_on_rent": isSeriesOnRent.toString(),
-        if (rentedTimeDays != null && rentedTimeDays.isNotEmpty) "rented_time_days": rentedTimeDays,
-        if (isHighlighted != null) "is_highlighted": isHighlighted.toString(),
-         "show_type":"series",
-      };
+      formData.fields.addAll([
+        if (movieName != null) MapEntry("series_name", movieName),
+        if (status != null) MapEntry("status", status.toString()),
+        if (movieLanguage != null) MapEntry("movie_language", movieLanguage),
+        if (genreId != null) MapEntry("genre_id", genreId),
+        if (description != null) MapEntry("description", description),
+        if (releasedBy != null) MapEntry("released_by", releasedBy),
+        if (releasedDate != null) MapEntry("released_date", releasedDate),
+        if (movieCategoryId != null) MapEntry("movie_category", movieCategoryId),
+        if (showSubscription != null) MapEntry("show_subscription", showSubscription.toString()),
+        if (seriesRentPrice != null) MapEntry("series_rent_price", seriesRentPrice),
+        if (isSeriesOnRent != null) MapEntry("is_series_on_rent", isSeriesOnRent.toString()),
+        if (rentedTimeDays != null && rentedTimeDays.isNotEmpty) MapEntry("rented_time_days", rentedTimeDays),
+        if (isHighlighted != null) MapEntry("is_highlighted", isHighlighted.toString()),
+        MapEntry("show_type", "series"),
+      ]);
 
-      request.fields.addAll(fields);
+      final response = await dio.post(
+        AppUrls.seriesUrl,
+        data: formData,
+        options: Options(
+          headers: headers,
+          validateStatus: (status) {
+            return true;
+          },
+        ),
+        onSendProgress: (sent, total) {
+          final percent = ((sent / total) * 100).clamp(0, 100).toInt();
+          emit(PostSeriesProgressState(percent: percent));
+        },
+      );
 
-      var response = await request.send();
-      var responseData = await response.stream.bytesToString();
-      log("message == $responseData");
-      final result = jsonDecode(responseData);
+      log("Response data: ${response.data}");
+      final result = response.data;
 
-      log("Result: $result");
       if (response.statusCode == 200 || response.statusCode == 201) {
         if (result['status'] == true) {
           emit(PostSeriesLoadedState());
         } else {
-          emit(PostSeriesErrorState("${result['message']}"));
+          emit(PostSeriesErrorState(result['message'].toString()));
         }
       } else {
-        emit(PostSeriesErrorState("Server error: ${response.statusCode}"));
+        emit(PostSeriesErrorState("${result['message'] ?? "Server Error"}"));
       }
     } catch (e) {
+      log("Error: $e");
       emit(PostSeriesErrorState(e.toString()));
     }
   }

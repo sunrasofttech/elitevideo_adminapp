@@ -1,9 +1,9 @@
-import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 import 'package:bloc/bloc.dart';
+import 'package:dio/dio.dart';
+import 'package:elite_admin/main.dart';
 import 'package:equatable/equatable.dart';
-import 'package:http/http.dart';
 import 'package:mime/mime.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:elite_admin/utils/apiurls/api.dart';
@@ -12,7 +12,7 @@ part 'create_music_state.dart';
 class CreateMusicCubit extends Cubit<CreateMusicState> {
   CreateMusicCubit() : super(CreateMusicInitial());
 
-  createMusic({
+  Future<void> createMusic({
     String? musicName,
     String? artistName,
     bool? status,
@@ -24,62 +24,71 @@ class CreateMusicCubit extends Cubit<CreateMusicState> {
     String? artistId,
     String? languageId,
   }) async {
-    emit(CreateMusicLoadingState());
     try {
-      var uri = Uri.parse(AppUrls.musicUrl);
-      var request = MultipartRequest("POST", uri);
+      emit(CreateMusicLoadingState());
 
-      request.headers.addAll(headers);
+      FormData formData = FormData();
 
-      Future<void> addFile(String fieldName, File? file) async {
+      void addFile(String fieldName, File? file) {
         if (file != null) {
-          final mimeType = lookupMimeType(file.path);
-          if (mimeType != null) {
-            request.files.add(
-              await MultipartFile.fromPath(
-                fieldName,
+          final mimeType = lookupMimeType(file.path)?.split("/") ?? ["application", "octet-stream"];
+          formData.files.add(
+            MapEntry(
+              fieldName,
+              MultipartFile.fromFileSync(
                 file.path,
-                contentType: MediaType.parse(mimeType),
+                filename: file.path.split("/").last,
+                contentType: MediaType(mimeType[0], mimeType[1]),
               ),
-            );
-          } else {
-            log("Unable to determine MIME type for file: ${file.path}");
-          }
+            ),
+          );
         }
       }
 
-      await addFile("cover_img", coverImg);
-      await addFile("song_file", songFile);
+      addFile("cover_img", coverImg);
+      addFile("song_file", songFile);
 
-      Map<String, String> fields = {
-        if (musicName != null) "song_title": musicName,
-        if (description != null) "description": description,
-        if (status != null) "status": status.toString(),
-        if (artistName != null) "artist_name": artistName.toString(),
-        if (categoryId != null) "category_id": categoryId.toString(),
-        if (isPopular != null) 'is_popular': isPopular.toString(),
-        if (artistId != null) 'artist_id': artistId,
-        if (languageId != null) 'language_id': languageId,
-      };
+      formData.fields.addAll([
+        if (musicName != null) MapEntry("song_title", musicName),
+        if (description != null) MapEntry("description", description),
+        if (status != null) MapEntry("status", status.toString()),
+        if (artistName != null) MapEntry("artist_name", artistName),
+        if (categoryId != null) MapEntry("category_id", categoryId),
+        if (isPopular != null) MapEntry("is_popular", isPopular.toString()),
+        if (artistId != null) MapEntry("artist_id", artistId),
+        if (languageId != null) MapEntry("language_id", languageId),
+      ]);
 
-      request.fields.addAll(fields);
+      final response = await dio.post(
+        AppUrls.musicUrl,
+        data: formData,
+        options: Options(
+          headers: headers,
+          validateStatus: (status) {
+            return true;
+          },
+        ),
+        onSendProgress: (sent, total) {
+          final percent = ((sent / total) * 100).clamp(0, 100).toInt();
+          log("Upload progress: $percent%");
+          emit(CreateMusicProgressState(percent: percent));
+        },
+      );
 
-      var response = await request.send();
-      var responseData = await response.stream.bytesToString();
-      log("message == $responseData");
-      final result = jsonDecode(responseData);
+      log("Response data: ${response.data}");
 
-      log("Result: $result");
+      final result = response.data;
       if (response.statusCode == 200 || response.statusCode == 201) {
         if (result['status'] == true) {
           emit(CreateMusicLoadedState());
         } else {
-          emit(CreateMusicErrorState("${result['message']}"));
+          emit(CreateMusicErrorState(result['message'].toString()));
         }
       } else {
-        emit(CreateMusicErrorState("Server error: ${response.statusCode}"));
+        emit(CreateMusicErrorState("${result['message'] ?? "Server Error"}"));
       }
     } catch (e) {
+      log("Error: $e");
       emit(CreateMusicErrorState(e.toString()));
     }
   }

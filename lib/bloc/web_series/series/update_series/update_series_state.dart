@@ -12,6 +12,13 @@ final class UpdateSeriesLoadingState extends UpdateSeriesState {
   List<Object?> get props => [];
 }
 
+final class UpdateSeriesProgressState extends UpdateSeriesState {
+  final int percent;
+  UpdateSeriesProgressState({required this.percent});
+  @override
+  List<Object?> get props => [percent];
+}
+
 final class UpdateSeriesLoadedState extends UpdateSeriesState {
   @override
   List<Object?> get props => [];

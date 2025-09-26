@@ -12,6 +12,15 @@ final class CreateMusicLoadingState extends CreateMusicState {
   List<Object?> get props => [];
 }
 
+final class CreateMusicProgressState extends CreateMusicState {
+  final int percent;
+
+  CreateMusicProgressState({required this.percent});
+
+  @override
+  List<Object?> get props => [percent];
+}
+
 final class CreateMusicLoadedState extends CreateMusicState {
   @override
   List<Object?> get props => [];

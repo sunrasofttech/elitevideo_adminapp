@@ -1,9 +1,9 @@
-import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 import 'package:bloc/bloc.dart';
+import 'package:dio/dio.dart';
+import 'package:elite_admin/main.dart';
 import 'package:equatable/equatable.dart';
-import 'package:http/http.dart';
 import 'package:mime/mime.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:elite_admin/utils/apiurls/api.dart';
@@ -12,7 +12,7 @@ part 'post_film_state.dart';
 class PostFilmCubit extends Cubit<PostFilmState> {
   PostFilmCubit() : super(PostFilmInitial());
 
-  postShortFilm({
+  Future<void> postShortFilm({
     String? movieName,
     bool? status,
     String? movieLanguage,
@@ -37,73 +37,77 @@ class PostFilmCubit extends Cubit<PostFilmState> {
     bool? showSubscription,
   }) async {
     emit(PostFilmLoadingState());
+
     try {
-      var uri = Uri.parse("${AppUrls.shortFlimUrl}/create");
-      var request = MultipartRequest("POST", uri);
+      FormData formData = FormData();
 
-      request.headers.addAll(headers);
-
-      Future<void> addFile(String fieldName, File? file) async {
+      void addFile(String fieldName, File? file) {
         if (file != null) {
-          final mimeType = lookupMimeType(file.path);
-          if (mimeType != null) {
-            request.files.add(
-              await MultipartFile.fromPath(
-                fieldName,
+          final mimeType = lookupMimeType(file.path)?.split("/") ?? ["application", "octet-stream"];
+          formData.files.add(
+            MapEntry(
+              fieldName,
+              MultipartFile.fromFileSync(
                 file.path,
-                contentType: MediaType.parse(mimeType),
+                filename: file.path.split("/").last,
+                contentType: MediaType(mimeType[0], mimeType[1]),
               ),
-            );
-          } else {
-            log("Unable to determine MIME type for file: ${file.path}");
-          }
+            ),
+          );
         }
       }
 
-      await addFile("cover_img", coverImg);
-      await addFile("poster_img", posterImg);
-      await addFile("short_video", movieVideo);
-      await addFile("trailor_video", trailorVideo);
+      addFile("cover_img", coverImg);
+      addFile("poster_img", posterImg);
+      addFile("short_video", movieVideo);
+      addFile("trailor_video", trailorVideo);
 
-      Map<String, String> fields = {
-        if (movieName != null) "short_film_title": movieName,
-        if (video_link != null) "video_link": video_link,
-        if (trailor_video_link != null) "trailor_video_link": trailor_video_link,
-        if (status != null) "status": status.toString(),
-        if (movieLanguage != null) "movie_language": movieLanguage,
-        if (genreId != null) "genre_id": genreId,
-        if (quality != null) "quality": quality.toString(),
-        if (subtitle != null) "subtitle": subtitle.toString(),
-        if (description != null) "description": description,
-        if (isMovieOnRent != null) "is_movie_on_rent": isMovieOnRent.toString(),
-        if (movieTime != null) "movie_time": movieTime,
-        if (movieRentPrice != null) "movie_rent_price": movieRentPrice,
-        if (isHighlighted != null) "is_highlighted": isHighlighted.toString(),
-        if (releasedBy != null) "released_by": releasedBy,
-        if (releasedDate != null) "released_date": releasedDate,
-        if (movieCategoryId != null) "movie_category": movieCategoryId,
-        if (rented_time_days != null) "rented_time_days": rented_time_days.toString(),
-        if(showSubscription!=null) "show_subscription":showSubscription.toString(),
-      };
+      formData.fields.addAll([
+        if (movieName != null) MapEntry("short_film_title", movieName),
+        if (video_link != null) MapEntry("video_link", video_link),
+        if (trailor_video_link != null) MapEntry("trailor_video_link", trailor_video_link),
+        if (status != null) MapEntry("status", status.toString()),
+        if (movieLanguage != null) MapEntry("movie_language", movieLanguage),
+        if (genreId != null) MapEntry("genre_id", genreId),
+        if (quality != null) MapEntry("quality", quality.toString()),
+        if (subtitle != null) MapEntry("subtitle", subtitle.toString()),
+        if (description != null) MapEntry("description", description),
+        if (isMovieOnRent != null) MapEntry("is_movie_on_rent", isMovieOnRent.toString()),
+        if (movieTime != null) MapEntry("movie_time", movieTime),
+        if (movieRentPrice != null) MapEntry("movie_rent_price", movieRentPrice),
+        if (isHighlighted != null) MapEntry("is_highlighted", isHighlighted.toString()),
+        if (releasedBy != null) MapEntry("released_by", releasedBy),
+        if (releasedDate != null) MapEntry("released_date", releasedDate),
+        if (movieCategoryId != null) MapEntry("movie_category", movieCategoryId),
+        if (rented_time_days != null) MapEntry("rented_time_days", rented_time_days.toString()),
+        if (showSubscription != null) MapEntry("show_subscription", showSubscription.toString()),
+      ]);
 
-      request.fields.addAll(fields);
+      final response = await dio.post(
+        "${AppUrls.shortFlimUrl}/create",
+        data: formData,
+        options: Options(headers: headers),
+        onSendProgress: (sent, total) {
+          final percent = ((sent / total) * 100).clamp(0, 100).toInt();
+          log("Upload progress: $percent%");
+          emit(PostFilmProgressState(percent: percent));
+        },
+      );
 
-      var response = await request.send();
-      var responseData = await response.stream.bytesToString();
-      log("message == $responseData");
-      final result = jsonDecode(responseData);
+      log("Response: ${response.data}");
+      final result = response.data;
 
-      log("Result: $result");
       if (response.statusCode == 200 || response.statusCode == 201) {
         if (result['status'] == true) {
           emit(PostFilmLoadedState());
         } else {
-          emit(PostFilmErrorState("${result['message']}"));
+          emit(PostFilmErrorState(result['message'].toString()));
         }
       } else {
-        emit(PostFilmErrorState("Server error: ${response.statusCode}"));
+        emit(PostFilmErrorState("${result['message'] ?? "Server Error"}"));
       }
     } catch (e) {
+      log("Error: $e");
       emit(PostFilmErrorState(e.toString()));
     }
   }

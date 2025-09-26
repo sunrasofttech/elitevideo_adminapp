@@ -23,3 +23,10 @@ final class PostFilmErrorState extends PostFilmState {
   @override
   List<Object?> get props => [error];
 }
+
+final class PostFilmProgressState extends PostFilmState {
+  final int percent;
+  PostFilmProgressState({required this.percent});
+  @override
+  List<Object?> get props => [percent];
+}
