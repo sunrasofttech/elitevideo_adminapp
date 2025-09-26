@@ -60,7 +60,12 @@ class CreatelivetvCubit extends Cubit<CreatelivetvState> {
       final response = await dio.post(
         AppUrls.liveTvUrl,
         data: formData,
-        options: Options(headers: headers),
+        options: Options(
+          headers: headers,
+          validateStatus: (status) {
+            return true;
+          },
+        ),
         onSendProgress: (sent, total) {
           final percent = ((sent / total) * 100).clamp(0, 100).toInt();
           log("Upload progress: $percent%");
