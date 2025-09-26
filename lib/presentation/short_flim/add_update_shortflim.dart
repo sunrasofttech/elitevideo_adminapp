@@ -655,10 +655,10 @@ class _AddUpdateShortFlimScreenState extends State<AddUpdateShortFlimScreen> wit
                                   //  showMessage(context, "Genre is required");
                                   //   return;
                                   // }
-                                  if (movieTimeController.text.isEmpty) {
-                                    showMessage(context, "Movie Time is required");
-                                    return;
-                                  }
+                                  // if (movieTimeController.text.isEmpty) {
+                                  //   showMessage(context, "Movie Time is required");
+                                  //   return;
+                                  // }
                                   if (releasedByController.text.isEmpty) {
                                     showMessage(context, "Released By is required");
                                     return;
