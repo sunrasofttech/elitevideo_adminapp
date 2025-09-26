@@ -12,6 +12,17 @@ final class PostMovieLoadingState extends PostMovieState {
   List<Object?> get props => [];
 }
 
+
+final class PostMovieProgressState extends PostMovieState {
+  final int percent;
+  final Duration eta;
+
+  PostMovieProgressState({required this.percent, required this.eta});
+
+  @override
+  List<Object?> get props => [percent, eta];
+}
+
 final class PostMovieLoadedState extends PostMovieState {
   @override
   List<Object?> get props => [];

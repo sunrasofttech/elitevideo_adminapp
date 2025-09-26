@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:elite_admin/constant/color.dart';
 import 'package:elite_admin/utils/widget/customcircularprogressbar.dart';
@@ -7,6 +9,7 @@ class CustomOutlinedButton extends StatelessWidget {
   final VoidCallback onPressed;
   final String buttonText;
   final bool? inProgress;
+  final int? progress;
   final double? buttonHeight;
   final double? buttonWidth;
   final Color? textColor;
@@ -18,6 +21,7 @@ class CustomOutlinedButton extends StatelessWidget {
     required this.buttonText,
     this.inProgress,
     this.buttonHeight,
+    this.progress,
     this.buttonWidth,
     this.textColor,
     this.borderRadius,
@@ -25,6 +29,7 @@ class CustomOutlinedButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    log("message button  $progress");
     return Container(
       height: buttonHeight ?? 50.0,
       width: buttonWidth ?? double.infinity,
@@ -32,7 +37,7 @@ class CustomOutlinedButton extends StatelessWidget {
         gradient: const LinearGradient(
           colors: AppColors.blueGradientList,
           begin: Alignment.topCenter,
-          end: Alignment.bottomCenter
+          end: Alignment.bottomCenter,
         ),
         borderRadius: BorderRadius.circular(borderRadius ?? 10),
       ),
@@ -41,13 +46,25 @@ class CustomOutlinedButton extends StatelessWidget {
           backgroundColor: Colors.transparent,
           shadowColor: Colors.transparent,
           elevation: 0,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(borderRadius ?? 12),
-          ),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(borderRadius ?? 12)),
         ),
         onPressed: onPressed,
         child: inProgress ?? false
-            ? const CustomCircularProgressIndicator()
+            ? Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const SizedBox(width: 20, height: 20, child: CustomCircularProgressIndicator()),
+                  const SizedBox(width: 10),
+                  Text(
+                    progress != null ? "$progress%" : "Uploading...",
+                    style: TextStyle(
+                      color: textColor ?? AppColors.whiteColor,
+                      fontWeight: FontWeight.w400,
+                      fontSize: 16,
+                    ),
+                  ),
+                ],
+              )
             : TextWidget(
                 text: buttonText,
                 fontSize: 18,

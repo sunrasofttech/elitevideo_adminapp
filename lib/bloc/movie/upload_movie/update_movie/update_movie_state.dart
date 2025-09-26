@@ -12,6 +12,16 @@ final class UpdateMovieLoadingState extends UpdateMovieState {
   List<Object?> get props => [];
 }
 
+final class UpdateMovieProgressState extends UpdateMovieState {
+  final int percent;
+  final Duration eta;
+
+  UpdateMovieProgressState({required this.percent, required this.eta});
+
+  @override
+  List<Object?> get props => [percent, eta];
+}
+
 final class UpdateMovieLoadedState extends UpdateMovieState {
   @override
   List<Object?> get props => [];

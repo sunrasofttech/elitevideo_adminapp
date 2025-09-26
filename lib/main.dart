@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:elite_admin/constant/color.dart';
@@ -7,6 +8,7 @@ import 'package:elite_admin/utils/blocproviders/bloc_provider.dart';
 import 'package:elite_admin/utils/preferences/local_preferences.dart';
 
 String? userId;
+final dio = Dio();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

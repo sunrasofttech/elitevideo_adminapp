@@ -37,6 +37,8 @@ class AddUpdateMoveiScreen extends StatefulWidget {
 }
 
 class _AddUpdateMoveiScreenState extends State<AddUpdateMoveiScreen> with Utility {
+  int? progressPercent;
+
   @override
   void initState() {
     super.initState();
@@ -648,6 +650,9 @@ class _AddUpdateMoveiScreenState extends State<AddUpdateMoveiScreen> with Utilit
                           }
                         },
                         builder: (context, updateState) {
+                          if (updateState is UpdateMovieProgressState) {
+                            progressPercent = updateState.percent;
+                          }
                           return BlocConsumer<PostMovieCubit, PostMovieState>(
                             listener: (context, state) {
                               if (state is PostMovieErrorState) {
@@ -662,8 +667,24 @@ class _AddUpdateMoveiScreenState extends State<AddUpdateMoveiScreen> with Utilit
                               }
                             },
                             builder: (context, state) {
+                              int? progressPercent;
+                              final inProgress =
+                                  state is PostMovieLoadingState ||
+                                  state is PostMovieProgressState ||
+                                  updateState is UpdateMovieLoadingState ||
+                                  updateState is UpdateMovieProgressState;
+
+                              if (state is PostMovieProgressState) {
+                                progressPercent = state.percent;
+                              }
+
+                              if (updateState is UpdateMovieProgressState) {
+                                progressPercent = updateState.percent;
+                              }
+
                               return CustomOutlinedButton(
-                                inProgress: (state is PostMovieLoadingState || updateState is UpdateMovieLoadingState),
+                                progress: progressPercent,
+                                inProgress: inProgress,
                                 onPressed: () async {
                                   final contentData = await descriptionController.getText();
                                   final document = parse(contentData);

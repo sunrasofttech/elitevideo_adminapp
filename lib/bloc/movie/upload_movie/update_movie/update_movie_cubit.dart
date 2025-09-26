@@ -1,11 +1,10 @@
-import 'dart:convert';
-import 'dart:developer';
 import 'dart:io';
 import 'package:bloc/bloc.dart';
+import 'package:dio/dio.dart';
+import 'package:elite_admin/main.dart';
 import 'package:equatable/equatable.dart';
 import 'package:elite_admin/utils/apiurls/api.dart';
 import 'package:mime/mime.dart';
-import 'package:http/http.dart';
 import 'package:http_parser/http_parser.dart';
 part 'update_movie_state.dart';
 
@@ -38,26 +37,25 @@ class UpdateMovieCubit extends Cubit<UpdateMovieState> {
     bool? showSubscription,
     String? position,
   }) async {
-    emit(UpdateMovieLoadingState());
     try {
-      var uri = Uri.parse("${AppUrls.movieUrl}/$id");
-      var request = MultipartRequest("PUT", uri);
+      emit(UpdateMovieLoadingState());
 
-      request.headers.addAll(headers);
+      FormData formData = FormData();
 
       Future<void> addFile(String fieldName, File? file) async {
         if (file != null) {
           final mimeType = lookupMimeType(file.path);
           if (mimeType != null) {
-            request.files.add(
-              await MultipartFile.fromPath(
+            formData.files.add(
+              MapEntry(
                 fieldName,
-                file.path,
-                contentType: MediaType.parse(mimeType),
+                await MultipartFile.fromFile(
+                  file.path,
+                  filename: file.path.split('/').last,
+                  contentType: MediaType.parse(mimeType),
+                ),
               ),
             );
-          } else {
-            log("Unable to determine MIME type for file: ${file.path}");
           }
         }
       }
@@ -67,44 +65,63 @@ class UpdateMovieCubit extends Cubit<UpdateMovieState> {
       await addFile("movie_video", movieVideo);
       await addFile("trailor_video", trailorVideo);
 
-      Map<String, String> fields = {
-        if (movieName != null) "movie_name": movieName,
-        if (video_link != null) "video_link": video_link,
-        if (trailor_video_link != null) "trailor_video_link": trailor_video_link,
-        if (status != null) "status": status.toString(),
-        if (movieLanguage != null) "movie_language": movieLanguage,
-        if (genreId != null) "genre_id": genreId,
-        if (quality != null) "quality": quality.toString(),
-        if (subtitle != null) "subtitle": subtitle.toString(),
-        if (description != null) "description": description,
-        if (movieTime != null) "movie_time": movieTime,
-        if (isMovieOnRent != null) "is_movie_on_rent": isMovieOnRent.toString(),
-        if (movieRentPrice != null) "movie_rent_price": movieRentPrice,
-        if (isHighlighted != null) "is_highlighted": isHighlighted.toString(),
-        if (releasedBy != null) "released_by": releasedBy,
-        if (releasedDate != null) "released_date": releasedDate,
-        if (movieCategoryId != null) "movie_category": movieCategoryId,
-        if (rented_time_days != null) "rented_time_days": rented_time_days.toString(),
-        if (showSubscription != null) "show_subscription": showSubscription.toString(),
-        if (position != null) "position": position,
-      };
+      // Add text fields
+      formData.fields.addAll([
+        if (movieName != null) MapEntry("movie_name", movieName),
+        if (video_link != null) MapEntry("video_link", video_link),
+        if (trailor_video_link != null) MapEntry("trailor_video_link", trailor_video_link),
+        if (status != null) MapEntry("status", status.toString()),
+        if (movieLanguage != null) MapEntry("movie_language", movieLanguage),
+        if (genreId != null) MapEntry("genre_id", genreId),
+        if (quality != null) MapEntry("quality", quality.toString()),
+        if (subtitle != null) MapEntry("subtitle", subtitle.toString()),
+        if (description != null) MapEntry("description", description),
+        if (isMovieOnRent != null) MapEntry("is_movie_on_rent", isMovieOnRent.toString()),
+        if (movieTime != null) MapEntry("movie_time", movieTime),
+        if (movieRentPrice != null) MapEntry("movie_rent_price", movieRentPrice),
+        if (isHighlighted != null) MapEntry("is_highlighted", isHighlighted.toString()),
+        if (releasedBy != null) MapEntry("released_by", releasedBy),
+        if (releasedDate != null) MapEntry("released_date", releasedDate),
+        if (movieCategoryId != null) MapEntry("movie_category", movieCategoryId),
+        if (rented_time_days != null) MapEntry("rented_time_days", rented_time_days.toString()),
+        if (showSubscription != null) MapEntry("show_subscription", showSubscription.toString()),
+        if (position != null) MapEntry("position", position),
+      ]);
 
-      request.fields.addAll(fields);
+      var response = await dio.put(
+        "${AppUrls.movieUrl}/$id",
+        data: formData,
+        options: Options(
+          headers: headers,
+          validateStatus: (status) {
+            return true;
+          },
+        ),
 
-      var response = await request.send();
-      var responseData = await response.stream.bytesToString();
-      log("message == $responseData");
-      final result = jsonDecode(responseData);
+        onSendProgress: (sent, total) {
+          final percent = ((sent / total) * 100).clamp(0, 100).toInt();
+          final elapsed = 1;
+          final speed = sent / (elapsed > 0 ? elapsed : 1);
+          final remaining = total - sent;
+          final etaSeconds = speed > 0 ? (remaining / speed).toInt() : 0;
 
-      log("Result: $result");
+          emit(
+            UpdateMovieProgressState(
+              percent: percent,
+              eta: Duration(seconds: etaSeconds),
+            ),
+          );
+        },
+      );
+
       if (response.statusCode == 200 || response.statusCode == 201) {
-        if (result['status'] == true) {
+        if (response.data['status'] == true) {
           emit(UpdateMovieLoadedState());
         } else {
-          emit(UpdateMovieErrorState("${result['message']}"));
+          emit(UpdateMovieErrorState("${response.data['message']}"));
         }
       } else {
-        emit(UpdateMovieErrorState("Server error: ${response.statusCode}"));
+        emit(UpdateMovieErrorState("${response.data['message'] ?? "Server Error"}"));
       }
     } catch (e) {
       emit(UpdateMovieErrorState(e.toString()));

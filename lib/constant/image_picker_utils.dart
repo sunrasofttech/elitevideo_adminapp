@@ -1,10 +1,11 @@
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:crop_your_image/crop_your_image.dart' as crop;
+import 'package:elite_admin/utils/widget/custombutton.dart';
 import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:path/path.dart' as p; 
+import 'package:path/path.dart' as p;
 
 class ImagePickerUtil {
   static final ImagePicker _picker = ImagePicker();
@@ -128,9 +129,7 @@ class _CropYourImageScreenState extends State<CropYourImageScreen> {
                 } else if (result is crop.CropFailure) {
                   // handle error
                   final cause = result.cause;
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Crop failed: $cause')),
-                  );
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Crop failed: $cause')));
                   Navigator.pop(context, null);
                 }
               },
@@ -141,10 +140,7 @@ class _CropYourImageScreenState extends State<CropYourImageScreen> {
             child: Row(
               children: [
                 Expanded(
-                  child: ElevatedButton(
-                    onPressed: () => _controller.crop(),
-                    child: const Text("Crop"),
-                  ),
+                  child: CustomOutlinedButton(onPressed: () => _controller.crop(), buttonText: "Crop"),
                 ),
               ],
             ),
