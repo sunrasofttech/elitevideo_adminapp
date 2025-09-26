@@ -49,7 +49,7 @@ class _AddUpdateEpisodeScreenState extends State<AddUpdateEpisodeScreen> with Ut
 
   Future<void> _pickImage() async {
     final pickedFile = await ImagePickerUtil.pickImageFromGallery(
-            context: context,
+      context: context,
       aspectRatio: const CropAspectRatio(ratioX: 4, ratioY: 3),
     );
     if (pickedFile != null) {
@@ -128,16 +128,11 @@ class _AddUpdateEpisodeScreenState extends State<AddUpdateEpisodeScreen> with Ut
                 Container(
                   width: MediaQuery.of(context).size.width,
                   padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
-                    color: AppColors.whiteColor,
-                  ),
+                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(12), color: AppColors.whiteColor),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const TextWidget(
-                        text: "Cover Image",
-                      ),
+                      const TextWidget(text: "Cover Image"),
                       heightBox10(),
                       GestureDetector(
                         onTap: _pickImage,
@@ -145,12 +140,8 @@ class _AddUpdateEpisodeScreenState extends State<AddUpdateEpisodeScreen> with Ut
                           width: MediaQuery.of(context).size.width,
                           padding: const EdgeInsets.all(8),
                           decoration: BoxDecoration(
-                            borderRadius: const BorderRadius.all(
-                              Radius.circular(8),
-                            ),
-                            border: Border.all(
-                              color: AppColors.greyColor,
-                            ),
+                            borderRadius: const BorderRadius.all(Radius.circular(8)),
+                            border: Border.all(color: AppColors.greyColor),
                           ),
                           child: _selectedImage == null
                               ? Column(
@@ -179,16 +170,11 @@ class _AddUpdateEpisodeScreenState extends State<AddUpdateEpisodeScreen> with Ut
                 Container(
                   width: MediaQuery.of(context).size.width,
                   padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
-                    color: AppColors.whiteColor,
-                  ),
+                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(12), color: AppColors.whiteColor),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const TextWidget(
-                        text: "Select Series",
-                      ),
+                      const TextWidget(text: "Select Series"),
                       heightBox5(),
                       BlocBuilder<GetAllSeriesCubit, GetAllSeriesState>(
                         builder: (context, state) {
@@ -202,8 +188,9 @@ class _AddUpdateEpisodeScreenState extends State<AddUpdateEpisodeScreen> with Ut
                                 setState(() {
                                   selectedSeries = value;
                                   log("selectedSeries $selectedSeries $value");
-                                  final selectedDatum =
-                                      state.model.data?.firstWhere((datum) => datum.seriesName == value);
+                                  final selectedDatum = state.model.data?.firstWhere(
+                                    (datum) => datum.seriesName == value,
+                                  );
                                   if (kDebugMode) {
                                     print("Selected Datum ID: ${selectedDatum?.id}");
                                   }
@@ -216,69 +203,61 @@ class _AddUpdateEpisodeScreenState extends State<AddUpdateEpisodeScreen> with Ut
                         },
                       ),
                       heightBox10(),
-                      const TextWidget(
-                        text: "Select  Season",
-                      ),
+                      const TextWidget(text: "Select  Season"),
                       heightBox5(),
                       BlocBuilder<GetAllSeasonCubit, GetAllSeasonState>(
                         builder: (context, state) {
                           if (state is GetAllSeasonLoadedState) {
-                            final genres = state.model.data
+                            final genres =
+                                state.model.data
                                     ?.map((datum) => '${datum.series?.seriesName} - ${datum.seasonName}')
                                     .whereType<String>()
                                     .toList() ??
                                 [];
                             return CustomDropdown(
-                                items: genres,
-                                selectedValue: selectedSeason,
-                                onChanged: (value) {
-                                  setState(() {
-                                    selectedSeason = value;
-                                    log("selectedSeason $selectedSeason");
-                                    final parts = value?.split(' - ');
-                                    final seriesName = parts?.first;
-                                    log("seriesName ${parts?.first} seasonName ${parts?.last}");
-                                    final selectedDatum =
-                                        state.model.data?.firstWhere((datum) => datum.series?.seriesName == seriesName);
-                                    log("Selected Datum ID: $selectedDatum");
+                              items: genres,
+                              selectedValue: selectedSeason,
+                              onChanged: (value) {
+                                setState(() {
+                                  selectedSeason = value;
+                                  log("selectedSeason $selectedSeason");
+                                  final parts = value?.split(' - ');
+                                  final seriesName = parts?.first;
+                                  log("seriesName ${parts?.first} seasonName ${parts?.last}");
+                                  final selectedDatum = state.model.data?.firstWhere(
+                                    (datum) => datum.series?.seriesName == seriesName,
+                                  );
+                                  log("Selected Datum ID: $selectedDatum");
 
-                                    selectedSeasonId = selectedDatum?.id;
-                                  });
+                                  selectedSeasonId = selectedDatum?.id;
                                 });
+                              },
+                            );
                           }
                           return const SizedBox();
                         },
                       ),
                       heightBox10(),
-                      const TextWidget(
-                        text: "Episode Title",
-                      ),
+                      const TextWidget(text: "Episode Title"),
                       heightBox5(),
-                      TextFormFieldWidget(
-                        controller: episodeController,
-                      ),
+                      TextFormFieldWidget(controller: episodeController),
                       heightBox10(),
-                      const TextWidget(
-                        text: "Episode Number",
-                      ),
+                      const TextWidget(text: "Episode Number"),
                       heightBox5(),
-                      TextFormFieldWidget(
-                        controller: episodeNoController,
-                      ),
+                      TextFormFieldWidget(controller: episodeNoController),
                       heightBox10(),
-                      const TextWidget(
-                        text: "Released Date",
-                      ),
+                      const TextWidget(text: "Released Date"),
                       heightBox5(),
                       TextFormFieldWidget(
                         controller: _releasedDateController,
                         readOnly: true,
                         isSuffixIconShow: true,
                         suffixIcon: InkWell(
-                            onTap: () {
-                              selectDate(context, _releasedDateController);
-                            },
-                            child: const Icon(Icons.calendar_month_outlined)),
+                          onTap: () {
+                            selectDate(context, _releasedDateController);
+                          },
+                          child: const Icon(Icons.calendar_month_outlined),
+                        ),
                       ),
                       heightBox10(),
                       const TextWidget(text: "Video"),
@@ -287,110 +266,117 @@ class _AddUpdateEpisodeScreenState extends State<AddUpdateEpisodeScreen> with Ut
                           ? Text("Selected video: ${_selectedVideo!.name}")
                           : const Text("No video selected."),
                       heightBox5(),
-                      CustomOutlinedButton(
-                        onPressed: _pickVideo,
-                        buttonText: "Pick Video",
-                      ),
+                      CustomOutlinedButton(onPressed: _pickVideo, buttonText: "Pick Video"),
                       heightBox10(),
                       const Center(child: TextWidget(text: "Or")),
                       heightBox15(),
                       const TextWidget(text: "Video Link"),
                       heightBox10(),
-                      TextFormFieldWidget(
-                        controller: videoLinkController,
-                      ),
+                      TextFormFieldWidget(controller: videoLinkController),
                       heightBox10(),
                       BlocConsumer<UpdateEpisodeCubit, UpdateEpisodeState>(
                         listener: (context, state) {
                           if (state is UpdateEpisodeErrorState) {
-                           showMessage(context, state.error);
+                            showMessage(context, state.error);
                             return;
                           }
                           if (state is UpdateEpisodeLoadedState) {
                             Navigator.pop(context);
-                           showMessage(context, "Update Successfully ✅");
+                            showMessage(context, "Update Successfully ✅");
                           }
                         },
                         builder: (context, updateState) {
                           return BlocConsumer<PostEpisodeCubit, PostEpisodeState>(
                             listener: (context, state) {
                               if (state is PostEpisodeErrorState) {
-                               showMessage(context, "${state.error} ❌");
+                                showMessage(context, "${state.error} ❌");
                                 return;
                               }
 
                               if (state is PostEpisodeLoadedState) {
                                 Navigator.pop(context);
-                               showMessage(context, "Post Successfully ✅");
+                                showMessage(context, "Post Successfully ✅");
                                 context.read<GetAllEpisodeCubit>().getAllEpisode();
                               }
                             },
                             builder: (context, postState) {
+                              int? progressPercent;
+                              if (postState is PostEpisodeProgressState) {
+                                progressPercent = postState.percent;
+                              }
+
+                              if (updateState is UpdateEpisodeProgressState) {
+                                progressPercent = updateState.percent;
+                              }
                               return CustomOutlinedButton(
+                                progress: progressPercent,
                                 inProgress:
-                                    (postState is PostEpisodeLoadingState || updateState is UpdateEpisodeLoadingState),
+                                    (postState is PostEpisodeLoadingState ||
+                                    updateState is UpdateEpisodeLoadingState ||
+                                    postState is PostEpisodeProgressState ||
+                                    updateState is UpdateEpisodeProgressState),
                                 onPressed: () {
                                   if (widget.id != null) {
                                     context.read<UpdateEpisodeCubit>().updateEpisode(
-                                          id: widget.id ?? "",
-                                          coverImg: _selectedImage != null ? File(_selectedImage!.path) : null,
-                                          episodeName: episodeController.text,
-                                          episodeNo: episodeNoController.text,
-                                          releasedDate: _releasedDateController.text,
-                                          seasonId: selectedSeasonId,
-                                          seriesId: selectedSeriesId,
-                                          video: _selectedVideo != null ? File(_selectedVideo!.path) : null,
-                                          movieTime: movieTimeController.text.isEmpty ? null : movieTimeController.text,
-                                          status: true,
-                                          videoLink: videoLinkController.text.isEmpty ? null : videoLinkController.text,
-                                        );
+                                      id: widget.id ?? "",
+                                      coverImg: _selectedImage != null ? File(_selectedImage!.path) : null,
+                                      episodeName: episodeController.text,
+                                      episodeNo: episodeNoController.text,
+                                      releasedDate: _releasedDateController.text,
+                                      seasonId: selectedSeasonId,
+                                      seriesId: selectedSeriesId,
+                                      video: _selectedVideo != null ? File(_selectedVideo!.path) : null,
+                                      movieTime: movieTimeController.text.isEmpty ? null : movieTimeController.text,
+                                      status: true,
+                                      videoLink: videoLinkController.text.isEmpty ? null : videoLinkController.text,
+                                    );
                                     return;
                                   }
 
                                   if (_selectedImage == null) {
-                                   showMessage(context, "Upload Cover Image");
+                                    showMessage(context, "Upload Cover Image");
                                     return;
                                   }
                                   if (episodeController.text.isEmpty) {
-                                   showMessage(context, "Please Enter Episode name");
+                                    showMessage(context, "Please Enter Episode name");
                                     return;
                                   }
                                   if (episodeNoController.text.isEmpty) {
-                                   showMessage(context, "Please Enter Episode No");
+                                    showMessage(context, "Please Enter Episode No");
                                     return;
                                   }
 
                                   if (_releasedDateController.text.isEmpty) {
-                                   showMessage(context, "Please Enter Episode No");
+                                    showMessage(context, "Please Enter Episode No");
                                     return;
                                   }
 
                                   if (selectedSeasonId == null) {
-                                   showMessage(context, "Select season id");
+                                    showMessage(context, "Select season id");
                                     return;
                                   }
 
                                   if (selectedSeriesId == null) {
-                                   showMessage(context, "Select series id");
+                                    showMessage(context, "Select series id");
                                     return;
                                   }
 
                                   if (_selectedVideo == null && videoLinkController.text.isEmpty) {
-                                   showMessage(context, "Select either a video file or provide a video link");
+                                    showMessage(context, "Select either a video file or provide a video link");
                                     return;
                                   }
 
                                   context.read<PostEpisodeCubit>().postEpisode(
-                                        coverImg: _selectedImage != null ? File(_selectedImage!.path) : null,
-                                        episodeName: episodeController.text,
-                                        episodeNo: episodeNoController.text,
-                                        releasedDate: _releasedDateController.text,
-                                        seasonId: selectedSeasonId,
-                                        seriesId: selectedSeriesId,
-                                        video: _selectedVideo != null ? File(_selectedVideo!.path) : null,
-                                        movieTime: movieTimeController.text.isEmpty ? null : movieTimeController.text,
-                                        videoLink: videoLinkController.text.isEmpty ? null : videoLinkController.text,
-                                      );
+                                    coverImg: _selectedImage != null ? File(_selectedImage!.path) : null,
+                                    episodeName: episodeController.text,
+                                    episodeNo: episodeNoController.text,
+                                    releasedDate: _releasedDateController.text,
+                                    seasonId: selectedSeasonId,
+                                    seriesId: selectedSeriesId,
+                                    video: _selectedVideo != null ? File(_selectedVideo!.path) : null,
+                                    movieTime: movieTimeController.text.isEmpty ? null : movieTimeController.text,
+                                    videoLink: videoLinkController.text.isEmpty ? null : videoLinkController.text,
+                                  );
                                 },
                                 buttonText: widget.id != null ? "Save Episode" : "Upload Episode",
                               );

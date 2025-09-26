@@ -25,3 +25,10 @@ final class UpdateEpisodeErrorState extends UpdateEpisodeState {
   @override
   List<Object?> get props => [error];
 }
+
+final class UpdateEpisodeProgressState extends UpdateEpisodeState {
+  final int percent;
+  UpdateEpisodeProgressState({required this.percent});
+  @override
+  List<Object?> get props => [percent];
+}

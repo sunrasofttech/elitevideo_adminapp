@@ -75,6 +75,7 @@ class UpdateTvShowEpisodeCubit extends Cubit<UpdateEpisodeState> {
         onSendProgress: (sent, total) {
           final percent = ((sent / total) * 100).clamp(0, 100).toInt();
           log("Upload progress: $percent%");
+          emit(UpdateEpisodeProgressState(percent: percent));
         },
       );
 

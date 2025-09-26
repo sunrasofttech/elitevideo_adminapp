@@ -129,7 +129,7 @@ class _AddUpdateShortFlimScreenState extends State<AddUpdateShortFlimScreen> wit
 
   Future<void> _pickImage() async {
     final pickedFile = await ImagePickerUtil.pickImageFromGallery(
-            context: context,
+      context: context,
       aspectRatio: const CropAspectRatio(ratioX: 5, ratioY: 3),
       initAspectRatio: CropAspectRatioPreset.square,
     );
@@ -143,7 +143,7 @@ class _AddUpdateShortFlimScreenState extends State<AddUpdateShortFlimScreen> wit
   Future<void> _pickPosterImage() async {
     final pickedFile = await ImagePickerUtil.pickImageFromGallery(
       aspectRatio: const CropAspectRatio(ratioX: 16, ratioY: 9),
-            context: context,
+      context: context,
       initAspectRatio: CropAspectRatioPreset.ratio3x2,
     );
     if (pickedFile != null) {
@@ -194,16 +194,11 @@ class _AddUpdateShortFlimScreenState extends State<AddUpdateShortFlimScreen> wit
                 Container(
                   width: MediaQuery.of(context).size.width,
                   padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
-                    color: AppColors.whiteColor,
-                  ),
+                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(12), color: AppColors.whiteColor),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const TextWidget(
-                        text: "Cover Image",
-                      ),
+                      const TextWidget(text: "Cover Image"),
                       heightBox10(),
                       GestureDetector(
                         onTap: _pickImage,
@@ -211,12 +206,8 @@ class _AddUpdateShortFlimScreenState extends State<AddUpdateShortFlimScreen> wit
                           width: MediaQuery.of(context).size.width,
                           padding: const EdgeInsets.all(8),
                           decoration: BoxDecoration(
-                            borderRadius: const BorderRadius.all(
-                              Radius.circular(8),
-                            ),
-                            border: Border.all(
-                              color: AppColors.greyColor,
-                            ),
+                            borderRadius: const BorderRadius.all(Radius.circular(8)),
+                            border: Border.all(color: AppColors.greyColor),
                           ),
                           child: _selectedImage == null
                               ? Column(
@@ -245,16 +236,11 @@ class _AddUpdateShortFlimScreenState extends State<AddUpdateShortFlimScreen> wit
                 Container(
                   width: MediaQuery.of(context).size.width,
                   padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
-                    color: AppColors.whiteColor,
-                  ),
+                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(12), color: AppColors.whiteColor),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const TextWidget(
-                        text: "Poster Image",
-                      ),
+                      const TextWidget(text: "Poster Image"),
                       heightBox10(),
                       GestureDetector(
                         onTap: _pickPosterImage,
@@ -262,12 +248,8 @@ class _AddUpdateShortFlimScreenState extends State<AddUpdateShortFlimScreen> wit
                           width: MediaQuery.of(context).size.width,
                           padding: const EdgeInsets.all(8),
                           decoration: BoxDecoration(
-                            borderRadius: const BorderRadius.all(
-                              Radius.circular(8),
-                            ),
-                            border: Border.all(
-                              color: AppColors.greyColor,
-                            ),
+                            borderRadius: const BorderRadius.all(Radius.circular(8)),
+                            border: Border.all(color: AppColors.greyColor),
                           ),
                           child: _selectedPosterImage == null
                               ? Column(
@@ -296,16 +278,11 @@ class _AddUpdateShortFlimScreenState extends State<AddUpdateShortFlimScreen> wit
                 Container(
                   width: MediaQuery.of(context).size.width,
                   padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
-                    color: AppColors.whiteColor,
-                  ),
+                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(12), color: AppColors.whiteColor),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const TextWidget(
-                        text: "Select Language",
-                      ),
+                      const TextWidget(text: "Select Language"),
                       heightBox5(),
                       BlocBuilder<GetAllLanguageCubit, GetAllLanguageState>(
                         builder: (context, state) {
@@ -329,9 +306,7 @@ class _AddUpdateShortFlimScreenState extends State<AddUpdateShortFlimScreen> wit
                         },
                       ),
                       heightBox10(),
-                      const TextWidget(
-                        text: "Select Genre",
-                      ),
+                      const TextWidget(text: "Select Genre"),
                       heightBox5(),
                       BlocBuilder<GetAllGenreCubit, GetAllGenreState>(
                         builder: (context, state) {
@@ -356,9 +331,7 @@ class _AddUpdateShortFlimScreenState extends State<AddUpdateShortFlimScreen> wit
                       ),
                       heightBox10(),
                       heightBox10(),
-                      const TextWidget(
-                        text: "Select Short Film Category",
-                      ),
+                      const TextWidget(text: "Select Short Film Category"),
                       heightBox5(),
                       BlocBuilder<GetAllMovieCategoryCubit, GetAllCategoryState>(
                         builder: (context, state) {
@@ -371,8 +344,9 @@ class _AddUpdateShortFlimScreenState extends State<AddUpdateShortFlimScreen> wit
                               onChanged: (value) {
                                 setState(() {
                                   selectedCategory = value;
-                                  final selectedDatum =
-                                      state.model.categories?.firstWhere((datum) => datum.name == value);
+                                  final selectedDatum = state.model.categories?.firstWhere(
+                                    (datum) => datum.name == value,
+                                  );
                                   selectedCategoryId = selectedDatum?.id;
                                   print("Selected Datum ID: ${selectedDatum?.id}");
                                 });
@@ -383,18 +357,11 @@ class _AddUpdateShortFlimScreenState extends State<AddUpdateShortFlimScreen> wit
                         },
                       ),
                       heightBox10(),
-                      const TextWidget(
-                        text: "Short Film Name",
-                      ),
+                      const TextWidget(text: "Short Film Name"),
                       heightBox5(),
-                      TextFormFieldWidget(
-                        focusNode: movieNameFocus,
-                        controller: movieNameController,
-                      ),
+                      TextFormFieldWidget(focusNode: movieNameFocus, controller: movieNameController),
                       heightBox10(),
-                      const TextWidget(
-                        text: "Short Film Upload Type",
-                      ),
+                      const TextWidget(text: "Short Film Upload Type"),
                       heightBox5(),
                       CustomDropdown(
                         items: videoUplaodType,
@@ -409,24 +376,16 @@ class _AddUpdateShortFlimScreenState extends State<AddUpdateShortFlimScreen> wit
                       const TextWidget(text: "Video"),
                       heightBox5(),
                       if (selectedVideoType == 'link') ...[
-                        TextFormFieldWidget(
-                          hintText: "Enter video link",
-                          controller: videoLinkController,
-                        ),
+                        TextFormFieldWidget(hintText: "Enter video link", controller: videoLinkController),
                       ] else ...[
                         _selectedVideo != null
                             ? Text("Selected video: ${_selectedVideo!.name}")
                             : const Text("No video selected."),
                         heightBox5(),
-                        CustomOutlinedButton(
-                          onPressed: _pickVideo,
-                          buttonText: "Pick Video",
-                        ),
+                        CustomOutlinedButton(onPressed: _pickVideo, buttonText: "Pick Video"),
                       ],
                       heightBox10(),
-                      const TextWidget(
-                        text: "Quality ON/OFF",
-                      ),
+                      const TextWidget(text: "Quality ON/OFF"),
                       heightBox5(),
                       CustomDropdown(
                         items: yesNoList,
@@ -438,9 +397,7 @@ class _AddUpdateShortFlimScreenState extends State<AddUpdateShortFlimScreen> wit
                         },
                       ),
                       heightBox10(),
-                      const TextWidget(
-                        text: "Subtitle ON/OFF",
-                      ),
+                      const TextWidget(text: "Subtitle ON/OFF"),
                       heightBox5(),
                       CustomDropdown(
                         items: yesNoList,
@@ -452,18 +409,11 @@ class _AddUpdateShortFlimScreenState extends State<AddUpdateShortFlimScreen> wit
                         },
                       ),
                       heightBox10(),
-                      const TextWidget(
-                        text: "Released By",
-                      ),
+                      const TextWidget(text: "Released By"),
                       heightBox5(),
-                      TextFormFieldWidget(
-                        focusNode: releasedByFocus,
-                        controller: releasedByController,
-                      ),
+                      TextFormFieldWidget(focusNode: releasedByFocus, controller: releasedByController),
                       heightBox10(),
-                      const TextWidget(
-                        text: "Released Date",
-                      ),
+                      const TextWidget(text: "Released Date"),
                       heightBox5(),
                       TextFormFieldWidget(
                         focusNode: releasedDateFocus,
@@ -478,40 +428,36 @@ class _AddUpdateShortFlimScreenState extends State<AddUpdateShortFlimScreen> wit
                         ),
                       ),
                       heightBox10(),
-                      const TextWidget(
-                        text: "Highlighted",
-                      ),
+                      const TextWidget(text: "Highlighted"),
                       heightBox10(),
                       Switch(
-                          activeColor: AppColors.zGreenColor,
-                          value: isHighlighted,
-                          onChanged: (v) {
-                            setState(() {
-                              isHighlighted = v;
-                            });
-                          }),
-                      heightBox10(),
-                      const TextWidget(
-                        text: "Is Short Film On Rent",
+                        activeColor: AppColors.zGreenColor,
+                        value: isHighlighted,
+                        onChanged: (v) {
+                          setState(() {
+                            isHighlighted = v;
+                          });
+                        },
                       ),
                       heightBox10(),
+                      const TextWidget(text: "Is Short Film On Rent"),
+                      heightBox10(),
                       Switch(
-                          activeColor: AppColors.zGreenColor,
-                          value: isMovieOnRent,
-                          onChanged: (v) {
-                            setState(() {
-                              isMovieOnRent = v;
-                              showSubscription = false;
-                            });
-                          }),
+                        activeColor: AppColors.zGreenColor,
+                        value: isMovieOnRent,
+                        onChanged: (v) {
+                          setState(() {
+                            isMovieOnRent = v;
+                            showSubscription = false;
+                          });
+                        },
+                      ),
                       heightBox10(),
                       if (isMovieOnRent)
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const TextWidget(
-                              text: "Movie Price",
-                            ),
+                            const TextWidget(text: "Movie Price"),
                             heightBox10(),
                             TextFormFieldWidget(
                               focusNode: moviePriceFocus,
@@ -525,9 +471,7 @@ class _AddUpdateShortFlimScreenState extends State<AddUpdateShortFlimScreen> wit
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const TextWidget(
-                              text: "Rent Time Days",
-                            ),
+                            const TextWidget(text: "Rent Time Days"),
                             heightBox10(),
                             TextFormFieldWidget(
                               focusNode: rentedTimeDaysFocus,
@@ -542,36 +486,32 @@ class _AddUpdateShortFlimScreenState extends State<AddUpdateShortFlimScreen> wit
                           ],
                         ),
                       heightBox10(),
-                      const TextWidget(
-                        text: "Status",
-                      ),
+                      const TextWidget(text: "Status"),
                       heightBox10(),
                       Switch(
-                          activeColor: AppColors.zGreenColor,
-                          value: status,
-                          onChanged: (v) {
-                            setState(() {
-                              status = v;
-                            });
-                          }),
-                      heightBox10(),
-                      heightBox10(),
-                      const TextWidget(
-                        text: "Show Subscription",
+                        activeColor: AppColors.zGreenColor,
+                        value: status,
+                        onChanged: (v) {
+                          setState(() {
+                            status = v;
+                          });
+                        },
                       ),
+                      heightBox10(),
+                      heightBox10(),
+                      const TextWidget(text: "Show Subscription"),
                       heightBox10(),
                       Switch(
-                          activeColor: AppColors.zGreenColor,
-                          value: showSubscription,
-                          onChanged: (v) {
-                            showSubscription = v;
-                            setState(() {});
-                          }),
-                      heightBox10(),
-                      heightBox10(),
-                      const TextWidget(
-                        text: "Description",
+                        activeColor: AppColors.zGreenColor,
+                        value: showSubscription,
+                        onChanged: (v) {
+                          showSubscription = v;
+                          setState(() {});
+                        },
                       ),
+                      heightBox10(),
+                      heightBox10(),
+                      const TextWidget(text: "Description"),
                       heightBox5(),
                       InkWell(
                         onTap: () {
@@ -603,15 +543,15 @@ class _AddUpdateShortFlimScreenState extends State<AddUpdateShortFlimScreen> wit
                       BlocConsumer<UpdateFilmCubit, UpdateFilmState>(
                         listener: (context, state) {
                           if (state is UpdateFilmLoadingState) {
-                           showMessage(context, "It take time to update a shortfilm");
+                            showMessage(context, "It take time to update a shortfilm");
                           }
                           if (state is UpdateFilmErrorState) {
-                           showMessage(context, state.error);
+                            showMessage(context, state.error);
                             return;
                           }
 
                           if (state is UpdateFilmLoadedState) {
-                           showMessage(context, "Update Sucessfully");
+                            showMessage(context, "Update Sucessfully");
                             Navigator.pop(context);
                             context.read<GetAllShortFilmCubit>().getAllShortFilm();
                           }
@@ -620,22 +560,35 @@ class _AddUpdateShortFlimScreenState extends State<AddUpdateShortFlimScreen> wit
                           return BlocConsumer<PostFilmCubit, PostFilmState>(
                             listener: (context, state) {
                               if (state is PostFilmLoadingState) {
-                               showMessage(context, "It take time to upload a shortfilm");
+                                showMessage(context, "It take time to upload a shortfilm");
                               }
                               if (state is PostFilmErrorState) {
-                               showMessage(context, state.error);
+                                showMessage(context, state.error);
                                 return;
                               }
 
                               if (state is PostFilmLoadedState) {
-                               showMessage(context, "Post Sucessfully");
+                                showMessage(context, "Post Sucessfully");
                                 Navigator.pop(context);
                                 context.read<GetAllShortFilmCubit>().getAllShortFilm();
                               }
                             },
                             builder: (context, state) {
+                              int? progressPercent;
+                              if (state is PostFilmProgressState) {
+                                progressPercent = state.percent;
+                              }
+
+                              if (updateState is UpdateFilmProgressState) {
+                                progressPercent = updateState.percent;
+                              }
                               return CustomOutlinedButton(
-                                inProgress: (state is PostFilmLoadingState || updateState is UpdateFilmLoadingState),
+                                progress: progressPercent,
+                                inProgress:
+                                    (state is PostFilmLoadingState ||
+                                    updateState is UpdateFilmLoadingState ||
+                                    state is PostFilmProgressState ||
+                                    updateState is UpdateFilmProgressState),
                                 onPressed: () async {
                                   final contentData = await descriptionController.getText();
                                   final document = parse(contentData);
@@ -647,37 +600,36 @@ class _AddUpdateShortFlimScreenState extends State<AddUpdateShortFlimScreen> wit
                                   }
                                   if (widget.id != null) {
                                     context.read<UpdateFilmCubit>().updateShortFilm(
-                                          id: widget.id ?? "",
-                                          coverImg: _selectedImage != null ? File(_selectedImage!.path) : null,
-                                          description: validHtml,
-                                          isMovieOnRent: isMovieOnRent,
-                                          isHighlighted: isHighlighted,
-                                          movieCategoryId: selectedCategoryId,
-                                          movieLanguage: selectedLanguageId,
-                                          genreId: seletedGenreId,
-                                          movieName: movieNameController.text,
-                                          subtitle: seelctedSubtitle == 'Yes' ? true : false,
-                                          movieRentPrice: moviePriceController.text,
-                                          movieTime: movieTimeController.text,
-                                          showSubscription: showSubscription,
-                                          movieVideo: _selectedVideo != null ? File(_selectedVideo!.path) : null,
-                                          posterImg:
-                                              _selectedPosterImage != null ? File(_selectedPosterImage!.path) : null,
-                                          quality: selectedQuality == 'Yes' ? true : false,
-                                          releasedBy: releasedByController.text,
-                                          releasedDate: releasedDateController.text,
-                                          status: status,
-                                          // trailorVideo: _selectedTrailer != null ? File(_selectedTrailer!.path) : null,
-                                          video_link: videoLinkController.text,
-                                          rented_time_days: rentedTimeDaysController.text.isEmpty
-                                              ? null
-                                              : int.tryParse(rentedTimeDaysController.text),
-                                        );
+                                      id: widget.id ?? "",
+                                      coverImg: _selectedImage != null ? File(_selectedImage!.path) : null,
+                                      description: validHtml,
+                                      isMovieOnRent: isMovieOnRent,
+                                      isHighlighted: isHighlighted,
+                                      movieCategoryId: selectedCategoryId,
+                                      movieLanguage: selectedLanguageId,
+                                      genreId: seletedGenreId,
+                                      movieName: movieNameController.text,
+                                      subtitle: seelctedSubtitle == 'Yes' ? true : false,
+                                      movieRentPrice: moviePriceController.text,
+                                      movieTime: movieTimeController.text,
+                                      showSubscription: showSubscription,
+                                      movieVideo: _selectedVideo != null ? File(_selectedVideo!.path) : null,
+                                      posterImg: _selectedPosterImage != null ? File(_selectedPosterImage!.path) : null,
+                                      quality: selectedQuality == 'Yes' ? true : false,
+                                      releasedBy: releasedByController.text,
+                                      releasedDate: releasedDateController.text,
+                                      status: status,
+                                      // trailorVideo: _selectedTrailer != null ? File(_selectedTrailer!.path) : null,
+                                      video_link: videoLinkController.text,
+                                      rented_time_days: rentedTimeDaysController.text.isEmpty
+                                          ? null
+                                          : int.tryParse(rentedTimeDaysController.text),
+                                    );
                                     return;
                                   }
 
                                   if (selectedCategory == null) {
-                                   showMessage(context, "Select Movie Category");
+                                    showMessage(context, "Select Movie Category");
                                     return;
                                   }
 
@@ -687,16 +639,16 @@ class _AddUpdateShortFlimScreenState extends State<AddUpdateShortFlimScreen> wit
                                   // }
 
                                   if (selectedLanguage == null) {
-                                   showMessage(context, "Select Movie Langiage");
+                                    showMessage(context, "Select Movie Langiage");
                                     return;
                                   }
 
                                   if (movieNameController.text.isEmpty) {
-                                   showMessage(context, "Movie Name is required");
+                                    showMessage(context, "Movie Name is required");
                                     return;
                                   }
                                   if (selectedLanguage == null) {
-                                   showMessage(context, "Movie Language is required");
+                                    showMessage(context, "Movie Language is required");
                                     return;
                                   }
                                   // if (selectedGenre == null) {
@@ -704,53 +656,52 @@ class _AddUpdateShortFlimScreenState extends State<AddUpdateShortFlimScreen> wit
                                   //   return;
                                   // }
                                   if (movieTimeController.text.isEmpty) {
-                                   showMessage(context, "Movie Time is required");
+                                    showMessage(context, "Movie Time is required");
                                     return;
                                   }
                                   if (releasedByController.text.isEmpty) {
-                                   showMessage(context, "Released By is required");
+                                    showMessage(context, "Released By is required");
                                     return;
                                   }
                                   if (releasedDateController.text.isEmpty) {
-                                   showMessage(context, "Released Date is required");
+                                    showMessage(context, "Released Date is required");
                                     return;
                                   }
                                   if (await descriptionController.getText() == '') {
-                                   showMessage(context, "Description is required");
+                                    showMessage(context, "Description is required");
                                     return;
                                   }
 
                                   if (_selectedVideo == null && videoLinkController.text.isEmpty) {
-                                   showMessage(context, "Video file or video link is required");
+                                    showMessage(context, "Video file or video link is required");
                                     return;
                                   }
 
                                   context.read<PostFilmCubit>().postShortFilm(
-                                        coverImg: _selectedImage != null ? File(_selectedImage!.path) : null,
-                                        description: validHtml,
-                                        isHighlighted: isHighlighted,
-                                        movieCategoryId: selectedCategoryId,
-                                        movieLanguage: selectedLanguageId,
-                                        genreId: seletedGenreId,
-                                        movieName: movieNameController.text,
-                                        subtitle: seelctedSubtitle == 'Yes' ? true : false,
-                                        movieRentPrice: moviePriceController.text,
-                                        showSubscription: showSubscription,
-                                        movieTime: movieTimeController.text,
-                                        movieVideo: _selectedVideo != null ? File(_selectedVideo!.path) : null,
-                                        // trailorVideo: _selectedTrailer != null ? File(_selectedTrailer!.path) : null,
-                                        posterImg:
-                                            _selectedPosterImage != null ? File(_selectedPosterImage!.path) : null,
-                                        quality: selectedQuality == 'Yes' ? true : false,
-                                        releasedBy: releasedByController.text,
-                                        releasedDate: releasedDateController.text,
-                                        status: status,
-                                        isMovieOnRent: isMovieOnRent,
-                                        video_link: videoLinkController.text,
-                                        rented_time_days: rentedTimeDaysController.text.isEmpty
-                                            ? null
-                                            : int.tryParse(rentedTimeDaysController.text),
-                                      );
+                                    coverImg: _selectedImage != null ? File(_selectedImage!.path) : null,
+                                    description: validHtml,
+                                    isHighlighted: isHighlighted,
+                                    movieCategoryId: selectedCategoryId,
+                                    movieLanguage: selectedLanguageId,
+                                    genreId: seletedGenreId,
+                                    movieName: movieNameController.text,
+                                    subtitle: seelctedSubtitle == 'Yes' ? true : false,
+                                    movieRentPrice: moviePriceController.text,
+                                    showSubscription: showSubscription,
+                                    movieTime: movieTimeController.text,
+                                    movieVideo: _selectedVideo != null ? File(_selectedVideo!.path) : null,
+                                    // trailorVideo: _selectedTrailer != null ? File(_selectedTrailer!.path) : null,
+                                    posterImg: _selectedPosterImage != null ? File(_selectedPosterImage!.path) : null,
+                                    quality: selectedQuality == 'Yes' ? true : false,
+                                    releasedBy: releasedByController.text,
+                                    releasedDate: releasedDateController.text,
+                                    status: status,
+                                    isMovieOnRent: isMovieOnRent,
+                                    video_link: videoLinkController.text,
+                                    rented_time_days: rentedTimeDaysController.text.isEmpty
+                                        ? null
+                                        : int.tryParse(rentedTimeDaysController.text),
+                                  );
                                 },
                                 buttonText: widget.id != null ? "Save Short Film" : "Upload Short Film",
                               );

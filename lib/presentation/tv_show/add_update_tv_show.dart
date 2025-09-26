@@ -441,9 +441,21 @@ class _AddUpdateTvShowScreenState extends State<AddUpdateTvShowScreen> with Util
                               }
                             },
                             builder: (context, state) {
+                              int? progressPercent;
+                              if (state is PostSeriesProgressState) {
+                                progressPercent = state.percent;
+                              }
+
+                              if (updateState is UpdateSeriesProgressState) {
+                                progressPercent = updateState.percent;
+                              }
                               return CustomOutlinedButton(
+                                progress: progressPercent,
                                 inProgress:
-                                    (updateState is UpdateSeriesLoadingState || state is PostSeriesLoadingState),
+                                    (updateState is UpdateSeriesLoadingState ||
+                                    state is PostSeriesLoadingState ||
+                                    state is PostSeriesProgressState ||
+                                    updateState is UpdateSeriesProgressState),
                                 onPressed: () async {
                                   final contentData = await descriptionController.getText();
                                   final document = parse(contentData);

@@ -41,7 +41,7 @@ class _AddUpdateLiveTvScreenState extends State<AddUpdateLiveTvScreen> with Util
   String? selectedLanguageId;
   Future<void> _pickImage() async {
     final pickedFile = await ImagePickerUtil.pickImageFromGallery(
-            context: context,
+      context: context,
       aspectRatio: const CropAspectRatio(ratioX: 4, ratioY: 3),
     );
     if (pickedFile != null) {
@@ -52,7 +52,7 @@ class _AddUpdateLiveTvScreenState extends State<AddUpdateLiveTvScreen> with Util
   }
 
   Future<void> _pickPosterImage() async {
-    final pickedFile = await ImagePickerUtil.pickImageFromGallery(      context: context,);
+    final pickedFile = await ImagePickerUtil.pickImageFromGallery(context: context);
     if (pickedFile != null) {
       setState(() {
         _selectedPosterImage = pickedFile;
@@ -319,9 +319,21 @@ class _AddUpdateLiveTvScreenState extends State<AddUpdateLiveTvScreen> with Util
                               }
                             },
                             builder: (context, state) {
+                              int? progressPercent;
+                              if (state is CreateFilmProgressState) {
+                                progressPercent = state.percent;
+                              }
+
+                              if (updateState is UpdateLiveProgressState) {
+                                progressPercent = updateState.percent;
+                              }
                               return CustomOutlinedButton(
+                                progress: progressPercent,
                                 inProgress:
-                                    (state is CreatelivetvLoadingState || updateState is UpdateLiveTvLoadingState),
+                                    (state is CreatelivetvLoadingState ||
+                                    updateState is UpdateLiveTvLoadingState ||
+                                    state is CreateFilmProgressState ||
+                                    updateState is UpdateLiveProgressState),
                                 onPressed: () async {
                                   final contentData = await descriptionController.getText();
                                   final document = parse(contentData);
