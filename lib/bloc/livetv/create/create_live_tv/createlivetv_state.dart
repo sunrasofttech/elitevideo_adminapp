@@ -23,3 +23,10 @@ final class CreatelivetvErrorState extends CreatelivetvState {
   @override
   List<Object?> get props => [error];
 }
+
+final class CreateFilmProgressState extends CreatelivetvState {
+  final int percent;
+  CreateFilmProgressState({required this.percent});
+  @override
+  List<Object?> get props => [percent];
+}

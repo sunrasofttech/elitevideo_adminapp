@@ -24,3 +24,10 @@ final class UpdateLiveTvErrorState extends UpdateLiveTvState {
   @override
   List<Object?> get props => [error];
 }
+
+final class UpdateLiveProgressState extends UpdateLiveTvState {
+  final int percent;
+  UpdateLiveProgressState({required this.percent});
+  @override
+  List<Object?> get props => [percent];
+}

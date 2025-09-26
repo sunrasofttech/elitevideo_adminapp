@@ -1,10 +1,10 @@
-import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 import 'package:bloc/bloc.dart';
+import 'package:dio/dio.dart';
+import 'package:elite_admin/main.dart';
 import 'package:equatable/equatable.dart';
 import 'package:elite_admin/utils/apiurls/api.dart';
-import 'package:http/http.dart';
 import 'package:mime/mime.dart';
 import 'package:http_parser/http_parser.dart';
 part 'post_episode_state.dart';
@@ -12,7 +12,7 @@ part 'post_episode_state.dart';
 class PostTvShowEpisodeCubit extends Cubit<PostEpisodeState> {
   PostTvShowEpisodeCubit() : super(PostEpisodeInitial());
 
-  postEpisode({
+  Future<void> postEpisode({
     String? seriesId,
     String? seasonId,
     String? episodeName,
@@ -24,64 +24,68 @@ class PostTvShowEpisodeCubit extends Cubit<PostEpisodeState> {
     File? video,
   }) async {
     emit(PostEpisodeLoadingState());
+
     try {
-      var uri = Uri.parse(AppUrls.episodeUrl);
-      var request = MultipartRequest("POST", uri);
+      FormData formData = FormData();
 
-      request.headers.addAll(headers);
-
-      Future<void> addFile(String fieldName, File? file) async {
+      void addFile(String fieldName, File? file) {
         if (file != null) {
-          final mimeType = lookupMimeType(file.path);
-          if (mimeType != null) {
-            request.files.add(
-              await MultipartFile.fromPath(
-                fieldName,
+          final mimeType = lookupMimeType(file.path)?.split("/") ?? ["application", "octet-stream"];
+          formData.files.add(
+            MapEntry(
+              fieldName,
+              MultipartFile.fromFileSync(
                 file.path,
-                contentType: MediaType.parse(mimeType),
+                filename: file.path.split("/").last,
+                contentType: MediaType(mimeType[0], mimeType[1]),
               ),
-            );
-          } else {
-            log("Unable to determine MIME type for file: ${file.path}");
-          }
+            ),
+          );
         }
       }
 
-      await addFile("cover_img", coverImg);
-      await addFile("video", video);
+      addFile("cover_img", coverImg);
+      addFile("video", video);
 
-      Map<String, String> fields = {
-        if (seriesId != null) "series_id": seriesId,
-        if (seasonId != null) "season_id": seasonId.toString(),
-        if (episodeName != null) "episode_name": episodeName,
-        if (episodeNo != null) "episode_no": episodeNo,
-        if (releasedDate != null) "released_date": releasedDate,
-        if (movieTime != null) "movie_time": movieTime,
-        if (videoLink != null) "video_link": videoLink,
-         "show_type":"tvshows",
-      };
+      formData.fields.addAll([
+        if (seriesId != null) MapEntry("series_id", seriesId),
+        if (seasonId != null) MapEntry("season_id", seasonId),
+        if (episodeName != null) MapEntry("episode_name", episodeName),
+        if (episodeNo != null) MapEntry("episode_no", episodeNo),
+        if (releasedDate != null) MapEntry("released_date", releasedDate),
+        if (movieTime != null) MapEntry("movie_time", movieTime),
+        if (videoLink != null) MapEntry("video_link", videoLink),
+        MapEntry("show_type", "tvshows"),
+      ]);
 
-      log("message fields  $fields");
+      log("Form fields: ${formData.fields}");
 
-      request.fields.addAll(fields);
+      final response = await dio.post(
+        AppUrls.episodeUrl,
+        data: formData,
+        options: Options(headers: headers),
+        onSendProgress: (sent, total) {
+          final percent = ((sent / total) * 100).clamp(0, 100).toInt();
+          log("Upload progress: $percent%");
+          emit(PostEpisodeProgressState(percent: percent));
+        },
+      );
 
-      var response = await request.send();
-      var responseData = await response.stream.bytesToString();
-      log("message == $responseData");
-      final result = jsonDecode(responseData);
+      log("Response: ${response.data}");
+      final result = response.data;
 
-      log("Result: $result");
       if (response.statusCode == 200 || response.statusCode == 201) {
         if (result['status'] == true) {
           emit(PostEpisodeLoadedState());
         } else {
-          emit(PostEpisodeErrorState("${result['message']}"));
+          emit(PostEpisodeErrorState(result['message'].toString()));
         }
       } else {
-        emit(PostEpisodeErrorState("Server error: ${response.statusCode}"));
+        emit(PostEpisodeErrorState("${result['message'] ?? "Server Error"}"));
       }
-    } catch (e) {
-      emit(PostEpisodeErrorState(e.toString()));
+    } catch (e, s) {
+      log("Error in postEpisode: $e, $s");
+      emit(PostEpisodeErrorState("Exception: $e"));
     }
   }
 }

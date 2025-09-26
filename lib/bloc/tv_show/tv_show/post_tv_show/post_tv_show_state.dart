@@ -23,3 +23,10 @@ final class PostSeriesErrorState extends PostSeriesState {
   @override
   List<Object?> get props => [error];
 }
+
+final class PostSeriesProgressState extends PostSeriesState {
+  final int percent;
+ PostSeriesProgressState({required this.percent});
+  @override
+  List<Object?> get props => [percent];
+}
