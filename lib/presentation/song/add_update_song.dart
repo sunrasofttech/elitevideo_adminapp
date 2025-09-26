@@ -59,6 +59,7 @@ class _AddUpdateSongScreenState extends State<AddUpdateSongScreen> with Utility 
 
   Future<void> _pickImage() async {
     final pickedFile = await ImagePickerUtil.pickImageFromGallery(
+      context: context,
       aspectRatio: const CropAspectRatio(ratioX: 4, ratioY: 3),
       initAspectRatio: CropAspectRatioPreset.square,
     );
@@ -77,7 +78,7 @@ class _AddUpdateSongScreenState extends State<AddUpdateSongScreen> with Utility 
         _selectedSong = result.files.first;
       });
     } else {
-     showMessage(context, "No audio file selected.");
+      showMessage(context, "No audio file selected.");
     }
   }
 
@@ -295,26 +296,26 @@ class _AddUpdateSongScreenState extends State<AddUpdateSongScreen> with Utility 
                       BlocConsumer<UpdateMusicCubit, UpdateMusicState>(
                         listener: (context, state) {
                           if (state is UpdateMusicLoadedState) {
-                           showMessage(context, "Update successfully");
+                            showMessage(context, "Update successfully");
                             context.read<GetAllMusicCubit>().getAllMusic();
                             Navigator.pop(context);
                           }
 
                           if (state is UpdateMusicErrorState) {
-                           showMessage(context, "${state.error}.");
+                            showMessage(context, "${state.error}.");
                           }
                         },
                         builder: (context, updateState) {
                           return BlocConsumer<CreateMusicCubit, CreateMusicState>(
                             listener: (context, state) {
                               if (state is CreateMusicErrorState) {
-                               showMessage(context, state.error);
+                                showMessage(context, state.error);
                               }
 
                               if (state is CreateMusicLoadedState) {
                                 Navigator.pop(context);
                                 context.read<GetAllMusicCubit>().getAllMusic();
-                               showMessage(context, "music added Successfully");
+                                showMessage(context, "music added Successfully");
                               }
                             },
                             builder: (context, state) {
@@ -346,37 +347,37 @@ class _AddUpdateSongScreenState extends State<AddUpdateSongScreen> with Utility 
                                   }
 
                                   if (songArtistController.text.isEmpty) {
-                                   showMessage(context, "Please add artist name");
+                                    showMessage(context, "Please add artist name");
                                     return;
                                   }
 
                                   if (songTitleController.text.isEmpty) {
-                                   showMessage(context, "Please add song title");
+                                    showMessage(context, "Please add song title");
                                     return;
                                   }
 
                                   if (_selectedCoverImage == null) {
-                                   showMessage(context, "Please select a cover image");
+                                    showMessage(context, "Please select a cover image");
                                     return;
                                   }
 
                                   if (_selectedSong == null || _selectedSong!.path!.isEmpty) {
-                                   showMessage(context, "Please select a song file");
+                                    showMessage(context, "Please select a song file");
                                     return;
                                   }
 
                                   if (selectedCategoryId == null || selectedCategoryId!.isEmpty) {
-                                   showMessage(context, "Please select a category");
+                                    showMessage(context, "Please select a category");
                                     return;
                                   }
 
                                   if (selectedArtistId == null) {
-                                   showMessage(context, "Please select a artist name");
+                                    showMessage(context, "Please select a artist name");
                                     return;
                                   }
 
                                   if (selectedLanguageId == null || selectedLanguageId!.isEmpty) {
-                                   showMessage(context, "Please select a language id");
+                                    showMessage(context, "Please select a language id");
                                     return;
                                   }
 

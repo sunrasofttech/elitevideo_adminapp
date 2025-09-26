@@ -31,6 +31,7 @@ class _ProfileScreenState extends State<ProfileScreen> with Utility {
 
   Future<void> _pickImage() async {
     final pickedFile = await ImagePickerUtil.pickImageFromGallery(
+      context: context,
         aspectRatio: const CropAspectRatio(ratioX: 4, ratioY: 3),
     );
     if (pickedFile != null) {

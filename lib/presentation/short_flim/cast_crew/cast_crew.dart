@@ -41,6 +41,7 @@ class _CastCrewScreenState extends State<ShortFilmCastCrewScreen> with Utility {
   XFile? _selectedImage;
   Future<void> _pickImage(StateSetter setState) async {
     final pickedFile = await ImagePickerUtil.pickImageFromGallery(
+            context: context,
       aspectRatio: const CropAspectRatio(ratioX: 4, ratioY: 3),
     );
     if (pickedFile != null) {

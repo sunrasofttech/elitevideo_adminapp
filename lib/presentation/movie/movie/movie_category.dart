@@ -36,6 +36,7 @@ class _MovieCategoryScreenState extends State<MovieCategoryScreen> with Utility 
   XFile? _selectedImage;
   Future<void> _pickImage(setState) async {
     final pickedFile = await ImagePickerUtil.pickImageFromGallery(
+      context: context,
       aspectRatio: const CropAspectRatio(ratioX: 4, ratioY: 3),
     );
     if (pickedFile != null) {
@@ -54,28 +55,20 @@ class _MovieCategoryScreenState extends State<MovieCategoryScreen> with Utility 
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const TextWidget(
-                text: "Movie Category",
-                fontSize: 15,
-                fontWeight: FontWeight.w600,
-              ),
+              const TextWidget(text: "Movie Category", fontSize: 15, fontWeight: FontWeight.w600),
               heightBox15(),
               Row(
                 children: [
                   Expanded(
-                      child: TextFormFieldWidget(
-                    controller: searchController,
-                    onChanged: (p0) {
-                      context.read<GetAllMovieCategoryCubit>().getAllMovieCategory(
-                            name: p0,
-                          );
-                    },
-                    isSuffixIconShow: true,
-                    suffixIcon: const Icon(
-                      Icons.search,
-                      color: AppColors.blackColor,
+                    child: TextFormFieldWidget(
+                      controller: searchController,
+                      onChanged: (p0) {
+                        context.read<GetAllMovieCategoryCubit>().getAllMovieCategory(name: p0);
+                      },
+                      isSuffixIconShow: true,
+                      suffixIcon: const Icon(Icons.search, color: AppColors.blackColor),
                     ),
-                  )),
+                  ),
                   widthBox10(),
                   InkWell(
                     onTap: () {
@@ -84,24 +77,14 @@ class _MovieCategoryScreenState extends State<MovieCategoryScreen> with Utility 
                     child: Container(
                       padding: const EdgeInsets.all(14),
                       decoration: const BoxDecoration(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(12),
-                        ),
-                        gradient: LinearGradient(
-                          colors: AppColors.blueGradientList,
-                        ),
+                        borderRadius: BorderRadius.all(Radius.circular(12)),
+                        gradient: LinearGradient(colors: AppColors.blueGradientList),
                       ),
                       child: Row(
                         children: [
-                          const TextWidget(
-                            text: "Add",
-                            color: AppColors.whiteColor,
-                          ),
+                          const TextWidget(text: "Add", color: AppColors.whiteColor),
                           widthBox5(),
-                          const Icon(
-                            Icons.add_circle_rounded,
-                            color: AppColors.whiteColor,
-                          )
+                          const Icon(Icons.add_circle_rounded, color: AppColors.whiteColor),
                         ],
                       ),
                     ),
@@ -112,24 +95,24 @@ class _MovieCategoryScreenState extends State<MovieCategoryScreen> with Utility 
               BlocListener<UpdateCategoryCubit, UpdateCategoryState>(
                 listener: (context, state) {
                   if (state is UpdateCategoryErrorState) {
-                   showMessage(context,  state.error);
+                    showMessage(context, state.error);
                     return;
                   }
 
                   if (state is UpdateCategoryLoadedState) {
-                   showMessage(context,  "Movie category Update successfully.");
+                    showMessage(context, "Movie category Update successfully.");
                     context.read<GetAllMovieCategoryCubit>().getAllMovieCategory();
                   }
                 },
                 child: BlocListener<DeleteCategoryCubit, DeleteCategoryState>(
                   listener: (context, state) {
                     if (state is DeleteCategoryErrorState) {
-                     showMessage(context,  state.error);
+                      showMessage(context, state.error);
                       return;
                     }
 
                     if (state is DeleteCategoryLoadedState) {
-                     showMessage(context,  "Delete Successfully");
+                      showMessage(context, "Delete Successfully");
                       context.read<GetAllMovieCategoryCubit>().getAllMovieCategory();
                       Navigator.pop(context);
                     }
@@ -137,21 +120,15 @@ class _MovieCategoryScreenState extends State<MovieCategoryScreen> with Utility 
                   child: BlocBuilder<GetAllMovieCategoryCubit, GetAllCategoryState>(
                     builder: (context, state) {
                       if (state is GetAllCategoryLoadingState) {
-                        return const Center(
-                          child: CustomCircularProgressIndicator(),
-                        );
+                        return const Center(child: CustomCircularProgressIndicator());
                       }
 
                       if (state is GetAllCategoryErrorState) {
-                        return const Center(
-                          child: CustomErrorWidget(),
-                        );
+                        return const Center(child: CustomErrorWidget());
                       }
                       if (state is GetAllCategoryLoadedState) {
                         return state.model.categories?.isEmpty ?? true
-                            ? const Center(
-                                child: CustomEmptyWidget(),
-                              )
+                            ? const Center(child: CustomEmptyWidget())
                             : ListView.builder(
                                 physics: const NeverScrollableScrollPhysics(),
                                 shrinkWrap: true,
@@ -176,10 +153,7 @@ class _MovieCategoryScreenState extends State<MovieCategoryScreen> with Utility 
                                                   fontWeight: FontWeight.w600,
                                                 ),
                                                 const SizedBox(height: 4),
-                                                const TextWidget(
-                                                  text: "23",
-                                                  color: AppColors.greyColor,
-                                                ),
+                                                const TextWidget(text: "23", color: AppColors.greyColor),
                                               ],
                                             ),
                                           ),
@@ -192,31 +166,36 @@ class _MovieCategoryScreenState extends State<MovieCategoryScreen> with Utility 
                                                 mainAxisSize: MainAxisSize.min,
                                                 children: [
                                                   InkWell(
-                                                      onTap: () {
-                                                        _addUpdateMovieCategoryPopUp(
-                                                            id: data?.id, name: data?.name, status: data?.status);
-                                                      },
-                                                      child: svgAsset(assetName: AppImages.editSvg)),
+                                                    onTap: () {
+                                                      _addUpdateMovieCategoryPopUp(
+                                                        id: data?.id,
+                                                        name: data?.name,
+                                                        status: data?.status,
+                                                      );
+                                                    },
+                                                    child: svgAsset(assetName: AppImages.editSvg),
+                                                  ),
                                                   widthBox5(),
                                                   InkWell(
-                                                      onTap: () {
-                                                        showDialog(
-                                                          context: context,
-                                                          builder: (context) {
-                                                            return DeleteDialog(
-                                                              onCancelPressed: () {
-                                                                Navigator.pop(context);
-                                                              },
-                                                              onDeletePressed: () {
-                                                                context
-                                                                    .read<DeleteCategoryCubit>()
-                                                                    .deleteMovieCategory(data?.id ?? "");
-                                                              },
-                                                            );
-                                                          },
-                                                        );
-                                                      },
-                                                      child: svgAsset(assetName: AppImages.deleteSvg)),
+                                                    onTap: () {
+                                                      showDialog(
+                                                        context: context,
+                                                        builder: (context) {
+                                                          return DeleteDialog(
+                                                            onCancelPressed: () {
+                                                              Navigator.pop(context);
+                                                            },
+                                                            onDeletePressed: () {
+                                                              context.read<DeleteCategoryCubit>().deleteMovieCategory(
+                                                                data?.id ?? "",
+                                                              );
+                                                            },
+                                                          );
+                                                        },
+                                                      );
+                                                    },
+                                                    child: svgAsset(assetName: AppImages.deleteSvg),
+                                                  ),
                                                 ],
                                               ),
                                               heightBox10(),
@@ -228,9 +207,9 @@ class _MovieCategoryScreenState extends State<MovieCategoryScreen> with Utility 
                                                 value: data?.status ?? false,
                                                 onChanged: (value) {
                                                   context.read<UpdateCategoryCubit>().updateCategory(
-                                                        id: data?.id ?? "",
-                                                        status: value,
-                                                      );
+                                                    id: data?.id ?? "",
+                                                    status: value,
+                                                  );
                                                 },
                                               ),
                                             ],
@@ -253,16 +232,15 @@ class _MovieCategoryScreenState extends State<MovieCategoryScreen> with Utility 
                 builder: (context, state) {
                   if (state is GetAllCategoryLoadedState) {
                     return CustomPagination(
-                        currentPage: currentPage,
-                        totalPages: state.model.totalPages ?? 0,
-                        onPageChanged: (e) {
-                          setState(() {
-                            currentPage = e;
-                          });
-                          context.read<GetAllMovieCategoryCubit>().getAllMovieCategory(
-                                page: currentPage,
-                              );
+                      currentPage: currentPage,
+                      totalPages: state.model.totalPages ?? 0,
+                      onPageChanged: (e) {
+                        setState(() {
+                          currentPage = e;
                         });
+                        context.read<GetAllMovieCategoryCubit>().getAllMovieCategory(page: currentPage);
+                      },
+                    );
                   }
                   return const SizedBox();
                 },
@@ -282,167 +260,150 @@ class _MovieCategoryScreenState extends State<MovieCategoryScreen> with Utility 
       builder: (context) {
         return Dialog(
           child: SingleChildScrollView(
-            child: StatefulBuilder(builder: (context, setState) {
-              return Padding(
-                padding: const EdgeInsets.all(12.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        TextWidget(
-                          text: id != null ? "Update Movie Category" : "Add Movie Category",
-                          fontWeight: FontWeight.w700,
-                          fontSize: 15,
-                        ),
-                        InkWell(
-                          onTap: () {
-                            Navigator.pop(context);
-                          },
-                          child: Container(
-                            decoration: const BoxDecoration(
-                              color: AppColors.greyColor,
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(12),
-                              ),
-                            ),
-                            child: const Icon(
-                              Icons.close,
-                              color: AppColors.whiteColor,
-                            ),
+            child: StatefulBuilder(
+              builder: (context, setState) {
+                return Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          TextWidget(
+                            text: id != null ? "Update Movie Category" : "Add Movie Category",
+                            fontWeight: FontWeight.w700,
+                            fontSize: 15,
                           ),
-                        ),
-                      ],
-                    ),
-                    heightBox15(),
-                    const TextWidget(
-                      text: "Movie Category Title",
-                      color: AppColors.blackColor,
-                    ),
-                    heightBox10(),
-                    TextFormFieldWidget(
-                      controller: nameController,
-                    ),
-                    heightBox15(),
-                    const TextWidget(
-                      text: "Cover Image",
-                    ),
-                    heightBox10(),
-                    GestureDetector(
-                      onTap: () {
-                        _pickImage(setState);
-                      },
-                      child: Container(
-                        width: MediaQuery.of(context).size.width,
-                        padding: const EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                          borderRadius: const BorderRadius.all(
-                            Radius.circular(8),
-                          ),
-                          border: Border.all(
-                            color: AppColors.greyColor,
-                          ),
-                        ),
-                        child: _selectedImage == null
-                            ? Column(
-                                children: [
-                                  SvgPicture.asset(AppImages.imageSvg),
-                                  heightBox10(),
-                                  const TextWidget(text: "Select a File"),
-                                  const TextWidget(text: "Browse or Drag image here.."),
-                                ],
-                              )
-                            : ClipRRect(
-                                borderRadius: BorderRadius.circular(8),
-                                child: Image.file(
-                                  File(_selectedImage!.path),
-                                  width: double.infinity,
-                                  height: 190,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                      ),
-                    ),
-                    heightBox15(),
-                    const TextWidget(
-                      text: "Status",
-                      color: AppColors.blackColor,
-                    ),
-                    heightBox10(),
-                    Switch(
-                      activeColor: AppColors.zGreenColor,
-                      value: isActive,
-                      onChanged: (value) {
-                        setState(() {
-                          isActive = value;
-                        });
-                      },
-                    ),
-                    heightBox10(),
-                    BlocConsumer<PostCategoryCubit, PostCategoryState>(
-                      listener: (context, state) {
-                        if (state is PostCategoryErrorState) {
-                         showMessage(context,  state.error);
-                          return;
-                        }
-
-                        if (state is PostCategoryLoadedState) {
-                          Navigator.pop(context);
-                         showMessage(context,  "Movie category created successfully.");
-                          context.read<GetAllMovieCategoryCubit>().getAllMovieCategory();
-                        }
-                      },
-                      builder: (context, postState) {
-                        return BlocConsumer<UpdateCategoryCubit, UpdateCategoryState>(
-                          listener: (context, postState) {
-                            if (postState is UpdateCategoryErrorState) {
-                             showMessage(context,  postState.error);
-                              return;
-                            }
-
-                            if (postState is UpdateCategoryLoadedState) {
+                          InkWell(
+                            onTap: () {
                               Navigator.pop(context);
-                             showMessage(context,  "Movie category Update successfully.");
-                              context.read<GetAllMovieCategoryCubit>().getAllMovieCategory();
-                            }
-                          },
-                          builder: (context, state) {
-                            return CustomOutlinedButton(
-                              inProgress:
-                                  (postState is PostCategoryLoadingState || state is UpdateCategoryLoadingState),
-                              onPressed: () {
-                                if (nameController.text.isEmpty) {
-                                 showMessage(context,  "Add title");
-                                  return;
-                                }
-                                if (id != null) {
-                                  context.read<UpdateCategoryCubit>().updateCategory(
-                                        id: id,
-                                        name: nameController.text,
-                                        status: isActive,
-                                        img: _selectedImage != null ? File(_selectedImage!.path) : null,
-                                      );
+                            },
+                            child: Container(
+                              decoration: const BoxDecoration(
+                                color: AppColors.greyColor,
+                                borderRadius: BorderRadius.all(Radius.circular(12)),
+                              ),
+                              child: const Icon(Icons.close, color: AppColors.whiteColor),
+                            ),
+                          ),
+                        ],
+                      ),
+                      heightBox15(),
+                      const TextWidget(text: "Movie Category Title", color: AppColors.blackColor),
+                      heightBox10(),
+                      TextFormFieldWidget(controller: nameController),
+                      heightBox15(),
+                      const TextWidget(text: "Cover Image"),
+                      heightBox10(),
+                      GestureDetector(
+                        onTap: () {
+                          _pickImage(setState);
+                        },
+                        child: Container(
+                          width: MediaQuery.of(context).size.width,
+                          padding: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            borderRadius: const BorderRadius.all(Radius.circular(8)),
+                            border: Border.all(color: AppColors.greyColor),
+                          ),
+                          child: _selectedImage == null
+                              ? Column(
+                                  children: [
+                                    SvgPicture.asset(AppImages.imageSvg),
+                                    heightBox10(),
+                                    const TextWidget(text: "Select a File"),
+                                    const TextWidget(text: "Browse or Drag image here.."),
+                                  ],
+                                )
+                              : ClipRRect(
+                                  borderRadius: BorderRadius.circular(8),
+                                  child: Image.file(
+                                    File(_selectedImage!.path),
+                                    width: double.infinity,
+                                    height: 190,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                        ),
+                      ),
+                      heightBox15(),
+                      const TextWidget(text: "Status", color: AppColors.blackColor),
+                      heightBox10(),
+                      Switch(
+                        activeColor: AppColors.zGreenColor,
+                        value: isActive,
+                        onChanged: (value) {
+                          setState(() {
+                            isActive = value;
+                          });
+                        },
+                      ),
+                      heightBox10(),
+                      BlocConsumer<PostCategoryCubit, PostCategoryState>(
+                        listener: (context, state) {
+                          if (state is PostCategoryErrorState) {
+                            showMessage(context, state.error);
+                            return;
+                          }
 
-                                  return;
-                                }
+                          if (state is PostCategoryLoadedState) {
+                            Navigator.pop(context);
+                            showMessage(context, "Movie category created successfully.");
+                            context.read<GetAllMovieCategoryCubit>().getAllMovieCategory();
+                          }
+                        },
+                        builder: (context, postState) {
+                          return BlocConsumer<UpdateCategoryCubit, UpdateCategoryState>(
+                            listener: (context, postState) {
+                              if (postState is UpdateCategoryErrorState) {
+                                showMessage(context, postState.error);
+                                return;
+                              }
 
-                                context.read<PostCategoryCubit>().postCategory(
-                                      nameController.text,
-                                      _selectedImage != null ? File(_selectedImage!.path) : null,
-                                      isActive,
+                              if (postState is UpdateCategoryLoadedState) {
+                                Navigator.pop(context);
+                                showMessage(context, "Movie category Update successfully.");
+                                context.read<GetAllMovieCategoryCubit>().getAllMovieCategory();
+                              }
+                            },
+                            builder: (context, state) {
+                              return CustomOutlinedButton(
+                                inProgress:
+                                    (postState is PostCategoryLoadingState || state is UpdateCategoryLoadingState),
+                                onPressed: () {
+                                  if (nameController.text.isEmpty) {
+                                    showMessage(context, "Add title");
+                                    return;
+                                  }
+                                  if (id != null) {
+                                    context.read<UpdateCategoryCubit>().updateCategory(
+                                      id: id,
+                                      name: nameController.text,
+                                      status: isActive,
+                                      img: _selectedImage != null ? File(_selectedImage!.path) : null,
                                     );
-                              },
-                              buttonText: id != null ? 'Save Movie Category' : 'Add Movie Category',
-                            );
-                          },
-                        );
-                      },
-                    ),
-                  ],
-                ),
-              );
-            }),
+
+                                    return;
+                                  }
+
+                                  context.read<PostCategoryCubit>().postCategory(
+                                    nameController.text,
+                                    _selectedImage != null ? File(_selectedImage!.path) : null,
+                                    isActive,
+                                  );
+                                },
+                                buttonText: id != null ? 'Save Movie Category' : 'Add Movie Category',
+                              );
+                            },
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
           ),
         );
       },

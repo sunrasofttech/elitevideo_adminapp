@@ -48,28 +48,20 @@ class _SongCategoryScreenState extends State<SongCategoryScreen> with Utility {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const TextWidget(
-                text: "Music Genre",
-                fontSize: 15,
-                fontWeight: FontWeight.w600,
-              ),
+              const TextWidget(text: "Music Genre", fontSize: 15, fontWeight: FontWeight.w600),
               heightBox15(),
               Row(
                 children: [
                   Expanded(
-                      child: TextFormFieldWidget(
-                    controller: searchController,
-                    isSuffixIconShow: true,
-                    onChanged: (p0) {
-                      context.read<GetAllMusicCategoryCubit>().getAllMusic(
-                            search: p0,
-                          );
-                    },
-                    suffixIcon: const Icon(
-                      Icons.search,
-                      color: AppColors.blackColor,
+                    child: TextFormFieldWidget(
+                      controller: searchController,
+                      isSuffixIconShow: true,
+                      onChanged: (p0) {
+                        context.read<GetAllMusicCategoryCubit>().getAllMusic(search: p0);
+                      },
+                      suffixIcon: const Icon(Icons.search, color: AppColors.blackColor),
                     ),
-                  )),
+                  ),
                   widthBox10(),
                   InkWell(
                     onTap: () {
@@ -78,24 +70,14 @@ class _SongCategoryScreenState extends State<SongCategoryScreen> with Utility {
                     child: Container(
                       padding: const EdgeInsets.all(14),
                       decoration: const BoxDecoration(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(12),
-                        ),
-                        gradient: LinearGradient(
-                          colors: AppColors.blueGradientList,
-                        ),
+                        borderRadius: BorderRadius.all(Radius.circular(12)),
+                        gradient: LinearGradient(colors: AppColors.blueGradientList),
                       ),
                       child: Row(
                         children: [
-                          const TextWidget(
-                            text: "Add",
-                            color: AppColors.whiteColor,
-                          ),
+                          const TextWidget(text: "Add", color: AppColors.whiteColor),
                           widthBox5(),
-                          const Icon(
-                            Icons.add_circle_rounded,
-                            color: AppColors.whiteColor,
-                          )
+                          const Icon(Icons.add_circle_rounded, color: AppColors.whiteColor),
                         ],
                       ),
                     ),
@@ -106,21 +88,19 @@ class _SongCategoryScreenState extends State<SongCategoryScreen> with Utility {
               BlocListener<DeleteMusicCategoryCubit, DeleteMusicCategoryState>(
                 listener: (context, state) {
                   if (state is DeleteMusicCategoryLoadedState) {
-                   showMessage(context, "Delete Successfully");
+                    showMessage(context, "Delete Successfully");
                     context.read<GetAllMusicCategoryCubit>().getAllMusic();
                   }
 
                   if (state is DeleteMusicCategoryErrorState) {
-                   showMessage(context, state.error);
+                    showMessage(context, state.error);
                     return;
                   }
                 },
                 child: BlocBuilder<GetAllMusicCategoryCubit, GetAllMusicCategoryState>(
                   builder: (context, state) {
                     if (state is GetAllMusicCategoryLoadingState) {
-                      return const Center(
-                        child: CustomCircularProgressIndicator(),
-                      );
+                      return const Center(child: CustomCircularProgressIndicator());
                     }
 
                     if (state is GetAllMusicCategoryErrorState) {
@@ -129,9 +109,7 @@ class _SongCategoryScreenState extends State<SongCategoryScreen> with Utility {
 
                     if (state is GetAllMusicCategoryLoadedState) {
                       return state.model.data?.isEmpty ?? true
-                          ? const Center(
-                              child: CustomEmptyWidget(),
-                            )
+                          ? const Center(child: CustomEmptyWidget())
                           : ListView.builder(
                               physics: const NeverScrollableScrollPhysics(),
                               shrinkWrap: true,
@@ -157,10 +135,7 @@ class _SongCategoryScreenState extends State<SongCategoryScreen> with Utility {
                                                 fontWeight: FontWeight.w600,
                                               ),
                                               const SizedBox(height: 4),
-                                              const TextWidget(
-                                                text: "23",
-                                                color: AppColors.greyColor,
-                                              ),
+                                              const TextWidget(text: "23", color: AppColors.greyColor),
                                             ],
                                           ),
                                         ),
@@ -174,21 +149,19 @@ class _SongCategoryScreenState extends State<SongCategoryScreen> with Utility {
                                               children: [
                                                 InkWell(
                                                   onTap: () {
-                                                    _addUpdateMusicCategoryPopUp(
-                                                      id: data?.id,
-                                                      name: data?.name,
-                                                    );
+                                                    _addUpdateMusicCategoryPopUp(id: data?.id, name: data?.name);
                                                   },
                                                   child: svgAsset(assetName: AppImages.editSvg),
                                                 ),
                                                 widthBox5(),
                                                 InkWell(
-                                                    onTap: () {
-                                                      context
-                                                          .read<DeleteMusicCategoryCubit>()
-                                                          .deleteMusicCategory(data?.id ?? "");
-                                                    },
-                                                    child: svgAsset(assetName: AppImages.deleteSvg)),
+                                                  onTap: () {
+                                                    context.read<DeleteMusicCategoryCubit>().deleteMusicCategory(
+                                                      data?.id ?? "",
+                                                    );
+                                                  },
+                                                  child: svgAsset(assetName: AppImages.deleteSvg),
+                                                ),
                                               ],
                                             ),
                                           ],
@@ -210,16 +183,15 @@ class _SongCategoryScreenState extends State<SongCategoryScreen> with Utility {
                 builder: (context, state) {
                   if (state is GetAllMusicCategoryLoadedState) {
                     return CustomPagination(
-                        currentPage: currentPage,
-                        totalPages: state.model.pagination?.totalPages ?? 0,
-                        onPageChanged: (e) {
-                          setState(() {
-                            currentPage = e;
-                          });
-                          context.read<GetAllMusicCategoryCubit>().getAllMusic(
-                                page: currentPage,
-                              );
+                      currentPage: currentPage,
+                      totalPages: state.model.pagination?.totalPages ?? 0,
+                      onPageChanged: (e) {
+                        setState(() {
+                          currentPage = e;
                         });
+                        context.read<GetAllMusicCategoryCubit>().getAllMusic(page: currentPage);
+                      },
+                    );
                   }
                   return const SizedBox();
                 },
@@ -236,7 +208,7 @@ class _SongCategoryScreenState extends State<SongCategoryScreen> with Utility {
     XFile? _selectedImage;
 
     Future<void> _pickImage() async {
-      final pickedFile = await ImagePickerUtil.pickImageFromGallery();
+      final pickedFile = await ImagePickerUtil.pickImageFromGallery(context: context);
       if (pickedFile != null) {
         setState(() {
           _selectedImage = pickedFile;
@@ -248,97 +220,90 @@ class _SongCategoryScreenState extends State<SongCategoryScreen> with Utility {
       context: context,
       builder: (context) {
         return Dialog(
-          child: StatefulBuilder(builder: (context, setState) {
-            return SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.all(12.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        TextWidget(
-                          text: id != null ? "Update Music Genre" : "Add Music Genre",
-                          fontWeight: FontWeight.w700,
-                          fontSize: 15,
-                        ),
-                        InkWell(
-                          onTap: () {
-                            Navigator.pop(context);
-                          },
-                          child: Container(
-                            decoration: const BoxDecoration(
-                              color: AppColors.greyColor,
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(12),
+          child: StatefulBuilder(
+            builder: (context, setState) {
+              return SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          TextWidget(
+                            text: id != null ? "Update Music Genre" : "Add Music Genre",
+                            fontWeight: FontWeight.w700,
+                            fontSize: 15,
+                          ),
+                          InkWell(
+                            onTap: () {
+                              Navigator.pop(context);
+                            },
+                            child: Container(
+                              decoration: const BoxDecoration(
+                                color: AppColors.greyColor,
+                                borderRadius: BorderRadius.all(Radius.circular(12)),
                               ),
-                            ),
-                            child: const Icon(
-                              Icons.close,
-                              color: AppColors.whiteColor,
+                              child: const Icon(Icons.close, color: AppColors.whiteColor),
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                    heightBox15(),
-                    const TextWidget(
-                      text: "Music Category Title",
-                      color: AppColors.blackColor,
-                    ),
-                    heightBox10(),
-                    TextFormFieldWidget(
-                      controller: titleController,
-                    ),
-                    heightBox10(),
-                    BlocConsumer<UpdateMusicCategoryCubit, UpdateMusicCategoryState>(
-                      listener: (context, state) {
-                        if (state is UpdateMusicCategoryErrorState) {
-                         showMessage(context, state.error);
-                          return;
-                        }
-                        if (state is UpdateMusicCategoryLoadedState) {
-                         showMessage(context, "Update Succesfully");
-                          Navigator.pop(context);
-                          context.read<GetAllMusicCategoryCubit>().getAllMusic();
-                        }
-                      },
-                      builder: (context, state) {
-                        return BlocConsumer<PostMusicCategoryCubit, PostMusicCategoryState>(
-                          listener: (context, state) {
-                            if (state is PostMusicCategoryLoadedState) {
-                             showMessage(context, "Post Sucessfully");
-                              Navigator.pop(context);
-                              context.read<GetAllMusicCategoryCubit>().getAllMusic();
-                            }
-                          },
-                          builder: (context, postState) {
-                            return CustomOutlinedButton(
-                              inProgress: (postState is PostMusicCategoryLoadingState ||
-                                  state is UpdateMusicCategoryLoadingState),
-                              onPressed: () {
-                                if (id != null) {
-                                  context.read<UpdateMusicCategoryCubit>().updateMusic(
-                                        titleController.text,
-                                        id,
-                                        _selectedImage != null ? File(_selectedImage!.path) : null,
-                                      );
-                                  return;
-                                }
-                                context.read<PostMusicCategoryCubit>().postMusicCategory(titleController.text);
-                              },
-                              buttonText: id != null ? 'Save Music Genre' : 'Add Music Genre',
-                            );
-                          },
-                        );
-                      },
-                    ),
-                  ],
+                        ],
+                      ),
+                      heightBox15(),
+                      const TextWidget(text: "Music Category Title", color: AppColors.blackColor),
+                      heightBox10(),
+                      TextFormFieldWidget(controller: titleController),
+                      heightBox10(),
+                      BlocConsumer<UpdateMusicCategoryCubit, UpdateMusicCategoryState>(
+                        listener: (context, state) {
+                          if (state is UpdateMusicCategoryErrorState) {
+                            showMessage(context, state.error);
+                            return;
+                          }
+                          if (state is UpdateMusicCategoryLoadedState) {
+                            showMessage(context, "Update Succesfully");
+                            Navigator.pop(context);
+                            context.read<GetAllMusicCategoryCubit>().getAllMusic();
+                          }
+                        },
+                        builder: (context, state) {
+                          return BlocConsumer<PostMusicCategoryCubit, PostMusicCategoryState>(
+                            listener: (context, state) {
+                              if (state is PostMusicCategoryLoadedState) {
+                                showMessage(context, "Post Sucessfully");
+                                Navigator.pop(context);
+                                context.read<GetAllMusicCategoryCubit>().getAllMusic();
+                              }
+                            },
+                            builder: (context, postState) {
+                              return CustomOutlinedButton(
+                                inProgress:
+                                    (postState is PostMusicCategoryLoadingState ||
+                                    state is UpdateMusicCategoryLoadingState),
+                                onPressed: () {
+                                  if (id != null) {
+                                    context.read<UpdateMusicCategoryCubit>().updateMusic(
+                                      titleController.text,
+                                      id,
+                                      _selectedImage != null ? File(_selectedImage!.path) : null,
+                                    );
+                                    return;
+                                  }
+                                  context.read<PostMusicCategoryCubit>().postMusicCategory(titleController.text);
+                                },
+                                buttonText: id != null ? 'Save Music Genre' : 'Add Music Genre',
+                              );
+                            },
+                          );
+                        },
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            );
-          }),
+              );
+            },
+          ),
         );
       },
     );

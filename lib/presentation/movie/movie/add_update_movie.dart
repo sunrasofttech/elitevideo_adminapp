@@ -159,6 +159,7 @@ class _AddUpdateMoveiScreenState extends State<AddUpdateMoveiScreen> with Utilit
 
   Future<void> _pickImage() async {
     final pickedFile = await ImagePickerUtil.pickImageFromGallery(
+      context: context,
       aspectRatio: const CropAspectRatio(ratioX: 4, ratioY: 3),
       initAspectRatio: CropAspectRatioPreset.square,
     );
@@ -171,6 +172,7 @@ class _AddUpdateMoveiScreenState extends State<AddUpdateMoveiScreen> with Utilit
 
   Future<void> _pickPosterImage() async {
     final pickedFile = await ImagePickerUtil.pickImageFromGallery(
+      context: context,
       aspectRatio: const CropAspectRatio(ratioX: 4, ratioY: 3),
       initAspectRatio: CropAspectRatioPreset.ratio3x2,
     );

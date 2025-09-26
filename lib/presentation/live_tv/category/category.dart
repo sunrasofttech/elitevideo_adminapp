@@ -35,7 +35,8 @@ class _LiveTvCategoryScreenState extends State<LiveTvCategoryScreen> with Utilit
 
   Future<void> _pickImage(void Function(void Function()) setState) async {
     final pickedFile = await ImagePickerUtil.pickImageFromGallery(
-       aspectRatio: const CropAspectRatio(ratioX: 4, ratioY: 3),
+      context: context,
+      aspectRatio: const CropAspectRatio(ratioX: 4, ratioY: 3),
     );
     if (pickedFile != null) {
       setState(() {
@@ -53,22 +54,16 @@ class _LiveTvCategoryScreenState extends State<LiveTvCategoryScreen> with Utilit
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const TextWidget(
-                text: "LiveTv Category",
-                fontSize: 15,
-                fontWeight: FontWeight.w600,
-              ),
+              const TextWidget(text: "LiveTv Category", fontSize: 15, fontWeight: FontWeight.w600),
               heightBox15(),
               Row(
                 children: [
                   Expanded(
-                      child: TextFormFieldWidget(
-                    isSuffixIconShow: true,
-                    suffixIcon: const Icon(
-                      Icons.search,
-                      color: AppColors.blackColor,
+                    child: TextFormFieldWidget(
+                      isSuffixIconShow: true,
+                      suffixIcon: const Icon(Icons.search, color: AppColors.blackColor),
                     ),
-                  )),
+                  ),
                   widthBox10(),
                   InkWell(
                     onTap: () {
@@ -77,24 +72,14 @@ class _LiveTvCategoryScreenState extends State<LiveTvCategoryScreen> with Utilit
                     child: Container(
                       padding: const EdgeInsets.all(14),
                       decoration: const BoxDecoration(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(12),
-                        ),
-                        gradient: LinearGradient(
-                          colors: AppColors.blueGradientList,
-                        ),
+                        borderRadius: BorderRadius.all(Radius.circular(12)),
+                        gradient: LinearGradient(colors: AppColors.blueGradientList),
                       ),
                       child: Row(
                         children: [
-                          const TextWidget(
-                            text: "Add",
-                            color: AppColors.whiteColor,
-                          ),
+                          const TextWidget(text: "Add", color: AppColors.whiteColor),
                           widthBox5(),
-                          const Icon(
-                            Icons.add_circle_rounded,
-                            color: AppColors.whiteColor,
-                          )
+                          const Icon(Icons.add_circle_rounded, color: AppColors.whiteColor),
                         ],
                       ),
                     ),
@@ -105,24 +90,24 @@ class _LiveTvCategoryScreenState extends State<LiveTvCategoryScreen> with Utilit
               BlocListener<UpdateLiveCategoryCubit, UpdateLiveCategoryState>(
                 listener: (context, state) {
                   if (state is UpdateLiveCategoryErrorState) {
-                   showMessage(context,  state.error);
+                    showMessage(context, state.error);
                     return;
                   }
 
                   if (state is UpdateLiveCategoryLoadedState) {
-                   showMessage(context,  "LiveTv category Update successfully.");
+                    showMessage(context, "LiveTv category Update successfully.");
                     context.read<GetLiveCategoryCubit>().getAllLiveCategory();
                   }
                 },
                 child: BlocListener<DeleteLiveCategoryCubit, DeleteLiveCategoryState>(
                   listener: (context, state) {
                     if (state is DeleteLiveCategoryErrorState) {
-                     showMessage(context,  state.error);
+                      showMessage(context, state.error);
                       return;
                     }
 
                     if (state is DeleteLiveCategoryLoadedState) {
-                     showMessage(context,  "Delete Successfully");
+                      showMessage(context, "Delete Successfully");
                       context.read<GetLiveCategoryCubit>().getAllLiveCategory();
                       Navigator.pop(context);
                     }
@@ -130,15 +115,11 @@ class _LiveTvCategoryScreenState extends State<LiveTvCategoryScreen> with Utilit
                   child: BlocBuilder<GetLiveCategoryCubit, GetLiveCategoryState>(
                     builder: (context, state) {
                       if (state is GetLiveCategoryLoadingState) {
-                        return const Center(
-                          child: CustomCircularProgressIndicator(),
-                        );
+                        return const Center(child: CustomCircularProgressIndicator());
                       }
 
                       if (state is GetLiveCategoryErrorState) {
-                        return const Center(
-                          child: CustomErrorWidget(),
-                        );
+                        return const Center(child: CustomErrorWidget());
                       }
                       if (state is GetLiveCategoryLoadedState) {
                         return state.model.data?.categories?.isEmpty ?? true
@@ -167,10 +148,7 @@ class _LiveTvCategoryScreenState extends State<LiveTvCategoryScreen> with Utilit
                                                   fontWeight: FontWeight.w600,
                                                 ),
                                                 const SizedBox(height: 4),
-                                                const TextWidget(
-                                                  text: "23",
-                                                  color: AppColors.greyColor,
-                                                ),
+                                                const TextWidget(text: "23", color: AppColors.greyColor),
                                               ],
                                             ),
                                           ),
@@ -183,31 +161,36 @@ class _LiveTvCategoryScreenState extends State<LiveTvCategoryScreen> with Utilit
                                                 mainAxisSize: MainAxisSize.min,
                                                 children: [
                                                   InkWell(
-                                                      onTap: () {
-                                                        _addUpdateLiveTvCategoryPopUp(
-                                                            id: data?.id, name: data?.name, status: data?.status);
-                                                      },
-                                                      child: svgAsset(assetName: AppImages.editSvg)),
+                                                    onTap: () {
+                                                      _addUpdateLiveTvCategoryPopUp(
+                                                        id: data?.id,
+                                                        name: data?.name,
+                                                        status: data?.status,
+                                                      );
+                                                    },
+                                                    child: svgAsset(assetName: AppImages.editSvg),
+                                                  ),
                                                   widthBox5(),
                                                   InkWell(
-                                                      onTap: () {
-                                                        showDialog(
-                                                          context: context,
-                                                          builder: (context) {
-                                                            return DeleteDialog(
-                                                              onCancelPressed: () {
-                                                                Navigator.pop(context);
-                                                              },
-                                                              onDeletePressed: () {
-                                                                context
-                                                                    .read<DeleteLiveCategoryCubit>()
-                                                                    .deleteLiveCategory(data?.id ?? "");
-                                                              },
-                                                            );
-                                                          },
-                                                        );
-                                                      },
-                                                      child: svgAsset(assetName: AppImages.deleteSvg)),
+                                                    onTap: () {
+                                                      showDialog(
+                                                        context: context,
+                                                        builder: (context) {
+                                                          return DeleteDialog(
+                                                            onCancelPressed: () {
+                                                              Navigator.pop(context);
+                                                            },
+                                                            onDeletePressed: () {
+                                                              context
+                                                                  .read<DeleteLiveCategoryCubit>()
+                                                                  .deleteLiveCategory(data?.id ?? "");
+                                                            },
+                                                          );
+                                                        },
+                                                      );
+                                                    },
+                                                    child: svgAsset(assetName: AppImages.deleteSvg),
+                                                  ),
                                                 ],
                                               ),
                                               heightBox10(),
@@ -219,9 +202,9 @@ class _LiveTvCategoryScreenState extends State<LiveTvCategoryScreen> with Utilit
                                                 value: data?.status ?? false,
                                                 onChanged: (value) {
                                                   context.read<UpdateLiveCategoryCubit>().updateLiveCategory(
-                                                        id: data?.id ?? "",
-                                                        status: value,
-                                                      );
+                                                    id: data?.id ?? "",
+                                                    status: value,
+                                                  );
                                                 },
                                               ),
                                             ],
@@ -254,179 +237,160 @@ class _LiveTvCategoryScreenState extends State<LiveTvCategoryScreen> with Utilit
       builder: (context) {
         return Dialog(
           child: SingleChildScrollView(
-            child: StatefulBuilder(builder: (context, setState) {
-              return Padding(
-                padding: const EdgeInsets.all(12.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        TextWidget(
-                          text: id != null ? "Update LiveTv Category" : "Add LiveTv Category",
-                          fontWeight: FontWeight.w700,
-                          fontSize: 15,
-                        ),
-                        InkWell(
-                          onTap: () {
-                            Navigator.pop(context);
-                          },
-                          child: Container(
-                            decoration: const BoxDecoration(
-                              color: AppColors.greyColor,
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(12),
-                              ),
-                            ),
-                            child: const Icon(
-                              Icons.close,
-                              color: AppColors.whiteColor,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Container(
-                      width: MediaQuery.of(context).size.width,
-                      padding: const EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12),
-                        color: AppColors.whiteColor,
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+            child: StatefulBuilder(
+              builder: (context, setState) {
+                return Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          const TextWidget(
-                            text: "Cover Image",
+                          TextWidget(
+                            text: id != null ? "Update LiveTv Category" : "Add LiveTv Category",
+                            fontWeight: FontWeight.w700,
+                            fontSize: 15,
                           ),
-                          heightBox10(),
-                          GestureDetector(
+                          InkWell(
                             onTap: () {
-                              _pickImage(setState);
+                              Navigator.pop(context);
                             },
                             child: Container(
-                              width: MediaQuery.of(context).size.width,
-                              padding: const EdgeInsets.all(8),
-                              decoration: BoxDecoration(
-                                borderRadius: const BorderRadius.all(
-                                  Radius.circular(8),
-                                ),
-                                border: Border.all(
-                                  color: AppColors.greyColor,
-                                ),
+                              decoration: const BoxDecoration(
+                                color: AppColors.greyColor,
+                                borderRadius: BorderRadius.all(Radius.circular(12)),
                               ),
-                              child: _selectedImage == null
-                                  ? Column(
-                                      children: [
-                                        SvgPicture.asset(AppImages.imageSvg),
-                                        heightBox10(),
-                                        const TextWidget(text: "Select a File"),
-                                        const TextWidget(text: "Browse or Drag image here.."),
-                                      ],
-                                    )
-                                  : ClipRRect(
-                                      borderRadius: BorderRadius.circular(8),
-                                      child: Image.file(
-                                        File(_selectedImage!.path),
-                                        width: double.infinity,
-                                        height: 190,
-                                        fit: BoxFit.cover,
-                                      ),
-                                    ),
+                              child: const Icon(Icons.close, color: AppColors.whiteColor),
                             ),
                           ),
                         ],
                       ),
-                    ),
-                    heightBox15(),
-                    const TextWidget(
-                      text: "LiveTv Category Title",
-                      color: AppColors.blackColor,
-                    ),
-                    heightBox10(),
-                    TextFormFieldWidget(
-                      controller: nameController,
-                    ),
-                    heightBox15(),
-                    const TextWidget(
-                      text: "Status",
-                      color: AppColors.blackColor,
-                    ),
-                    heightBox10(),
-                    Switch(
-                      activeColor: AppColors.zGreenColor,
-                      value: isActive,
-                      onChanged: (value) {
-                        setState(() {
-                          isActive = value;
-                        });
-                      },
-                    ),
-                    heightBox10(),
-                    BlocConsumer<CreateLiveCategoryCubit, CreateLiveCategoryState>(
-                      listener: (context, state) {
-                        if (state is CreateLiveCategoryErrorState) {
-                         showMessage(context,  state.error);
-                          return;
-                        }
+                      Container(
+                        width: MediaQuery.of(context).size.width,
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(12), color: AppColors.whiteColor),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const TextWidget(text: "Cover Image"),
+                            heightBox10(),
+                            GestureDetector(
+                              onTap: () {
+                                _pickImage(setState);
+                              },
+                              child: Container(
+                                width: MediaQuery.of(context).size.width,
+                                padding: const EdgeInsets.all(8),
+                                decoration: BoxDecoration(
+                                  borderRadius: const BorderRadius.all(Radius.circular(8)),
+                                  border: Border.all(color: AppColors.greyColor),
+                                ),
+                                child: _selectedImage == null
+                                    ? Column(
+                                        children: [
+                                          SvgPicture.asset(AppImages.imageSvg),
+                                          heightBox10(),
+                                          const TextWidget(text: "Select a File"),
+                                          const TextWidget(text: "Browse or Drag image here.."),
+                                        ],
+                                      )
+                                    : ClipRRect(
+                                        borderRadius: BorderRadius.circular(8),
+                                        child: Image.file(
+                                          File(_selectedImage!.path),
+                                          width: double.infinity,
+                                          height: 190,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      heightBox15(),
+                      const TextWidget(text: "LiveTv Category Title", color: AppColors.blackColor),
+                      heightBox10(),
+                      TextFormFieldWidget(controller: nameController),
+                      heightBox15(),
+                      const TextWidget(text: "Status", color: AppColors.blackColor),
+                      heightBox10(),
+                      Switch(
+                        activeColor: AppColors.zGreenColor,
+                        value: isActive,
+                        onChanged: (value) {
+                          setState(() {
+                            isActive = value;
+                          });
+                        },
+                      ),
+                      heightBox10(),
+                      BlocConsumer<CreateLiveCategoryCubit, CreateLiveCategoryState>(
+                        listener: (context, state) {
+                          if (state is CreateLiveCategoryErrorState) {
+                            showMessage(context, state.error);
+                            return;
+                          }
 
-                        if (state is CreateLiveCategoryLoadedState) {
-                          Navigator.pop(context);
-                         showMessage(context,  "LiveTv category created successfully.");
-                          context.read<GetLiveCategoryCubit>().getAllLiveCategory();
-                        }
-                      },
-                      builder: (context, postState) {
-                        return BlocConsumer<UpdateLiveCategoryCubit, UpdateLiveCategoryState>(
-                          listener: (context, postState) {
-                            if (postState is UpdateLiveCategoryErrorState) {
-                             showMessage(context,  postState.error);
-                              return;
-                            }
+                          if (state is CreateLiveCategoryLoadedState) {
+                            Navigator.pop(context);
+                            showMessage(context, "LiveTv category created successfully.");
+                            context.read<GetLiveCategoryCubit>().getAllLiveCategory();
+                          }
+                        },
+                        builder: (context, postState) {
+                          return BlocConsumer<UpdateLiveCategoryCubit, UpdateLiveCategoryState>(
+                            listener: (context, postState) {
+                              if (postState is UpdateLiveCategoryErrorState) {
+                                showMessage(context, postState.error);
+                                return;
+                              }
 
-                            if (postState is UpdateLiveCategoryLoadedState) {
-                              Navigator.pop(context);
-                             showMessage(context,  "LiveTv category Update successfully.");
-                              context.read<GetLiveCategoryCubit>();
-                            }
-                          },
-                          builder: (context, state) {
-                            return CustomOutlinedButton(
-                              inProgress: (postState is CreateLiveCategoryLoadingState ||
-                                  state is UpdateLiveCategoryLoadingState),
-                              onPressed: () {
-                                if (nameController.text.isEmpty) {
-                                 showMessage(context,  "Add title");
-                                  return;
-                                }
-                                if (id != null) {
-                                  context.read<UpdateLiveCategoryCubit>().updateLiveCategory(
-                                        id: id,
-                                        name: nameController.text,
-                                        status: isActive,
-                                        coverImg: _selectedImage != null ? File(_selectedImage!.path) : null,
-                                      );
-
-                                  return;
-                                }
-
-                                context.read<CreateLiveCategoryCubit>().createLiveCategory(
-                                      nameController.text,
-                                      isActive,
+                              if (postState is UpdateLiveCategoryLoadedState) {
+                                Navigator.pop(context);
+                                showMessage(context, "LiveTv category Update successfully.");
+                                context.read<GetLiveCategoryCubit>();
+                              }
+                            },
+                            builder: (context, state) {
+                              return CustomOutlinedButton(
+                                inProgress:
+                                    (postState is CreateLiveCategoryLoadingState ||
+                                    state is UpdateLiveCategoryLoadingState),
+                                onPressed: () {
+                                  if (nameController.text.isEmpty) {
+                                    showMessage(context, "Add title");
+                                    return;
+                                  }
+                                  if (id != null) {
+                                    context.read<UpdateLiveCategoryCubit>().updateLiveCategory(
+                                      id: id,
+                                      name: nameController.text,
+                                      status: isActive,
                                       coverImg: _selectedImage != null ? File(_selectedImage!.path) : null,
                                     );
-                              },
-                              buttonText: id != null ? 'Save LiveTv Category' : 'Add LiveTv Category',
-                            );
-                          },
-                        );
-                      },
-                    ),
-                  ],
-                ),
-              );
-            }),
+
+                                    return;
+                                  }
+
+                                  context.read<CreateLiveCategoryCubit>().createLiveCategory(
+                                    nameController.text,
+                                    isActive,
+                                    coverImg: _selectedImage != null ? File(_selectedImage!.path) : null,
+                                  );
+                                },
+                                buttonText: id != null ? 'Save LiveTv Category' : 'Add LiveTv Category',
+                              );
+                            },
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
           ),
         );
       },

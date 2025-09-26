@@ -231,7 +231,7 @@ class _LanguageScreenState extends State<LanguageScreen> with Utility {
     XFile? _selectedImage;
 
     Future<void> _pickImage(setState) async {
-      final pickedFile = await ImagePickerUtil.pickImageFromGallery();
+      final pickedFile = await ImagePickerUtil.pickImageFromGallery(      context: context,);
       if (pickedFile != null) {
         setState(() {
           _selectedImage = pickedFile;

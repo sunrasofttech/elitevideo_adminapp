@@ -66,6 +66,7 @@ class _AddUpdateSeriesScreenState extends State<AddUpdateSeriesScreen> with Util
 
   Future<void> _pickPosterImage() async {
     final pickedFile = await ImagePickerUtil.pickImageFromGallery(
+      context: context,
       aspectRatio: const CropAspectRatio(ratioX: 4, ratioY: 3),
       initAspectRatio: CropAspectRatioPreset.ratio3x2,
     );
@@ -78,6 +79,7 @@ class _AddUpdateSeriesScreenState extends State<AddUpdateSeriesScreen> with Util
 
   Future<void> _pickCoverImage() async {
     final pickedFile = await ImagePickerUtil.pickImageFromGallery(
+      context: context,
       aspectRatio: const CropAspectRatio(ratioX: 4, ratioY: 3),
       initAspectRatio: CropAspectRatioPreset.square,
     );

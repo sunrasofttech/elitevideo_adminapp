@@ -66,6 +66,7 @@ class _AddUpdateTvShowScreenState extends State<AddUpdateTvShowScreen> with Util
 
   Future<void> _pickPosterImage() async {
     final pickedFile = await ImagePickerUtil.pickImageFromGallery(
+      context: context,
       aspectRatio: const CropAspectRatio(ratioX: 4, ratioY: 3),
       initAspectRatio: CropAspectRatioPreset.ratio3x2,
     );
@@ -78,6 +79,7 @@ class _AddUpdateTvShowScreenState extends State<AddUpdateTvShowScreen> with Util
 
   Future<void> _pickCoverImage() async {
     final pickedFile = await ImagePickerUtil.pickImageFromGallery(
+      context: context,
       aspectRatio: const CropAspectRatio(ratioX: 4, ratioY: 3),
       initAspectRatio: CropAspectRatioPreset.square,
     );
@@ -136,16 +138,11 @@ class _AddUpdateTvShowScreenState extends State<AddUpdateTvShowScreen> with Util
                 Container(
                   width: MediaQuery.of(context).size.width,
                   padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
-                    color: AppColors.whiteColor,
-                  ),
+                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(12), color: AppColors.whiteColor),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const TextWidget(
-                        text: "Cover Image",
-                      ),
+                      const TextWidget(text: "Cover Image"),
                       heightBox10(),
                       GestureDetector(
                         onTap: _pickCoverImage,
@@ -153,12 +150,8 @@ class _AddUpdateTvShowScreenState extends State<AddUpdateTvShowScreen> with Util
                           width: MediaQuery.of(context).size.width,
                           padding: const EdgeInsets.all(8),
                           decoration: BoxDecoration(
-                            borderRadius: const BorderRadius.all(
-                              Radius.circular(8),
-                            ),
-                            border: Border.all(
-                              color: AppColors.greyColor,
-                            ),
+                            borderRadius: const BorderRadius.all(Radius.circular(8)),
+                            border: Border.all(color: AppColors.greyColor),
                           ),
                           child: _selectedCoverImage == null
                               ? Column(
@@ -187,16 +180,11 @@ class _AddUpdateTvShowScreenState extends State<AddUpdateTvShowScreen> with Util
                 Container(
                   width: MediaQuery.of(context).size.width,
                   padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
-                    color: AppColors.whiteColor,
-                  ),
+                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(12), color: AppColors.whiteColor),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const TextWidget(
-                        text: "Poster Image",
-                      ),
+                      const TextWidget(text: "Poster Image"),
                       heightBox10(),
                       GestureDetector(
                         onTap: _pickPosterImage,
@@ -204,12 +192,8 @@ class _AddUpdateTvShowScreenState extends State<AddUpdateTvShowScreen> with Util
                           width: MediaQuery.of(context).size.width,
                           padding: const EdgeInsets.all(8),
                           decoration: BoxDecoration(
-                            borderRadius: const BorderRadius.all(
-                              Radius.circular(8),
-                            ),
-                            border: Border.all(
-                              color: AppColors.greyColor,
-                            ),
+                            borderRadius: const BorderRadius.all(Radius.circular(8)),
+                            border: Border.all(color: AppColors.greyColor),
                           ),
                           child: _selectedPosterImage == null
                               ? Column(
@@ -238,16 +222,11 @@ class _AddUpdateTvShowScreenState extends State<AddUpdateTvShowScreen> with Util
                 Container(
                   width: MediaQuery.of(context).size.width,
                   padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
-                    color: AppColors.whiteColor,
-                  ),
+                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(12), color: AppColors.whiteColor),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const TextWidget(
-                        text: "Select Language",
-                      ),
+                      const TextWidget(text: "Select Language"),
                       heightBox5(),
                       BlocBuilder<GetAllLanguageCubit, GetAllLanguageState>(
                         builder: (context, state) {
@@ -271,9 +250,7 @@ class _AddUpdateTvShowScreenState extends State<AddUpdateTvShowScreen> with Util
                         },
                       ),
                       heightBox10(),
-                      const TextWidget(
-                        text: "Select Genre",
-                      ),
+                      const TextWidget(text: "Select Genre"),
                       heightBox5(),
                       BlocBuilder<GetAllGenreCubit, GetAllGenreState>(
                         builder: (context, state) {
@@ -297,9 +274,7 @@ class _AddUpdateTvShowScreenState extends State<AddUpdateTvShowScreen> with Util
                         },
                       ),
                       heightBox10(),
-                      const TextWidget(
-                        text: "Select Category",
-                      ),
+                      const TextWidget(text: "Select Category"),
                       heightBox5(),
                       BlocBuilder<GetAllMovieCategoryCubit, GetAllCategoryState>(
                         builder: (context, state) {
@@ -312,8 +287,9 @@ class _AddUpdateTvShowScreenState extends State<AddUpdateTvShowScreen> with Util
                               onChanged: (value) {
                                 setState(() {
                                   selectedCategory = value;
-                                  final selectedDatum =
-                                      state.model.categories?.firstWhere((datum) => datum.name == value);
+                                  final selectedDatum = state.model.categories?.firstWhere(
+                                    (datum) => datum.name == value,
+                                  );
                                   selectedCategoryId = selectedDatum?.id;
                                   print("Selected Datum ID: ${selectedDatum?.id}");
                                 });
@@ -324,27 +300,15 @@ class _AddUpdateTvShowScreenState extends State<AddUpdateTvShowScreen> with Util
                         },
                       ),
                       heightBox10(),
-                      const TextWidget(
-                        text: "Web Series Name",
-                      ),
+                      const TextWidget(text: "Web Series Name"),
                       heightBox5(),
-                      TextFormFieldWidget(
-                        focusNode: movieNameFocusNode,
-                        controller: movieNameController,
-                      ),
+                      TextFormFieldWidget(focusNode: movieNameFocusNode, controller: movieNameController),
                       heightBox10(),
-                      const TextWidget(
-                        text: "Released By",
-                      ),
+                      const TextWidget(text: "Released By"),
                       heightBox5(),
-                      TextFormFieldWidget(
-                        focusNode: releasedByFocusNode,
-                        controller: releasedByController,
-                      ),
+                      TextFormFieldWidget(focusNode: releasedByFocusNode, controller: releasedByController),
                       heightBox10(),
-                      const TextWidget(
-                        text: "Released Date",
-                      ),
+                      const TextWidget(text: "Released Date"),
                       heightBox5(),
                       TextFormFieldWidget(
                         focusNode: releasedDateFocusNode,
@@ -359,44 +323,37 @@ class _AddUpdateTvShowScreenState extends State<AddUpdateTvShowScreen> with Util
                         ),
                       ),
                       heightBox10(),
-                      const TextWidget(
-                        text: "Status",
-                      ),
+                      const TextWidget(text: "Status"),
                       heightBox10(),
                       Switch(
-                          activeColor: AppColors.zGreenColor,
-                          value: status,
-                          onChanged: (v) {
-                            setState(() {
-                              status = v;
-                            });
-                          }),
-                      heightBox10(),
-                      const TextWidget(
-                        text: "Is Short Film On Rent",
+                        activeColor: AppColors.zGreenColor,
+                        value: status,
+                        onChanged: (v) {
+                          setState(() {
+                            status = v;
+                          });
+                        },
                       ),
                       heightBox10(),
+                      const TextWidget(text: "Is Short Film On Rent"),
+                      heightBox10(),
                       Switch(
-                          activeColor: AppColors.zGreenColor,
-                          value: isMovieOnRent,
-                          onChanged: (v) {
-                            setState(() {
-                              isMovieOnRent = v;
-                            });
-                          }),
+                        activeColor: AppColors.zGreenColor,
+                        value: isMovieOnRent,
+                        onChanged: (v) {
+                          setState(() {
+                            isMovieOnRent = v;
+                          });
+                        },
+                      ),
                       heightBox10(),
                       if (isMovieOnRent)
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const TextWidget(
-                              text: "Series Price",
-                            ),
+                            const TextWidget(text: "Series Price"),
                             heightBox10(),
-                            TextFormFieldWidget(
-                              controller: seriesRentPriceController,
-                              hintText: "Series price",
-                            ),
+                            TextFormFieldWidget(controller: seriesRentPriceController, hintText: "Series price"),
                           ],
                         ),
                       heightBox10(),
@@ -404,9 +361,7 @@ class _AddUpdateTvShowScreenState extends State<AddUpdateTvShowScreen> with Util
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const TextWidget(
-                              text: "Rent Time Days",
-                            ),
+                            const TextWidget(text: "Rent Time Days"),
                             heightBox10(),
                             TextFormFieldWidget(
                               inputFormater: [
@@ -420,21 +375,18 @@ class _AddUpdateTvShowScreenState extends State<AddUpdateTvShowScreen> with Util
                           ],
                         ),
                       heightBox10(),
-                      const TextWidget(
-                        text: "Show Subscription",
-                      ),
+                      const TextWidget(text: "Show Subscription"),
                       heightBox10(),
                       Switch(
-                          activeColor: AppColors.zGreenColor,
-                          value: showSubscription,
-                          onChanged: (v) {
-                            showSubscription = v;
-                            setState(() {});
-                          }),
-                      heightBox10(),
-                      const TextWidget(
-                        text: "Description",
+                        activeColor: AppColors.zGreenColor,
+                        value: showSubscription,
+                        onChanged: (v) {
+                          showSubscription = v;
+                          setState(() {});
+                        },
                       ),
+                      heightBox10(),
+                      const TextWidget(text: "Description"),
                       heightBox5(),
                       InkWell(
                         onTap: () {
@@ -464,13 +416,13 @@ class _AddUpdateTvShowScreenState extends State<AddUpdateTvShowScreen> with Util
                       BlocConsumer<UpdateTvShowSeriesCubit, UpdateSeriesState>(
                         listener: (context, state) {
                           if (state is UpdateSeriesErrorState) {
-                           showMessage(context, state.error);
+                            showMessage(context, state.error);
                             return;
                           }
 
                           if (state is UpdateSeriesLoadedState) {
                             Navigator.pop(context);
-                           showMessage(context, "Update Successfully");
+                            showMessage(context, "Update Successfully");
                             context.read<GetAllTvShowSeriesCubit>().getAllSeries();
                           }
                         },
@@ -478,12 +430,12 @@ class _AddUpdateTvShowScreenState extends State<AddUpdateTvShowScreen> with Util
                           return BlocConsumer<PostTvShowSeriesCubit, PostSeriesState>(
                             listener: (context, state) {
                               if (state is PostSeriesErrorState) {
-                               showMessage(context, state.error);
+                                showMessage(context, state.error);
                                 return;
                               }
 
                               if (state is PostSeriesLoadedState) {
-                               showMessage(context, "Post Sucessdfully ✅");
+                                showMessage(context, "Post Sucessdfully ✅");
                                 Navigator.pop(context);
                                 context.read<GetAllTvShowSeriesCubit>().getAllSeries();
                               }
@@ -496,80 +448,79 @@ class _AddUpdateTvShowScreenState extends State<AddUpdateTvShowScreen> with Util
                                   final contentData = await descriptionController.getText();
                                   final document = parse(contentData);
                                   final validHtml = document.outerHtml;
-                                  log("Validated HTML: $validHtml ${rentedTimeDaysController.text.runtimeType} ${rentedTimeDaysController.text.isEmpty} ${rentedTimeDaysController.text.length} ${rentedTimeDaysController.text}");
+                                  log(
+                                    "Validated HTML: $validHtml ${rentedTimeDaysController.text.runtimeType} ${rentedTimeDaysController.text.isEmpty} ${rentedTimeDaysController.text.length} ${rentedTimeDaysController.text}",
+                                  );
                                   if (widget.id != null) {
                                     context.read<UpdateTvShowSeriesCubit>().updateSeries(
-                                          id: widget.id ?? "",
-                                          coverImg:
-                                              _selectedPosterImage != null ? File(_selectedPosterImage!.path) : null,
-                                          description: validHtml,
-                                          genreId: seletedGenreId,
-                                          movieCategoryId: selectedCategoryId,
-                                          movieLanguage: selectedLanguageId,
-                                          movieName: movieNameController.text,
-                                          posterImg:
-                                              _selectedPosterImage != null ? File(_selectedPosterImage!.path) : null,
-                                          releasedBy: releasedByController.text,
-                                          releasedDate: releasedDateController.text,
-                                          status: status,
-                                          isSeriesOnRent: isMovieOnRent,
-                                          rentedTimeDays: (rentedTimeDaysController.text.isEmpty ||
-                                                  rentedTimeDaysController.text.contains('null'))
-                                              ? null
-                                              : rentedTimeDaysController.text,
-                                          seriesRentPrice: seriesRentPriceController.text,
-                                          showSubscription: showSubscription,
-                                        );
+                                      id: widget.id ?? "",
+                                      coverImg: _selectedPosterImage != null ? File(_selectedPosterImage!.path) : null,
+                                      description: validHtml,
+                                      genreId: seletedGenreId,
+                                      movieCategoryId: selectedCategoryId,
+                                      movieLanguage: selectedLanguageId,
+                                      movieName: movieNameController.text,
+                                      posterImg: _selectedPosterImage != null ? File(_selectedPosterImage!.path) : null,
+                                      releasedBy: releasedByController.text,
+                                      releasedDate: releasedDateController.text,
+                                      status: status,
+                                      isSeriesOnRent: isMovieOnRent,
+                                      rentedTimeDays:
+                                          (rentedTimeDaysController.text.isEmpty ||
+                                              rentedTimeDaysController.text.contains('null'))
+                                          ? null
+                                          : rentedTimeDaysController.text,
+                                      seriesRentPrice: seriesRentPriceController.text,
+                                      showSubscription: showSubscription,
+                                    );
                                     return;
                                   }
 
                                   if (_selectedPosterImage == null) {
-                                   showMessage(context, "Upload Poster Image");
+                                    showMessage(context, "Upload Poster Image");
                                     return;
                                   }
 
                                   if (seletedGenreId == null) {
-                                   showMessage(context, "Select Genre");
+                                    showMessage(context, "Select Genre");
                                     return;
                                   }
                                   if (selectedCategoryId == null) {
-                                   showMessage(context, "Select Category");
+                                    showMessage(context, "Select Category");
                                     return;
                                   }
 
                                   if (selectedLanguageId == null) {
-                                   showMessage(context, "Select Language");
+                                    showMessage(context, "Select Language");
                                     return;
                                   }
 
                                   if (movieNameController.text.isEmpty) {
-                                   showMessage(context, "please enter movie name");
+                                    showMessage(context, "please enter movie name");
                                     return;
                                   }
 
                                   if (_selectedPosterImage == null) {
-                                   showMessage(context, "upload poster is required");
+                                    showMessage(context, "upload poster is required");
                                     return;
                                   }
 
                                   context.read<PostTvShowSeriesCubit>().postSeries(
-                                        coverImg:
-                                            _selectedPosterImage != null ? File(_selectedPosterImage!.path) : null,
-                                        description: validHtml,
-                                        genreId: seletedGenreId,
-                                        movieCategoryId: selectedCategoryId,
-                                        movieLanguage: selectedLanguageId,
-                                        movieName: movieNameController.text,
-                                        posterImg:
-                                            _selectedPosterImage != null ? File(_selectedPosterImage!.path) : null,
-                                        releasedBy: releasedByController.text,
-                                        releasedDate: releasedDateController.text,
-                                        status: status,
-                                        isSeriesOnRent: isMovieOnRent,
-                                        rentedTimeDays: rentedTimeDaysController.text,
-                                        seriesRentPrice: seriesRentPriceController.text,
-                                        showSubscription: showSubscription,
-                                      );
+                                    coverImg: _selectedPosterImage != null ? File(_selectedPosterImage!.path) : null,
+                                    description: validHtml,
+                                    genreId: seletedGenreId,
+                                    movieCategoryId: selectedCategoryId,
+                                    movieLanguage: selectedLanguageId,
+                                    movieName: movieNameController.text,
+                                    posterImg: _selectedPosterImage != null ? File(_selectedPosterImage!.path) : null,
+                                    releasedBy: releasedByController.text,
+                                    releasedDate: releasedDateController.text,
+                                    status: status,
+                                    isSeriesOnRent: isMovieOnRent,
+                                    rentedTimeDays: rentedTimeDaysController.text,
+                                    seriesRentPrice: seriesRentPriceController.text,
+                                    showSubscription: showSubscription,
+                                  );
                                 },
                                 buttonText: widget.id != null ? "Save Web Series" : "Upload Web Series",
                               );

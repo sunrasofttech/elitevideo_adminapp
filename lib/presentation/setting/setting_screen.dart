@@ -56,6 +56,7 @@ class _SettingScreenState extends State<SettingScreen> with Utility {
 
   Future<void> _pickImage() async {
     final pickedFile = await ImagePickerUtil.pickImageFromGallery(
+            context: context,
       aspectRatio: const CropAspectRatio(ratioX: 4, ratioY: 3),
     );
     if (pickedFile != null) {
@@ -67,6 +68,7 @@ class _SettingScreenState extends State<SettingScreen> with Utility {
 
   Future<void> _pickSplashImage(int index) async {
     final pickedFile = await ImagePickerUtil.pickImageFromGallery(
+            context: context,
       aspectRatio: const CropAspectRatio(ratioX: 4, ratioY: 3),
     );
     if (pickedFile != null) {

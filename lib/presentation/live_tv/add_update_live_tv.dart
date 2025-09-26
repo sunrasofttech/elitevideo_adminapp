@@ -41,6 +41,7 @@ class _AddUpdateLiveTvScreenState extends State<AddUpdateLiveTvScreen> with Util
   String? selectedLanguageId;
   Future<void> _pickImage() async {
     final pickedFile = await ImagePickerUtil.pickImageFromGallery(
+            context: context,
       aspectRatio: const CropAspectRatio(ratioX: 4, ratioY: 3),
     );
     if (pickedFile != null) {
@@ -51,7 +52,7 @@ class _AddUpdateLiveTvScreenState extends State<AddUpdateLiveTvScreen> with Util
   }
 
   Future<void> _pickPosterImage() async {
-    final pickedFile = await ImagePickerUtil.pickImageFromGallery();
+    final pickedFile = await ImagePickerUtil.pickImageFromGallery(      context: context,);
     if (pickedFile != null) {
       setState(() {
         _selectedPosterImage = pickedFile;

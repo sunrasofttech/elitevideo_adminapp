@@ -129,6 +129,7 @@ class _AddUpdateShortFlimScreenState extends State<AddUpdateShortFlimScreen> wit
 
   Future<void> _pickImage() async {
     final pickedFile = await ImagePickerUtil.pickImageFromGallery(
+            context: context,
       aspectRatio: const CropAspectRatio(ratioX: 5, ratioY: 3),
       initAspectRatio: CropAspectRatioPreset.square,
     );
@@ -142,6 +143,7 @@ class _AddUpdateShortFlimScreenState extends State<AddUpdateShortFlimScreen> wit
   Future<void> _pickPosterImage() async {
     final pickedFile = await ImagePickerUtil.pickImageFromGallery(
       aspectRatio: const CropAspectRatio(ratioX: 16, ratioY: 9),
+            context: context,
       initAspectRatio: CropAspectRatioPreset.ratio3x2,
     );
     if (pickedFile != null) {

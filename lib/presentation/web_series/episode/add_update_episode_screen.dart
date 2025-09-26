@@ -49,6 +49,7 @@ class _AddUpdateEpisodeScreenState extends State<AddUpdateEpisodeScreen> with Ut
 
   Future<void> _pickImage() async {
     final pickedFile = await ImagePickerUtil.pickImageFromGallery(
+            context: context,
       aspectRatio: const CropAspectRatio(ratioX: 4, ratioY: 3),
     );
     if (pickedFile != null) {
