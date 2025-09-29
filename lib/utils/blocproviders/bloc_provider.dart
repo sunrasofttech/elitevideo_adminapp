@@ -1,3 +1,7 @@
+import 'package:elite_admin/bloc/trailer/delete_trailer/delete_trailer_cubit.dart';
+import 'package:elite_admin/bloc/trailer/get_all_trailer/get_all_trailer_cubit.dart';
+import 'package:elite_admin/bloc/trailer/post_trailer/post_trailer_cubit.dart';
+import 'package:elite_admin/bloc/trailer/update_trailer/update_trailer_cubit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:elite_admin/bloc/ads/create_ads/create_ads_cubit.dart';
 import 'package:elite_admin/bloc/ads/delete_ads/delete_ads_cubit.dart';
@@ -239,7 +243,7 @@ List<SingleChildWidget> providers = [
   BlocProvider(create: (context) => DeleteCastcrewShortfilmCubit()),
   BlocProvider(create: (context) => CreateShortFilmCastcrewCubit()),
 
-//Tv Show
+  //Tv Show
   BlocProvider(create: (context) => DeleteTvShowWebAdsCubit()),
   BlocProvider(create: (context) => GetTvShowWebAdsCubit()),
   BlocProvider(create: (context) => PostTvShowWebAdsCubit()),
@@ -270,4 +274,9 @@ List<SingleChildWidget> providers = [
   BlocProvider(create: (context) => PostArtistCubit()),
   BlocProvider(create: (context) => UpdateArtistCubit()),
   BlocProvider(create: (context) => DeleteArtistCubit()),
+
+  BlocProvider(create: (context) => GetAllTrailerCubit()),
+  BlocProvider(create: (context) => PostTrailerCubit()),
+  BlocProvider(create: (context) => UpdateTrailerCubit()),
+  BlocProvider(create: (context) => DeleteTrailerCubit()),
 ];

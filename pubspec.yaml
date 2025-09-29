@@ -58,6 +58,7 @@ dependencies:
   video_compress: ^3.1.4
   crop_your_image: ^2.0.0
   dio: ^5.9.0
+  flutter_quill: ^11.4.2
 
 dev_dependencies:
   flutter_test:

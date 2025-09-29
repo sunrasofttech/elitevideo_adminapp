@@ -1,4 +1,6 @@
 import 'dart:developer';
+import 'package:elite_admin/bloc/trailer/get_all_trailer/get_all_trailer_cubit.dart';
+import 'package:elite_admin/presentation/trailer/trailer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:elite_admin/bloc/ads/get_all_ads/get_all_ads_cubit.dart';
@@ -115,6 +117,7 @@ class _DashboardScreenState extends State<DashboardScreen> with Utility {
     context.read<GetSubadminCubit>().getSubAdmins();
     context.read<GetUserAnalysisCubit>().getUserAnalysis();
     context.read<GetRevenueAnaylsisCubit>().getRevenueAnalysis();
+    context.read<GetAllTrailerCubit>().getAllTrailer();
     context.read<GetAllSeriesCubit>().getAllSeries();
     context.read<GetWebAdsCubit>().getAllWebAds();
     context.read<GetArtistCubit>().getAllArtist();
@@ -160,13 +163,7 @@ class _DashboardScreenState extends State<DashboardScreen> with Utility {
           icon: AppImages.movieSvg,
           tag: "quick",
           children: [
-            DrawerItem(
-              title: 'Movie',
-              icon: AppImages.movieSvg,
-              tag: "quick",
-              screen: const MovieScreen(),
-              index: 1,
-            ),
+            DrawerItem(title: 'Movie', icon: AppImages.movieSvg, tag: "quick", screen: const MovieScreen(), index: 1),
             DrawerItem(
               title: 'Cast Crew',
               icon: AppImages.movieSvg,
@@ -189,20 +186,8 @@ class _DashboardScreenState extends State<DashboardScreen> with Utility {
           icon: AppImages.songSvg,
           tag: "quick",
           children: [
-            DrawerItem(
-              title: 'Songs',
-              icon: AppImages.songSvg,
-              tag: "quick",
-              index: 4,
-              screen: const SongScreen(),
-            ),
-            DrawerItem(
-              title: 'Artists',
-              icon: AppImages.songSvg,
-              tag: "quick",
-              index: 5,
-              screen: const ArtistScreen(),
-            ),
+            DrawerItem(title: 'Songs', icon: AppImages.songSvg, tag: "quick", index: 4, screen: const SongScreen()),
+            DrawerItem(title: 'Artists', icon: AppImages.songSvg, tag: "quick", index: 5, screen: const ArtistScreen()),
           ],
         ),
       if (permissions?['Web Series'] == true)
@@ -245,7 +230,7 @@ class _DashboardScreenState extends State<DashboardScreen> with Utility {
               tag: "quick",
               screen: const WebScreenCastCrewScreen(),
               index: 10,
-            )
+            ),
           ],
         ),
       if (permissions?['Tv Show'] == true)
@@ -288,7 +273,7 @@ class _DashboardScreenState extends State<DashboardScreen> with Utility {
               tag: "quick",
               screen: const TvShowCastCrewScreen(),
               index: 15,
-            )
+            ),
           ],
         ),
       if (permissions?['Live TV'] == true)
@@ -297,61 +282,61 @@ class _DashboardScreenState extends State<DashboardScreen> with Utility {
           icon: AppImages.tvSvg,
           tag: "quick",
           children: [
-            DrawerItem(
-              title: 'Live TV',
-              icon: AppImages.tvSvg,
-              tag: "quick",
-              screen: const TvShowScreen(),
-              index: 16,
-            ),
+            DrawerItem(title: 'Live TV', icon: AppImages.tvSvg, tag: "quick", screen: const TvShowScreen(), index: 16),
             DrawerItem(
               title: 'Live Tv Ads',
               icon: "asset/svg/video.svg",
               tag: "quick",
               screen: const LiveTvScreen(),
               index: 17,
-            )
+            ),
           ],
         ),
       if (permissions?['Short Film'] == true)
-        DrawerItem(title: 'Short Flim', icon: AppImages.dramaSvg, tag: "quick", children: [
-          DrawerItem(
-            title: 'Short Flim',
-            icon: AppImages.dramaSvg,
-            tag: "quick",
-            screen: const ShortFilmsScreen(),
-            index: 18,
-          ),
-          DrawerItem(
-            title: 'Short Flim Cast Crew',
-            icon: AppImages.dramaSvg,
-            tag: "quick",
-            screen: const ShortFilmCastCrewScreen(),
-            index: 19,
-          ),
-          DrawerItem(
-            title: 'Short Film Ads',
-            icon: "asset/svg/adwords.svg",
-            tag: "quick",
-            screen: const ShortFlimAdsScreen(),
-            index: 20,
-          ),
-        ]),
-      if (permissions?['Ads'] == true)
         DrawerItem(
-          title: 'Ads',
-          icon: "asset/svg/adwords.svg",
-          screen: const AdsScreen(),
+          title: 'Short Flim',
+          icon: AppImages.dramaSvg,
           tag: "quick",
-          index: 21,
+          children: [
+            DrawerItem(
+              title: 'Short Flim',
+              icon: AppImages.dramaSvg,
+              tag: "quick",
+              screen: const ShortFilmsScreen(),
+              index: 18,
+            ),
+            DrawerItem(
+              title: 'Short Flim Cast Crew',
+              icon: AppImages.dramaSvg,
+              tag: "quick",
+              screen: const ShortFilmCastCrewScreen(),
+              index: 19,
+            ),
+            DrawerItem(
+              title: 'Short Film Ads',
+              icon: "asset/svg/adwords.svg",
+              tag: "quick",
+              screen: const ShortFlimAdsScreen(),
+              index: 20,
+            ),
+          ],
         ),
+      DrawerItem(
+        title: 'Trailer',
+        icon: "asset/svg/languages.svg",
+        screen: const TrailerScreen(),
+        tag: "quick",
+        index: 21,
+      ),
+      if (permissions?['Ads'] == true)
+        DrawerItem(title: 'Ads', icon: "asset/svg/adwords.svg", screen: const AdsScreen(), tag: "quick", index: 22),
       if (permissions?['Movie'] == true)
         DrawerItem(
           title: 'Movie Categories',
           icon: "asset/svg/television.svg",
           screen: const MovieCategoryScreen(),
           tag: "menu",
-          index: 22,
+          index: 23,
         ),
       if (permissions?['Music'] == true)
         DrawerItem(
@@ -359,7 +344,7 @@ class _DashboardScreenState extends State<DashboardScreen> with Utility {
           icon: "asset/svg/music-note.svg",
           screen: const SongCategoryScreen(),
           tag: "menu",
-          index: 23,
+          index: 24,
         ),
       if (permissions?['Live TV'] == true)
         DrawerItem(
@@ -367,71 +352,41 @@ class _DashboardScreenState extends State<DashboardScreen> with Utility {
           icon: "asset/svg/tv-show.svg",
           screen: const LiveTvCategoryScreen(),
           tag: "menu",
-          index: 24,
-        ),
-      if (permissions?['Rentals'] == true)
-        DrawerItem(
-          title: 'Rentals',
-          icon: AppImages.rentalsSvg,
-          screen: const RentalScreen(),
-          tag: "menu",
           index: 25,
         ),
+      if (permissions?['Rentals'] == true)
+        DrawerItem(title: 'Rentals', icon: AppImages.rentalsSvg, screen: const RentalScreen(), tag: "menu", index: 26),
       if (permissions?['Language'] == true)
         DrawerItem(
           title: 'Language',
           icon: "asset/svg/languages.svg",
           screen: const LanguageScreen(),
           tag: "menu",
-          index: 26,
-        ),
-      if (permissions?['Genre'] == true)
-        DrawerItem(
-          title: 'Genre',
-          icon: AppImages.languageSvg,
-          screen: const GenreScreen(),
-          tag: "menu",
           index: 27,
         ),
+      if (permissions?['Genre'] == true)
+        DrawerItem(title: 'Genre', icon: AppImages.languageSvg, screen: const GenreScreen(), tag: "menu", index: 28),
       if (permissions?['Users'] == true)
-        DrawerItem(
-          title: 'Users',
-          icon: AppImages.userSvg,
-          screen: const UserScreen(),
-          tag: "menu",
-          index: 28,
-        ),
+        DrawerItem(title: 'Users', icon: AppImages.userSvg, screen: const UserScreen(), tag: "menu", index: 29),
       if (permissions?['Sub Admin'] == true)
-        DrawerItem(
-          title: 'SubAdmin',
-          icon: AppImages.userSvg,
-          screen: const SubAdminScreen(),
-          tag: "menu",
-          index: 29,
-        ),
+        DrawerItem(title: 'SubAdmin', icon: AppImages.userSvg, screen: const SubAdminScreen(), tag: "menu", index: 30),
       if (permissions?['Subscription'] == true)
         DrawerItem(
           title: 'Subscription',
           icon: AppImages.subscriptionSvg,
           screen: const SubscriptionScreen(),
           tag: "menu",
-          index: 30,
-        ),
-      if (permissions?['Reports'] == true)
-        DrawerItem(
-          title: 'Reports',
-          icon: AppImages.reportsSvg,
-          screen: const ReportScreen(),
-          tag: "menu",
           index: 31,
         ),
+      if (permissions?['Reports'] == true)
+        DrawerItem(title: 'Reports', icon: AppImages.reportsSvg, screen: const ReportScreen(), tag: "menu", index: 32),
       if (permissions?['Notification'] == true)
         DrawerItem(
           title: 'Notification',
           icon: AppImages.notificationSvg,
           screen: const NotificationScreen(),
           tag: "menu",
-          index: 32,
+          index: 33,
         ),
       if (permissions?['Settings'] == true)
         DrawerItem(
@@ -439,7 +394,7 @@ class _DashboardScreenState extends State<DashboardScreen> with Utility {
           icon: AppImages.settingSvg,
           screen: const SettingScreen(),
           tag: "menu",
-          index: 33,
+          index: 34,
         ),
     ];
 
@@ -470,6 +425,7 @@ class _DashboardScreenState extends State<DashboardScreen> with Utility {
       const ShortFilmsScreen(),
       const ShortFilmCastCrewScreen(),
       const ShortFlimAdsScreen(),
+      TrailerScreen(),
       const AdsScreen(),
       const MovieCategoryScreen(),
       const SongCategoryScreen(),
@@ -490,19 +446,18 @@ class _DashboardScreenState extends State<DashboardScreen> with Utility {
 
   @override
   Widget build(BuildContext context) {
-    DrawerItem? selectedItem = _drawerItems.expand((item) {
-      log("message = = = ${item.screen}");
-      if (item.children != null) {
-        return [
-          item,
-          ...item.children ?? [],
-        ];
-      }
-      return [item];
-    }).firstWhere(
-      (item) => item.index == _selectedScreenIndex,
-      orElse: () => _drawerItems.isNotEmpty ? _drawerItems.first : null,
-    );
+    DrawerItem? selectedItem = _drawerItems
+        .expand((item) {
+          log("message = = = ${item.screen}");
+          if (item.children != null) {
+            return [item, ...item.children ?? []];
+          }
+          return [item];
+        })
+        .firstWhere(
+          (item) => item.index == _selectedScreenIndex,
+          orElse: () => _drawerItems.isNotEmpty ? _drawerItems.first : null,
+        );
 
     return WillPopScope(
       onWillPop: () async {
@@ -512,14 +467,8 @@ class _DashboardScreenState extends State<DashboardScreen> with Utility {
             title: const Text("Exit App"),
             content: const Text("Do you want to exit the app?"),
             actions: [
-              TextButton(
-                onPressed: () => Navigator.of(context).pop(false),
-                child: const Text("No"),
-              ),
-              TextButton(
-                onPressed: () => Navigator.of(context).pop(true),
-                child: const Text("Yes"),
-              ),
+              TextButton(onPressed: () => Navigator.of(context).pop(false), child: const Text("No")),
+              TextButton(onPressed: () => Navigator.of(context).pop(true), child: const Text("Yes")),
             ],
           ),
         );
@@ -534,9 +483,7 @@ class _DashboardScreenState extends State<DashboardScreen> with Utility {
             LocalStorageUtils.clear().then((e) {
               Navigator.pushAndRemoveUntil(
                 context,
-                MaterialPageRoute(
-                  builder: (context) => const LoginScreen(),
-                ),
+                MaterialPageRoute(builder: (context) => const LoginScreen()),
                 (route) => false,
               );
             });
@@ -547,17 +494,11 @@ class _DashboardScreenState extends State<DashboardScreen> with Utility {
         },
         builder: (context, state) {
           if (state is GetProfileLoadingState) {
-            return const Center(
-              child: CustomCircularProgressIndicator(),
-            );
+            return const Center(child: CustomCircularProgressIndicator());
           }
 
           if (state is GetProfileErrorState) {
-            return const Scaffold(
-              body: Center(
-                child: CustomErrorWidget(),
-              ),
-            );
+            return const Scaffold(body: Center(child: CustomErrorWidget()));
           }
           return Scaffold(
             key: _scaffoldKey,
@@ -567,12 +508,7 @@ class _DashboardScreenState extends State<DashboardScreen> with Utility {
                     preferredSize: const Size(double.infinity, 70),
                     child: CustomAppBar(
                       settingOnTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const ProfileScreen(),
-                          ),
-                        );
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => const ProfileScreen()));
                       },
                       notificationOnTap: () {
                         setState(() {
@@ -618,26 +554,17 @@ class _DashboardScreenState extends State<DashboardScreen> with Utility {
                       isSuffixIconShow: true,
                       controller: searchController,
                       onChanged: (p0) {},
-                      suffixIcon: InkWell(
-                        onTap: () {},
-                        child: const Icon(Icons.search),
-                      ),
+                      suffixIcon: InkWell(onTap: () {}, child: const Icon(Icons.search)),
                     ),
                     heightBox15(),
                     ..._drawerItems.where((item) => item.tag == null).map((item) {
                       return Container(
                         decoration: const BoxDecoration(
                           color: AppColors.whiteColor,
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(12),
-                          ),
+                          borderRadius: BorderRadius.all(Radius.circular(12)),
                         ),
                         child: ListTile(
-                          leading: svgAsset(
-                            assetName: item.icon,
-                            width: 24,
-                            height: 24,
-                          ),
+                          leading: svgAsset(assetName: item.icon, width: 24, height: 24),
                           title: Text(item.title),
                           onTap: () {
                             if (item.screen != null) {
@@ -655,18 +582,14 @@ class _DashboardScreenState extends State<DashboardScreen> with Utility {
                     Container(
                       decoration: const BoxDecoration(
                         color: AppColors.whiteColor,
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(12),
-                        ),
+                        borderRadius: BorderRadius.all(Radius.circular(12)),
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const Padding(
                             padding: EdgeInsets.symmetric(horizontal: 18, vertical: 10),
-                            child: TextWidget(
-                              text: "Quick",
-                            ),
+                            child: TextWidget(text: "Quick"),
                           ),
                           ..._drawerItems.where((item) => item.tag == "quick").map((item) {
                             if (item.children != null && item.children!.isNotEmpty) {
@@ -674,26 +597,22 @@ class _DashboardScreenState extends State<DashboardScreen> with Utility {
                                 collapsedIconColor: AppColors.blackColor,
                                 expandedAlignment: Alignment.centerLeft,
                                 shape: const RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.zero, side: BorderSide.none),
+                                  borderRadius: BorderRadius.zero,
+                                  side: BorderSide.none,
+                                ),
                                 tilePadding: const EdgeInsets.symmetric(horizontal: 16),
                                 childrenPadding: const EdgeInsets.symmetric(horizontal: 20),
                                 collapsedShape: const RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.zero, side: BorderSide.none),
+                                  borderRadius: BorderRadius.zero,
+                                  side: BorderSide.none,
+                                ),
                                 iconColor: AppColors.greyColor,
                                 enabled: true,
-                                leading: svgAsset(
-                                  assetName: item.icon,
-                                  width: 24,
-                                  height: 24,
-                                ),
+                                leading: svgAsset(assetName: item.icon, width: 24, height: 24),
                                 title: Text(item.title),
                                 children: item.children!.map((child) {
                                   return ListTile(
-                                    leading: svgAsset(
-                                      assetName: child.icon,
-                                      width: 24,
-                                      height: 24,
-                                    ),
+                                    leading: svgAsset(assetName: child.icon, width: 24, height: 24),
                                     title: Text(child.title),
                                     onTap: () {
                                       if (child.screen != null) {
@@ -709,11 +628,7 @@ class _DashboardScreenState extends State<DashboardScreen> with Utility {
                               );
                             } else {
                               return ListTile(
-                                leading: svgAsset(
-                                  assetName: item.icon,
-                                  width: 24,
-                                  height: 24,
-                                ),
+                                leading: svgAsset(assetName: item.icon, width: 24, height: 24),
                                 title: Text(item.title),
                                 onTap: () {
                                   if (item.screen != null) {
@@ -734,18 +649,14 @@ class _DashboardScreenState extends State<DashboardScreen> with Utility {
                     Container(
                       decoration: const BoxDecoration(
                         color: AppColors.whiteColor,
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(12),
-                        ),
+                        borderRadius: BorderRadius.all(Radius.circular(12)),
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const Padding(
                             padding: EdgeInsets.symmetric(horizontal: 18, vertical: 10),
-                            child: TextWidget(
-                              text: "Menu",
-                            ),
+                            child: TextWidget(text: "Menu"),
                           ),
                           ..._drawerItems.where((item) => item.tag == "menu").map((item) {
                             if (item.children != null && item.children!.isNotEmpty) {
@@ -755,24 +666,20 @@ class _DashboardScreenState extends State<DashboardScreen> with Utility {
                                 initiallyExpanded: true,
                                 dense: true,
                                 shape: const RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.zero, side: BorderSide.none),
+                                  borderRadius: BorderRadius.zero,
+                                  side: BorderSide.none,
+                                ),
                                 collapsedShape: const RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.zero, side: BorderSide.none),
+                                  borderRadius: BorderRadius.zero,
+                                  side: BorderSide.none,
+                                ),
                                 iconColor: AppColors.greyColor,
                                 enabled: true,
-                                leading: svgAsset(
-                                  assetName: item.icon,
-                                  width: 24,
-                                  height: 24,
-                                ),
+                                leading: svgAsset(assetName: item.icon, width: 24, height: 24),
                                 title: Text(item.title),
                                 children: item.children!.map((child) {
                                   return ListTile(
-                                    leading: svgAsset(
-                                      assetName: child.icon,
-                                      width: 24,
-                                      height: 24,
-                                    ),
+                                    leading: svgAsset(assetName: child.icon, width: 24, height: 24),
                                     title: Text(child.title),
                                     onTap: () {
                                       if (child.screen != null) {
@@ -789,11 +696,7 @@ class _DashboardScreenState extends State<DashboardScreen> with Utility {
                               );
                             } else {
                               return ListTile(
-                                leading: svgAsset(
-                                  assetName: item.icon,
-                                  width: 24,
-                                  height: 24,
-                                ),
+                                leading: svgAsset(assetName: item.icon, width: 24, height: 24),
                                 title: Text(item.title),
                                 onTap: () {
                                   if (item.screen != null) {
@@ -804,11 +707,15 @@ class _DashboardScreenState extends State<DashboardScreen> with Utility {
                                       log("📦 _drawerItems (screens):");
                                       for (var item in _drawerItems) {
                                         if (item.screen != null) {
-                                          log("➡️ ${item.title} | screen: ${item.screen.runtimeType} | index: ${item.index}");
+                                          log(
+                                            "➡️ ${item.title} | screen: ${item.screen.runtimeType} | index: ${item.index}",
+                                          );
                                         }
                                         if (item.children != null && item.children!.isNotEmpty) {
                                           for (var child in item.children!) {
-                                            log("   └── 🧒 ${child.title} | screen: ${child.screen.runtimeType} | index: ${child.index}");
+                                            log(
+                                              "   └── 🧒 ${child.title} | screen: ${child.screen.runtimeType} | index: ${child.index}",
+                                            );
                                           }
                                         }
                                       }
