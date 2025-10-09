@@ -686,11 +686,15 @@ class _AddUpdateMoveiScreenState extends State<AddUpdateMoveiScreen> with Utilit
                                 progress: progressPercent,
                                 inProgress: inProgress,
                                 onPressed: () async {
-                                  final contentData = await descriptionController.getText();
-                                  final document = parse(contentData);
-                                  final validHtml = document.outerHtml;
-                                  log("Validated HTML: $validHtml");
-
+                                  var validHtml;
+                                  try {
+                                    final contentData = await descriptionController.getText();
+                                    final document = parse(contentData);
+                                    validHtml = document.outerHtml;
+                                    log("Validated HTML: $validHtml");
+                                  } catch (e) {
+                                    
+                                  }
                                   if (state is PostMovieLoadingState || updateState is UpdateMovieLoadingState) {
                                     return;
                                   }
@@ -699,7 +703,7 @@ class _AddUpdateMoveiScreenState extends State<AddUpdateMoveiScreen> with Utilit
                                       showSubscription: showSubscription,
                                       id: widget.id ?? "",
                                       coverImg: _selectedImage != null ? File(_selectedImage!.path) : null,
-                                      description: validHtml,
+                                      description: validHtml ?? "",
                                       isMovieOnRent: isMovieOnRent,
                                       isHighlighted: isHighlighted,
                                       movieCategoryId: selectedCategoryId,
@@ -762,10 +766,10 @@ class _AddUpdateMoveiScreenState extends State<AddUpdateMoveiScreen> with Utilit
                                     showMessage(context, "Released Date is required");
                                     return;
                                   }
-                                  if (await descriptionController.getText() == '') {
-                                    showMessage(context, "Description is required");
-                                    return;
-                                  }
+                                  // if (await descriptionController.getText() == '') {
+                                  //   showMessage(context, "Description is required");
+                                  //   return;
+                                  // }
 
                                   if (_selectedVideo == null && videoLinkController.text.isEmpty) {
                                     showMessage(context, "Video file or video link is required");

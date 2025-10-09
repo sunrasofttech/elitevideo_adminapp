@@ -335,10 +335,13 @@ class _AddUpdateLiveTvScreenState extends State<AddUpdateLiveTvScreen> with Util
                                     state is CreateFilmProgressState ||
                                     updateState is UpdateLiveProgressState),
                                 onPressed: () async {
-                                  final contentData = await descriptionController.getText();
-                                  final document = parse(contentData);
-                                  final validHtml = document.outerHtml;
-                                  log("Validated HTML: $validHtml");
+                                  var validHtml;
+                                  try {
+                                    final contentData = await descriptionController.getText();
+                                    final document = parse(contentData);
+                                    validHtml = document.outerHtml;
+                                    log("Validated HTML: $validHtml");
+                                  } catch (e) {}
 
                                   if (state is CreatelivetvLoadingState || updateState is UpdateLiveTvLoadingState) {
                                     return;
@@ -347,7 +350,7 @@ class _AddUpdateLiveTvScreenState extends State<AddUpdateLiveTvScreen> with Util
                                     context.read<UpdateLiveTvCubit>().updateLiveTV(
                                       id: widget.id ?? "",
                                       coverImg: _selectedImage != null ? File(_selectedImage!.path) : null,
-                                      description: validHtml,
+                                      description: validHtml ?? "",
                                       posterImg: _selectedPosterImage != null ? File(_selectedPosterImage!.path) : null,
                                       status: status,
                                       androidChannelUrl: androidUrlController.text,
@@ -383,7 +386,7 @@ class _AddUpdateLiveTvScreenState extends State<AddUpdateLiveTvScreen> with Util
 
                                   context.read<CreatelivetvCubit>().createLiveTV(
                                     coverImg: _selectedImage != null ? File(_selectedImage!.path) : null,
-                                    description: validHtml,
+                                    description: validHtml ?? "",
                                     posterImg: _selectedPosterImage != null ? File(_selectedPosterImage!.path) : null,
                                     status: status,
                                     androidChannelUrl: androidUrlController.text,

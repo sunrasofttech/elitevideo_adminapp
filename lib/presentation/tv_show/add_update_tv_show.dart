@@ -457,12 +457,15 @@ class _AddUpdateTvShowScreenState extends State<AddUpdateTvShowScreen> with Util
                                     state is PostSeriesProgressState ||
                                     updateState is UpdateSeriesProgressState),
                                 onPressed: () async {
-                                  final contentData = await descriptionController.getText();
-                                  final document = parse(contentData);
-                                  final validHtml = document.outerHtml;
-                                  log(
-                                    "Validated HTML: $validHtml ${rentedTimeDaysController.text.runtimeType} ${rentedTimeDaysController.text.isEmpty} ${rentedTimeDaysController.text.length} ${rentedTimeDaysController.text}",
-                                  );
+                                  var validHtml;
+                                  try {
+                                    final contentData = await descriptionController.getText();
+                                    final document = parse(contentData);
+                                    validHtml = document.outerHtml;
+                                    log(
+                                      "Validated HTML: $validHtml ${rentedTimeDaysController.text.runtimeType} ${rentedTimeDaysController.text.isEmpty} ${rentedTimeDaysController.text.length} ${rentedTimeDaysController.text}",
+                                    );
+                                  } catch (e) {}
                                   if (widget.id != null) {
                                     context.read<UpdateTvShowSeriesCubit>().updateSeries(
                                       id: widget.id ?? "",

@@ -590,10 +590,13 @@ class _AddUpdateShortFlimScreenState extends State<AddUpdateShortFlimScreen> wit
                                     state is PostFilmProgressState ||
                                     updateState is UpdateFilmProgressState),
                                 onPressed: () async {
-                                  final contentData = await descriptionController.getText();
-                                  final document = parse(contentData);
-                                  final validHtml = document.outerHtml;
-                                  log("Validated HTML: $validHtml");
+                                  var validHtml;
+                                  try {
+                                    final contentData = await descriptionController.getText();
+                                    final document = parse(contentData);
+                                    validHtml = document.outerHtml;
+                                    log("Validated HTML: $validHtml");
+                                  } catch (e) {}
 
                                   if (state is PostFilmLoadingState || updateState is UpdateFilmLoadingState) {
                                     return;
@@ -602,7 +605,7 @@ class _AddUpdateShortFlimScreenState extends State<AddUpdateShortFlimScreen> wit
                                     context.read<UpdateFilmCubit>().updateShortFilm(
                                       id: widget.id ?? "",
                                       coverImg: _selectedImage != null ? File(_selectedImage!.path) : null,
-                                      description: validHtml,
+                                      description: validHtml ?? "",
                                       isMovieOnRent: isMovieOnRent,
                                       isHighlighted: isHighlighted,
                                       movieCategoryId: selectedCategoryId,
@@ -667,10 +670,10 @@ class _AddUpdateShortFlimScreenState extends State<AddUpdateShortFlimScreen> wit
                                     showMessage(context, "Released Date is required");
                                     return;
                                   }
-                                  if (await descriptionController.getText() == '') {
-                                    showMessage(context, "Description is required");
-                                    return;
-                                  }
+                                  // if (await descriptionController.getText() == '') {
+                                  //   showMessage(context, "Description is required");
+                                  //   return;
+                                  // }
 
                                   if (_selectedVideo == null && videoLinkController.text.isEmpty) {
                                     showMessage(context, "Video file or video link is required");
@@ -679,7 +682,7 @@ class _AddUpdateShortFlimScreenState extends State<AddUpdateShortFlimScreen> wit
 
                                   context.read<PostFilmCubit>().postShortFilm(
                                     coverImg: _selectedImage != null ? File(_selectedImage!.path) : null,
-                                    description: validHtml,
+                                    description: validHtml ?? "",
                                     isHighlighted: isHighlighted,
                                     movieCategoryId: selectedCategoryId,
                                     movieLanguage: selectedLanguageId,

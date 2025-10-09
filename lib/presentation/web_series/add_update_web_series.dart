@@ -464,17 +464,20 @@ class _AddUpdateSeriesScreenState extends State<AddUpdateSeriesScreen> with Util
                                     updateState is UpdateSeriesProgressState ||
                                     state is PostSeriesProgressState),
                                 onPressed: () async {
-                                  final contentData = await descriptionController.getText();
-                                  final document = parse(contentData);
-                                  final validHtml = document.outerHtml;
-                                  log(
-                                    "Validated HTML: $validHtml ${rentedTimeDaysController.text.runtimeType} ${rentedTimeDaysController.text.isEmpty} ${rentedTimeDaysController.text.length} ${rentedTimeDaysController.text}",
-                                  );
+                                  var validHtml;
+                                  try {
+                                    final contentData = await descriptionController.getText();
+                                    final document = parse(contentData);
+                                    validHtml = document.outerHtml;
+                                    log(
+                                      "Validated HTML: $validHtml ${rentedTimeDaysController.text.runtimeType} ${rentedTimeDaysController.text.isEmpty} ${rentedTimeDaysController.text.length} ${rentedTimeDaysController.text}",
+                                    );
+                                  } catch (e) {}
                                   if (widget.id != null) {
                                     context.read<UpdateSeriesCubit>().updateSeries(
                                       id: widget.id ?? "",
                                       coverImg: _selectedPosterImage != null ? File(_selectedPosterImage!.path) : null,
-                                      description: validHtml,
+                                      description: validHtml ?? "",
                                       genreId: seletedGenreId,
                                       movieCategoryId: selectedCategoryId,
                                       movieLanguage: selectedLanguageId,
@@ -522,7 +525,7 @@ class _AddUpdateSeriesScreenState extends State<AddUpdateSeriesScreen> with Util
 
                                   context.read<PostSeriesCubit>().postSeries(
                                     coverImg: _selectedPosterImage != null ? File(_selectedPosterImage!.path) : null,
-                                    description: validHtml,
+                                    description: validHtml ?? "",
                                     genreId: seletedGenreId,
                                     movieCategoryId: selectedCategoryId,
                                     movieLanguage: selectedLanguageId,

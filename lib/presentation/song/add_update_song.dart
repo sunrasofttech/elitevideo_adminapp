@@ -341,16 +341,19 @@ class _AddUpdateSongScreenState extends State<AddUpdateSongScreen> with Utility 
                                       updateState is UpdateMusicProgressState) {
                                     return;
                                   }
-                                  final contentData = await descriptionController.getText();
-                                  final document = parse(contentData);
-                                  final validHtml = document.outerHtml;
-                                  log("Validated HTML: $validHtml   $selectedArtistId");
+                                  var validHtml;
+                                  try {
+                                    final contentData = await descriptionController.getText();
+                                    final document = parse(contentData);
+                                    validHtml = document.outerHtml;
+                                    log("Validated HTML: $validHtml   $selectedArtistId");
+                                  } catch (e) {}
                                   if (widget.id != null) {
                                     context.read<UpdateMusicCubit>().updateMusic(
                                       id: widget.id ?? "",
                                       artistName: songArtistController.text,
                                       coverImg: _selectedCoverImage != null ? File(_selectedCoverImage!.path) : null,
-                                      description: validHtml,
+                                      description: validHtml ?? "",
                                       musicName: songTitleController.text,
                                       songFile: _selectedSong != null ? File(_selectedSong!.path ?? "") : null,
                                       status: status,
@@ -399,7 +402,7 @@ class _AddUpdateSongScreenState extends State<AddUpdateSongScreen> with Utility 
                                   context.read<CreateMusicCubit>().createMusic(
                                     artistName: songArtistController.text,
                                     coverImg: _selectedCoverImage != null ? File(_selectedCoverImage!.path) : null,
-                                    description: validHtml,
+                                    description: validHtml ?? "",
                                     musicName: songTitleController.text,
                                     songFile: _selectedSong != null ? File(_selectedSong!.path ?? "") : null,
                                     status: status,

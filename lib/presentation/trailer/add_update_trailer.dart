@@ -65,7 +65,6 @@ class _AddUpdateTrailerScreenState extends State<AddUpdateTrailerScreen> with Ut
   String? selectedAction = 'Play';
   String? selectedVideoType = 'video';
   XFile? _selectedVideo;
-  XFile? _selectedTrailer;
   String selectedQuality = 'Yes';
   bool isHighlighted = false;
   String seelctedSubtitle = 'Yes';
@@ -373,10 +372,13 @@ class _AddUpdateTrailerScreenState extends State<AddUpdateTrailerScreen> with Ut
                                 progress: progressPercent,
                                 inProgress: inProgress,
                                 onPressed: () async {
-                                  final contentData = await descriptionController.getText();
-                                  final document = parse(contentData);
-                                  final validHtml = document.outerHtml;
-                                  log("Validated HTML: $validHtml");
+                                  var validHtml;
+                                  try {
+                                    final contentData = await descriptionController.getText();
+                                    final document = parse(contentData);
+                                    validHtml = document.outerHtml;
+                                    log("Validated HTML: $validHtml");
+                                  } catch (e) {}
 
                                   if (state is PostTrailerLoadingState || updateState is UpdateTrailerLoadingState) {
                                     return;
@@ -385,9 +387,9 @@ class _AddUpdateTrailerScreenState extends State<AddUpdateTrailerScreen> with Ut
                                     context.read<UpdateTrailerCubit>().updateMovies(
                                       id: widget.id ?? "",
                                       coverImg: _selectedImage != null ? File(_selectedImage!.path) : null,
-                                      description: validHtml,
+                                      description: validHtml ?? "",
                                       movieName: movieNameController.text,
-                                      trailerVideo: _selectedTrailer != null ? File(_selectedTrailer!.path) : null,
+                                      trailerVideo: _selectedVideo != null ? File(_selectedVideo!.path) : null,
                                       posterImg: _selectedPosterImage != null ? File(_selectedPosterImage!.path) : null,
                                       status: status,
                                     );
@@ -404,10 +406,10 @@ class _AddUpdateTrailerScreenState extends State<AddUpdateTrailerScreen> with Ut
                                   //   return;
                                   // }
 
-                                  if (await descriptionController.getText() == '') {
-                                    showMessage(context, "Description is required");
-                                    return;
-                                  }
+                                  // if (await descriptionController.getText() == '') {
+                                  //   showMessage(context, "Description is required");
+                                  //   return;
+                                  // }
 
                                   if (_selectedVideo == null) {
                                     showMessage(context, "Video file or video link is required");
@@ -416,9 +418,9 @@ class _AddUpdateTrailerScreenState extends State<AddUpdateTrailerScreen> with Ut
 
                                   context.read<PostTrailerCubit>().postMovies(
                                     coverImg: _selectedImage != null ? File(_selectedImage!.path) : null,
-                                    description: validHtml,
+                                    description: validHtml ?? "",
                                     movieName: movieNameController.text,
-                                    trailerVideo: _selectedTrailer != null ? File(_selectedTrailer!.path) : null,
+                                    trailerVideo: _selectedVideo != null ? File(_selectedVideo!.path) : null,
                                     posterImg: _selectedPosterImage != null ? File(_selectedPosterImage!.path) : null,
                                     status: status,
                                   );
