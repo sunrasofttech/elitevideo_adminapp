@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:html/parser.dart';
+import 'package:html/parser.dart' as html_parser;
 import 'package:html_editor_enhanced/html_editor.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
@@ -54,6 +55,12 @@ class _AddUpdateShortFlimScreenState extends State<AddUpdateShortFlimScreen> wit
       seelctedSubtitle = widget.model?.subtitle == true ? 'Yes' : 'No';
       rentedTimeDaysController.text = widget.model?.rentedTimeDays.toString() ?? '';
       showSubscription = widget.model?.showSubscription ?? true;
+      if (Platform.isWindows) {
+    final rawHtml = widget.model?.description ?? "";
+    final document = html_parser.parse(rawHtml);
+    final cleanText = document.body?.text ?? "";
+    descriptionTextController.text = cleanText.trim();
+  }
     }
   }
 
@@ -70,6 +77,8 @@ class _AddUpdateShortFlimScreenState extends State<AddUpdateShortFlimScreen> wit
 
   XFile? _selectedImage;
   XFile? _selectedPosterImage;
+  final FocusNode descriptionFocusNode = FocusNode();
+  final TextEditingController descriptionTextController = TextEditingController();
   final HtmlEditorController descriptionController = HtmlEditorController();
   TextEditingController videoLinkController = TextEditingController();
   TextEditingController movieNameController = TextEditingController();
@@ -522,22 +531,35 @@ class _AddUpdateShortFlimScreenState extends State<AddUpdateShortFlimScreen> wit
                           moviePriceFocus.unfocus();
                         },
                         child: SizedBox(
-                          height: 500,
-                          child: CustomHtmlEditor(
-                            hint: "",
-                            onPressed: () async {
-                              final contentData = await descriptionController.getText();
-                              try {
-                                final document = parse(contentData);
-                                final validHtml = document.outerHtml;
-                                log("Validated HTML: $validHtml");
-                              } catch (e) {
-                                log("Invalid HTML structure: $e");
-                              }
-                            },
-                            controller: descriptionController,
-                            htmlContent: widget.model?.description ?? "",
-                          ),
+                          height: Platform.isWindows ? null : 500,
+                          child: Platform.isWindows
+                              ? TextField(
+                                  controller: descriptionTextController, // define this controller
+                                  focusNode: descriptionFocusNode, // optional if you want focus handling
+                                  maxLines: 12,
+                                  decoration: InputDecoration(
+                                    hintText: "Enter shortfilm description",
+                                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                                    contentPadding: const EdgeInsets.all(12),
+                                  ),
+                                )
+                              : CustomHtmlEditor(
+                                  hint: "",
+                                  onPressed: () async {
+                                    final contentData = Platform.isWindows
+                                        ? descriptionTextController.text
+                                        : await descriptionController.getText();
+                                    try {
+                                      final document = parse(contentData);
+                                      final validHtml = document.outerHtml;
+                                      log("Validated HTML: $validHtml");
+                                    } catch (e) {
+                                      log("Invalid HTML structure: $e");
+                                    }
+                                  },
+                                  controller: descriptionController,
+                                  htmlContent: widget.model?.description ?? "",
+                                ),
                         ),
                       ),
                       BlocConsumer<UpdateFilmCubit, UpdateFilmState>(

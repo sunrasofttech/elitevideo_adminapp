@@ -71,6 +71,9 @@ class _AddUpdateLiveTvScreenState extends State<AddUpdateLiveTvScreen> with Util
   bool status = false;
   bool showSubscrption = false;
 
+  final FocusNode descriptionFocusNode = FocusNode();
+  final TextEditingController descriptionTextController = TextEditingController();
+
   @override
   void dispose() {
     nameController.dispose();
@@ -267,28 +270,39 @@ class _AddUpdateLiveTvScreenState extends State<AddUpdateLiveTvScreen> with Util
                       const TextWidget(text: "Description"),
                       heightBox5(),
                       SizedBox(
-                        height: 500,
+                        height: Platform.isWindows ? null : 500,
                         child: InkWell(
                           onTap: () {
                             nameFocus.unfocus();
                             androidUrlFocus.unfocus();
                             iosUrlFocus.unfocus();
                           },
-                          child: CustomHtmlEditor(
-                            hint: "",
-                            onPressed: () async {
-                              final contentData = await descriptionController.getText();
-                              try {
-                                final document = parse(contentData);
-                                final validHtml = document.outerHtml;
-                                log("Validated HTML: $validHtml");
-                              } catch (e) {
-                                log("Invalid HTML structure: $e");
-                              }
-                            },
-                            controller: descriptionController,
-                            htmlContent: widget.model?.description ?? "",
-                          ),
+                          child: Platform.isWindows
+                              ? TextField(
+                                  controller: descriptionTextController,
+                                  focusNode: descriptionFocusNode,
+                                  maxLines: 12,
+                                  decoration: InputDecoration(
+                                    hintText: "Enter movie description",
+                                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                                    contentPadding: const EdgeInsets.all(12),
+                                  ),
+                                )
+                              : CustomHtmlEditor(
+                                  hint: "",
+                                  onPressed: () async {
+                                    final contentData = await descriptionController.getText();
+                                    try {
+                                      final document = parse(contentData);
+                                      final validHtml = document.outerHtml;
+                                      log("Validated HTML: $validHtml");
+                                    } catch (e) {
+                                      log("Invalid HTML structure: $e");
+                                    }
+                                  },
+                                  controller: descriptionController,
+                                  htmlContent: widget.model?.description ?? "",
+                                ),
                         ),
                       ),
                       BlocConsumer<UpdateLiveTvCubit, UpdateLiveTvState>(
@@ -337,7 +351,9 @@ class _AddUpdateLiveTvScreenState extends State<AddUpdateLiveTvScreen> with Util
                                 onPressed: () async {
                                   var validHtml;
                                   try {
-                                    final contentData = await descriptionController.getText();
+                                    final contentData = Platform.isWindows
+                                        ? descriptionTextController.text
+                                        : await descriptionController.getText();
                                     final document = parse(contentData);
                                     validHtml = document.outerHtml;
                                     log("Validated HTML: $validHtml");

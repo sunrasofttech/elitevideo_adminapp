@@ -36,7 +36,7 @@ class _GenreScreenState extends State<GenreScreen> with Utility {
   XFile? _selectedImage;
   Future<void> _pickImage(StateSetter setState) async {
     final pickedFile = await ImagePickerUtil.pickImageFromGallery(
-            context: context,
+      context: context,
       aspectRatio: const CropAspectRatio(ratioX: 4, ratioY: 3),
     );
     if (pickedFile != null) {
@@ -63,28 +63,20 @@ class _GenreScreenState extends State<GenreScreen> with Utility {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const TextWidget(
-                text: "Genre",
-                fontSize: 15,
-                fontWeight: FontWeight.w600,
-              ),
+              const TextWidget(text: "Genre", fontSize: 15, fontWeight: FontWeight.w600),
               heightBox15(),
               Row(
                 children: [
                   Expanded(
-                      child: TextFormFieldWidget(
-                    controller: searchController,
-                    isSuffixIconShow: true,
-                    onChanged: (p0) {
-                      context.read<GetAllGenreCubit>().getGenre(
-                            name: p0,
-                          );
-                    },
-                    suffixIcon: const Icon(
-                      Icons.search,
-                      color: AppColors.blackColor,
+                    child: TextFormFieldWidget(
+                      controller: searchController,
+                      isSuffixIconShow: true,
+                      onChanged: (p0) {
+                        context.read<GetAllGenreCubit>().getGenre(name: p0);
+                      },
+                      suffixIcon: const Icon(Icons.search, color: AppColors.blackColor),
                     ),
-                  )),
+                  ),
                   widthBox10(),
                   InkWell(
                     onTap: () {
@@ -94,24 +86,14 @@ class _GenreScreenState extends State<GenreScreen> with Utility {
                     child: Container(
                       padding: const EdgeInsets.all(14),
                       decoration: const BoxDecoration(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(12),
-                        ),
-                        gradient: LinearGradient(
-                          colors: AppColors.blueGradientList,
-                        ),
+                        borderRadius: BorderRadius.all(Radius.circular(12)),
+                        gradient: LinearGradient(colors: AppColors.blueGradientList),
                       ),
                       child: Row(
                         children: [
-                          const TextWidget(
-                            text: "Add",
-                            color: AppColors.whiteColor,
-                          ),
+                          const TextWidget(text: "Add", color: AppColors.whiteColor),
                           widthBox5(),
-                          const Icon(
-                            Icons.add_circle_rounded,
-                            color: AppColors.whiteColor,
-                          )
+                          const Icon(Icons.add_circle_rounded, color: AppColors.whiteColor),
                         ],
                       ),
                     ),
@@ -122,24 +104,24 @@ class _GenreScreenState extends State<GenreScreen> with Utility {
               BlocListener<UpdateGenreCubit, UpdateGenreState>(
                 listener: (context, state) {
                   if (state is UpdateGenreErrorState) {
-                   showMessage(context,  state.error);
+                    showMessage(context, state.error);
                     return;
                   }
 
                   if (state is UpdateGenreLoadedState) {
-                   showMessage(context,  "Update Genre Sucessfully");
+                    showMessage(context, "Update Genre Sucessfully");
                     context.read<GetAllGenreCubit>().getGenre();
                   }
                 },
                 child: BlocListener<DeleteGenreCubit, DeleteGenreState>(
                   listener: (context, state) {
                     if (state is DeleteGenreErrorState) {
-                     showMessage(context,  state.error);
+                      showMessage(context, state.error);
                       return;
                     }
 
                     if (state is DeleteGenreLoadedState) {
-                     showMessage(context,  "Delete Sucessfully");
+                      showMessage(context, "Delete Sucessfully");
                       Navigator.pop(context);
                       context.read<GetAllGenreCubit>().getGenre();
                     }
@@ -147,22 +129,23 @@ class _GenreScreenState extends State<GenreScreen> with Utility {
                   child: BlocBuilder<GetAllGenreCubit, GetAllGenreState>(
                     builder: (context, state) {
                       if (state is GetAllGenreLoadingState) {
-                        return const Center(
-                          child: CustomCircularProgressIndicator(),
-                        );
+                        return const Center(child: CustomCircularProgressIndicator());
                       }
 
                       if (state is GetAllGenreErrorState) {
-                        return const Center(
-                          child: CustomErrorWidget(),
+                        return Center(
+                          child: InkWell(
+                            onTap: () {
+                              context.read<GetAllGenreCubit>().getGenre();
+                            },
+                            child: CustomErrorWidget(),
+                          ),
                         );
                       }
 
                       if (state is GetAllGenreLaodedState) {
                         return state.model.data?.isEmpty ?? true
-                            ? const Center(
-                                child: CustomEmptyWidget(),
-                              )
+                            ? const Center(child: CustomEmptyWidget())
                             : ListView.builder(
                                 physics: const NeverScrollableScrollPhysics(),
                                 shrinkWrap: true,
@@ -184,11 +167,7 @@ class _GenreScreenState extends State<GenreScreen> with Utility {
                                               imageUrl: "${AppUrls.baseUrl}/${data?.coverImg}",
                                               fit: BoxFit.fill,
                                               errorWidget: (context, url, error) {
-                                                return const Center(
-                                                  child: TextWidget(
-                                                    text: "No Img 😒",
-                                                  ),
-                                                );
+                                                return const Center(child: TextWidget(text: "No Img 😒"));
                                               },
                                             ),
                                           ),
@@ -205,10 +184,7 @@ class _GenreScreenState extends State<GenreScreen> with Utility {
                                                   fontWeight: FontWeight.w600,
                                                 ),
                                                 const SizedBox(height: 4),
-                                                const TextWidget(
-                                                  text: "09",
-                                                  color: AppColors.greyColor,
-                                                ),
+                                                const TextWidget(text: "09", color: AppColors.greyColor),
                                               ],
                                             ),
                                           ),
@@ -232,24 +208,25 @@ class _GenreScreenState extends State<GenreScreen> with Utility {
                                                   ),
                                                   widthBox5(),
                                                   InkWell(
-                                                      onTap: () {
-                                                        showDialog(
-                                                          context: context,
-                                                          builder: (context) {
-                                                            return DeleteDialog(
-                                                              onCancelPressed: () {
-                                                                Navigator.pop(context);
-                                                              },
-                                                              onDeletePressed: () {
-                                                                context
-                                                                    .read<DeleteGenreCubit>()
-                                                                    .deleteGenre(data?.id ?? "");
-                                                              },
-                                                            );
-                                                          },
-                                                        );
-                                                      },
-                                                      child: svgAsset(assetName: AppImages.deleteSvg)),
+                                                    onTap: () {
+                                                      showDialog(
+                                                        context: context,
+                                                        builder: (context) {
+                                                          return DeleteDialog(
+                                                            onCancelPressed: () {
+                                                              Navigator.pop(context);
+                                                            },
+                                                            onDeletePressed: () {
+                                                              context.read<DeleteGenreCubit>().deleteGenre(
+                                                                data?.id ?? "",
+                                                              );
+                                                            },
+                                                          );
+                                                        },
+                                                      );
+                                                    },
+                                                    child: svgAsset(assetName: AppImages.deleteSvg),
+                                                  ),
                                                 ],
                                               ),
                                               Switch(
@@ -260,9 +237,9 @@ class _GenreScreenState extends State<GenreScreen> with Utility {
                                                 value: data?.status ?? false,
                                                 onChanged: (value) {
                                                   context.read<UpdateGenreCubit>().updateGenre(
-                                                        id: data?.id,
-                                                        status: value,
-                                                      );
+                                                    id: data?.id,
+                                                    status: value,
+                                                  );
                                                 },
                                               ),
                                             ],
@@ -298,170 +275,147 @@ class _GenreScreenState extends State<GenreScreen> with Utility {
           child: SingleChildScrollView(
             child: Padding(
               padding: const EdgeInsets.all(12.0),
-              child: StatefulBuilder(builder: (context, setState) {
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const TextWidget(
-                          text: "Genre",
-                          fontWeight: FontWeight.w700,
-                          fontSize: 15,
-                        ),
-                        InkWell(
-                          onTap: () {
-                            Navigator.pop(context);
-                          },
-                          child: Container(
-                            decoration: const BoxDecoration(
-                              color: AppColors.greyColor,
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(12),
-                              ),
-                            ),
-                            child: const Icon(
-                              Icons.close,
-                              color: AppColors.whiteColor,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    heightBox15(),
-                    Container(
-                      width: MediaQuery.of(context).size.width,
-                      padding: const EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12),
-                        color: AppColors.whiteColor,
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+              child: StatefulBuilder(
+                builder: (context, setState) {
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          const TextWidget(
-                            text: "Cover Image",
-                          ),
-                          heightBox10(),
-                          GestureDetector(
+                          const TextWidget(text: "Genre", fontWeight: FontWeight.w700, fontSize: 15),
+                          InkWell(
                             onTap: () {
-                              _pickImage(setState); // Pass setState here
+                              Navigator.pop(context);
                             },
                             child: Container(
-                              width: MediaQuery.of(context).size.width,
-                              padding: const EdgeInsets.all(8),
-                              decoration: BoxDecoration(
-                                borderRadius: const BorderRadius.all(
-                                  Radius.circular(8),
-                                ),
-                                border: Border.all(
-                                  color: AppColors.greyColor,
-                                ),
+                              decoration: const BoxDecoration(
+                                color: AppColors.greyColor,
+                                borderRadius: BorderRadius.all(Radius.circular(12)),
                               ),
-                              child: _selectedImage == null
-                                  ? Column(
-                                      children: [
-                                        SvgPicture.asset("asset/svg/profile-circle.svg"),
-                                        heightBox10(),
-                                        const TextWidget(text: "Select a Cover picture"),
-                                        const TextWidget(text: "Browse or Drag image here.."),
-                                      ],
-                                    )
-                                  : ClipRRect(
-                                      borderRadius: BorderRadius.circular(8),
-                                      child: Image.file(
-                                        File(_selectedImage!.path),
-                                        width: double.infinity,
-                                        height: 190,
-                                        fit: BoxFit.cover,
-                                      ),
-                                    ),
+                              child: const Icon(Icons.close, color: AppColors.whiteColor),
                             ),
                           ),
                         ],
                       ),
-                    ),
-                    heightBox15(),
-                    const TextWidget(
-                      text: "Genre Title",
-                      color: AppColors.blackColor,
-                    ),
-                    heightBox10(),
-                    TextFormFieldWidget(
-                      controller: titleController,
-                    ),
-                    heightBox10(),
-                    const TextWidget(
-                      text: "Status",
-                    ),
-                    heightBox10(),
-                    Switch(
-                      activeColor: AppColors.zGreenColor,
-                      value: isActive,
-                      onChanged: (value) {
-                        setState(() {
-                          isActive = value;
-                        });
-                      },
-                    ),
-                    heightBox10(),
-                    BlocConsumer<UpdateGenreCubit, UpdateGenreState>(
-                      listener: (context, state) {
-                        if (state is UpdateGenreErrorState) {
-                         showMessage(context,  state.error);
-                          return;
-                        }
+                      heightBox15(),
+                      Container(
+                        width: MediaQuery.of(context).size.width,
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(12), color: AppColors.whiteColor),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const TextWidget(text: "Cover Image"),
+                            heightBox10(),
+                            GestureDetector(
+                              onTap: () {
+                                _pickImage(setState); // Pass setState here
+                              },
+                              child: Container(
+                                width: MediaQuery.of(context).size.width,
+                                padding: const EdgeInsets.all(8),
+                                decoration: BoxDecoration(
+                                  borderRadius: const BorderRadius.all(Radius.circular(8)),
+                                  border: Border.all(color: AppColors.greyColor),
+                                ),
+                                child: _selectedImage == null
+                                    ? Column(
+                                        children: [
+                                          SvgPicture.asset("asset/svg/profile-circle.svg"),
+                                          heightBox10(),
+                                          const TextWidget(text: "Select a Cover picture"),
+                                          const TextWidget(text: "Browse or Drag image here.."),
+                                        ],
+                                      )
+                                    : ClipRRect(
+                                        borderRadius: BorderRadius.circular(8),
+                                        child: Image.file(
+                                          File(_selectedImage!.path),
+                                          width: double.infinity,
+                                          height: 190,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      heightBox15(),
+                      const TextWidget(text: "Genre Title", color: AppColors.blackColor),
+                      heightBox10(),
+                      TextFormFieldWidget(controller: titleController),
+                      heightBox10(),
+                      const TextWidget(text: "Status"),
+                      heightBox10(),
+                      Switch(
+                        activeColor: AppColors.zGreenColor,
+                        value: isActive,
+                        onChanged: (value) {
+                          setState(() {
+                            isActive = value;
+                          });
+                        },
+                      ),
+                      heightBox10(),
+                      BlocConsumer<UpdateGenreCubit, UpdateGenreState>(
+                        listener: (context, state) {
+                          if (state is UpdateGenreErrorState) {
+                            showMessage(context, state.error);
+                            return;
+                          }
 
-                        if (state is UpdateGenreLoadedState) {
-                         showMessage(context,  "Update Sucessfully");
-                          context.read<GetAllGenreCubit>().getGenre();
-                          Navigator.pop(context);
-                        }
-                      },
-                      builder: (context, updateState) {
-                        return BlocConsumer<PostGenreCubit, PostGenreState>(
-                          listener: (context, state) {
-                            if (state is PostGenreErrorState) {
-                             showMessage(context,  state.error);
-                              return;
-                            }
+                          if (state is UpdateGenreLoadedState) {
+                            showMessage(context, "Update Sucessfully");
+                            context.read<GetAllGenreCubit>().getGenre();
+                            Navigator.pop(context);
+                          }
+                        },
+                        builder: (context, updateState) {
+                          return BlocConsumer<PostGenreCubit, PostGenreState>(
+                            listener: (context, state) {
+                              if (state is PostGenreErrorState) {
+                                showMessage(context, state.error);
+                                return;
+                              }
 
-                            if (state is PostGenreLaodedState) {
-                             showMessage(context,  "Post Genre Successfully");
-                              context.read<GetAllGenreCubit>().getGenre();
-                              Navigator.pop(context);
-                            }
-                          },
-                          builder: (context, state) {
-                            return CustomOutlinedButton(
-                              inProgress: (updateState is UpdateGenreLoadingState || state is PostGenreLoadingState),
-                              onPressed: () {
-                                if (id != null) {
-                                  context.read<UpdateGenreCubit>().updateGenre(
-                                        id: id,
-                                        name: titleController.text,
-                                        status: isActive,
-                                        coverImg: _selectedImage != null ? File(_selectedImage!.path) : null,
-                                      );
-                                  return;
-                                }
-
-                                context.read<PostGenreCubit>().postGenre(
+                              if (state is PostGenreLaodedState) {
+                                showMessage(context, "Post Genre Successfully");
+                                context.read<GetAllGenreCubit>().getGenre();
+                                Navigator.pop(context);
+                              }
+                            },
+                            builder: (context, state) {
+                              return CustomOutlinedButton(
+                                inProgress: (updateState is UpdateGenreLoadingState || state is PostGenreLoadingState),
+                                onPressed: () {
+                                  if (id != null) {
+                                    context.read<UpdateGenreCubit>().updateGenre(
+                                      id: id,
                                       name: titleController.text,
                                       status: isActive,
                                       coverImg: _selectedImage != null ? File(_selectedImage!.path) : null,
                                     );
-                              },
-                              buttonText: id != null ? 'Save Genre' : 'Add Genre',
-                            );
-                          },
-                        );
-                      },
-                    ),
-                  ],
-                );
-              }),
+                                    return;
+                                  }
+
+                                  context.read<PostGenreCubit>().postGenre(
+                                    name: titleController.text,
+                                    status: isActive,
+                                    coverImg: _selectedImage != null ? File(_selectedImage!.path) : null,
+                                  );
+                                },
+                                buttonText: id != null ? 'Save Genre' : 'Add Genre',
+                              );
+                            },
+                          );
+                        },
+                      ),
+                    ],
+                  );
+                },
+              ),
             ),
           ),
         );

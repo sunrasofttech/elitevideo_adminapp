@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:html/parser.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:html/parser.dart' as html_parser;
 import 'package:html_editor_enhanced/html_editor.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
@@ -57,6 +58,8 @@ class _AddUpdateTvShowScreenState extends State<AddUpdateTvShowScreen> with Util
   TextEditingController releasedDateController = TextEditingController();
   TextEditingController seriesRentPriceController = TextEditingController();
   TextEditingController rentedTimeDaysController = TextEditingController();
+  final TextEditingController descriptionTextController = TextEditingController();
+  final FocusNode descriptionFocusNode = FocusNode();
   TextEditingController moviePriceController = TextEditingController();
   bool isMovieOnRent = false;
   bool showSubscription = true;
@@ -102,6 +105,12 @@ class _AddUpdateTvShowScreenState extends State<AddUpdateTvShowScreen> with Util
       showSubscription = data?.showSubscription ?? false;
       seriesRentPriceController.text = data?.seriesRentPrice ?? '';
       rentedTimeDaysController.text = data?.rentedTimeDays.toString() ?? "";
+      if (Platform.isWindows) {
+        final rawHtml = data?.description ?? "";
+        final document = html_parser.parse(rawHtml);
+        final cleanText = document.body?.text ?? "";
+        descriptionTextController.text = cleanText.trim();
+      }
     }
     super.initState();
   }
@@ -395,22 +404,33 @@ class _AddUpdateTvShowScreenState extends State<AddUpdateTvShowScreen> with Util
                           releasedDateFocusNode.unfocus();
                         },
                         child: SizedBox(
-                          height: 500,
-                          child: CustomHtmlEditor(
-                            hint: "",
-                            onPressed: () async {
-                              final contentData = await descriptionController.getText();
-                              try {
-                                final document = parse(contentData);
-                                final validHtml = document.outerHtml;
-                                log("Validated HTML: $validHtml");
-                              } catch (e) {
-                                log("Invalid HTML structure: $e");
-                              }
-                            },
-                            controller: descriptionController,
-                            htmlContent: widget.item?.description ?? "",
-                          ),
+                          height: Platform.isWindows ? null : 500,
+                          child: Platform.isWindows
+                              ? TextField(
+                                  controller: descriptionTextController,
+                                  focusNode: descriptionFocusNode,
+                                  maxLines: 12,
+                                  decoration: InputDecoration(
+                                    hintText: "Enter Tv Show Description",
+                                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                                    contentPadding: const EdgeInsets.all(12),
+                                  ),
+                                )
+                              : CustomHtmlEditor(
+                                  hint: "",
+                                  onPressed: () async {
+                                    final contentData = await descriptionController.getText();
+                                    try {
+                                      final document = parse(contentData);
+                                      final validHtml = document.outerHtml;
+                                      log("Validated HTML: $validHtml");
+                                    } catch (e) {
+                                      log("Invalid HTML structure: $e");
+                                    }
+                                  },
+                                  controller: descriptionController,
+                                  htmlContent: widget.item?.description ?? "",
+                                ),
                         ),
                       ),
                       BlocConsumer<UpdateTvShowSeriesCubit, UpdateSeriesState>(
@@ -459,7 +479,9 @@ class _AddUpdateTvShowScreenState extends State<AddUpdateTvShowScreen> with Util
                                 onPressed: () async {
                                   var validHtml;
                                   try {
-                                    final contentData = await descriptionController.getText();
+                                    final contentData = Platform.isWindows
+                                        ? descriptionTextController.text
+                                        : await descriptionController.getText();
                                     final document = parse(contentData);
                                     validHtml = document.outerHtml;
                                     log(

@@ -18,6 +18,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:html/parser.dart';
+import 'package:html/parser.dart' as html_parser;
 import 'package:html_editor_enhanced/html_editor.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
@@ -34,13 +35,20 @@ class AddUpdateTrailerScreen extends StatefulWidget {
 
 class _AddUpdateTrailerScreenState extends State<AddUpdateTrailerScreen> with Utility {
   int? progressPercent;
+  final TextEditingController descriptionTextController = TextEditingController();
+  final FocusNode descriptionFocusNode = FocusNode();
 
   @override
   void initState() {
     super.initState();
     if (widget.model != null) {
       movieNameController.text = widget.model?.movieName ?? '';
-
+      if (Platform.isWindows) {
+        final rawHtml = widget.model?.description ?? "";
+        final document = html_parser.parse(rawHtml);
+        final cleanText = document.body?.text ?? "";
+        descriptionTextController.text = cleanText.trim();
+      }
       status = widget.model?.status ?? false;
     }
   }
@@ -304,22 +312,33 @@ class _AddUpdateTrailerScreenState extends State<AddUpdateTrailerScreen> with Ut
                           Focus.of(context).unfocus();
                         },
                         child: SizedBox(
-                          height: 500,
-                          child: CustomHtmlEditor(
-                            hint: "",
-                            onPressed: () async {
-                              final contentData = await descriptionController.getText();
-                              try {
-                                final document = parse(contentData);
-                                final validHtml = document.outerHtml;
-                                log("Validated HTML: $validHtml");
-                              } catch (e) {
-                                log("Invalid HTML structure: $e");
-                              }
-                            },
-                            controller: descriptionController,
-                            htmlContent: widget.model?.description ?? "",
-                          ),
+                          height: Platform.isWindows ? null : 500,
+                          child: Platform.isWindows
+                              ? TextField(
+                                  controller: descriptionTextController,
+                                  focusNode: descriptionFocusNode,
+                                  maxLines: 12,
+                                  decoration: InputDecoration(
+                                    hintText: "Enter trailer description",
+                                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                                    contentPadding: const EdgeInsets.all(12),
+                                  ),
+                                )
+                              : CustomHtmlEditor(
+                                  hint: "",
+                                  onPressed: () async {
+                                    final contentData = await descriptionController.getText();
+                                    try {
+                                      final document = parse(contentData);
+                                      final validHtml = document.outerHtml;
+                                      log("Validated HTML: $validHtml");
+                                    } catch (e) {
+                                      log("Invalid HTML structure: $e");
+                                    }
+                                  },
+                                  controller: descriptionController,
+                                  htmlContent: widget.model?.description ?? "",
+                                ),
                         ),
                       ),
                       BlocConsumer<UpdateTrailerCubit, UpdateTrailerState>(

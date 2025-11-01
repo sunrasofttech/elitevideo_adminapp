@@ -19,27 +19,20 @@ class GetAllGenreCubit extends Cubit<GetAllGenreState> {
         queryParams['name'] = name.trim();
       }
 
-      final uri = Uri.parse("${AppUrls.genreUrl}/get-all").replace(
-        queryParameters: queryParams.isEmpty ? null : queryParams,
-      );
+      final uri = Uri.parse(
+        "${AppUrls.genreUrl}/get-all",
+      ).replace(queryParameters: queryParams.isEmpty ? null : queryParams);
 
       // Make API call
-      final response = await post(
-        uri,
-        headers: headers,
-      );
+      final response = await post(uri, headers: headers);
+
+      log("uri----$uri ${response.body} ");
 
       final result = jsonDecode(response.body);
       log("message me $result");
       if (response.statusCode == 200 || response.statusCode == 201) {
         if (result['status'] == true) {
-          emit(
-            GetAllGenreLaodedState(
-              getGenreModelFromJson(
-                json.encode(result),
-              ),
-            ),
-          );
+          emit(GetAllGenreLaodedState(getGenreModelFromJson(json.encode(result))));
         } else {
           emit(GetAllGenreErrorState(result["message"]));
         }
@@ -48,11 +41,7 @@ class GetAllGenreCubit extends Cubit<GetAllGenreState> {
       }
     } catch (e, s) {
       print("catch error $e, $s");
-      emit(
-        GetAllGenreErrorState(
-          "catch error $e, $s",
-        ),
-      );
+      emit(GetAllGenreErrorState("catch error $e, $s"));
     }
   }
 }

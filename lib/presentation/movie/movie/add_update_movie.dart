@@ -1,6 +1,9 @@
 import 'dart:developer';
 import 'dart:io';
+import 'dart:io' show Platform;
+import 'package:html/parser.dart' as html_parser;
 import 'package:elite_admin/utils/toast.dart';
+import 'package:elite_admin/utils/widget/custom_editor.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:html/parser.dart';
@@ -21,7 +24,6 @@ import 'package:elite_admin/constant/image.dart';
 import 'package:elite_admin/constant/image_picker_utils.dart';
 import 'package:elite_admin/utils/utility_mixin.dart';
 import 'package:elite_admin/utils/widget/custom_dropdown.dart';
-import 'package:elite_admin/utils/widget/custom_editor.dart';
 import 'package:elite_admin/utils/widget/custombutton.dart';
 import 'package:elite_admin/utils/widget/textformfield.dart';
 import 'package:elite_admin/utils/widget/textwidget.dart';
@@ -58,6 +60,12 @@ class _AddUpdateMoveiScreenState extends State<AddUpdateMoveiScreen> with Utilit
       rentedTimeDaysController.text = widget.model?.rentedTimeDays.toString() ?? '';
       showSubscription = widget.model?.showSubscription ?? true;
       positionController.text = widget.model?.position != null ? widget.model!.position.toString() : "";
+  if (Platform.isWindows) {
+    final rawHtml = widget.model?.description ?? "";
+    final document = html_parser.parse(rawHtml);
+    final cleanText = document.body?.text ?? "";
+    descriptionTextController.text = cleanText.trim();
+  }
       log("positionController--> $positionController ${widget.model?.position.runtimeType}--");
     }
   }
@@ -77,6 +85,8 @@ class _AddUpdateMoveiScreenState extends State<AddUpdateMoveiScreen> with Utilit
   XFile? _selectedImage;
   XFile? _selectedPosterImage;
   final HtmlEditorController descriptionController = HtmlEditorController();
+  final TextEditingController descriptionTextController = TextEditingController();
+
   TextEditingController videoLinkController = TextEditingController();
   TextEditingController trailerVideoLink = TextEditingController();
   TextEditingController trailerLinkController = TextEditingController();
@@ -98,7 +108,7 @@ class _AddUpdateMoveiScreenState extends State<AddUpdateMoveiScreen> with Utilit
   final FocusNode moviePriceFocusNode = FocusNode();
   final FocusNode positionFocusNode = FocusNode();
   final FocusNode moveiPriceFocusNode = FocusNode();
-
+  final FocusNode descriptionFocusNode = FocusNode();
   String? selectedLanguage;
   String? selectedLanguageId;
 
@@ -618,24 +628,36 @@ class _AddUpdateMoveiScreenState extends State<AddUpdateMoveiScreen> with Utilit
                           Focus.of(context).unfocus();
                         },
                         child: SizedBox(
-                          height: 500,
-                          child: CustomHtmlEditor(
-                            hint: "",
-                            onPressed: () async {
-                              final contentData = await descriptionController.getText();
-                              try {
-                                final document = parse(contentData);
-                                final validHtml = document.outerHtml;
-                                log("Validated HTML: $validHtml");
-                              } catch (e) {
-                                log("Invalid HTML structure: $e");
-                              }
-                            },
-                            controller: descriptionController,
-                            htmlContent: widget.model?.description ?? "",
-                          ),
+                          height: Platform.isWindows ? null : 500,
+                          child: Platform.isWindows
+                              ? TextField(
+                                  controller: descriptionTextController,
+                                  focusNode: descriptionFocusNode,
+                                  maxLines: 12,
+                                  decoration: InputDecoration(
+                                    hintText: "Enter movie description",
+                                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                                    contentPadding: const EdgeInsets.all(12),
+                                  ),
+                                )
+                              : CustomHtmlEditor(
+                                  hint: "",
+                                  onPressed: () async {
+                                    final contentData = await descriptionController.getText();
+                                    try {
+                                      final document = parse(contentData);
+                                      final validHtml = document.outerHtml;
+                                      log("Validated HTML: $validHtml");
+                                    } catch (e) {
+                                      log("Invalid HTML structure: $e");
+                                    }
+                                  },
+                                  controller: descriptionController,
+                                  htmlContent: widget.model?.description ?? "",
+                                ),
                         ),
                       ),
+                      heightBox10(),
                       BlocConsumer<UpdateMovieCubit, UpdateMovieState>(
                         listener: (context, state) {
                           if (state is UpdateMovieErrorState) {
@@ -688,13 +710,13 @@ class _AddUpdateMoveiScreenState extends State<AddUpdateMoveiScreen> with Utilit
                                 onPressed: () async {
                                   var validHtml;
                                   try {
-                                    final contentData = await descriptionController.getText();
+                                    final contentData = Platform.isWindows
+                                        ? descriptionTextController.text
+                                        : await descriptionController.getText();
                                     final document = parse(contentData);
                                     validHtml = document.outerHtml;
                                     log("Validated HTML: $validHtml");
-                                  } catch (e) {
-                                    
-                                  }
+                                  } catch (e) {}
                                   if (state is PostMovieLoadingState || updateState is UpdateMovieLoadingState) {
                                     return;
                                   }

@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:html/parser.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:html/parser.dart' as html_parser;
 import 'package:html_editor_enhanced/html_editor.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
@@ -55,6 +56,8 @@ class _AddUpdateSongScreenState extends State<AddUpdateSongScreen> with Utility 
 
   final HtmlEditorController descriptionController = HtmlEditorController();
   final songTitleController = TextEditingController();
+  final TextEditingController descriptionTextController = TextEditingController();
+  final FocusNode descriptionFocusNode = FocusNode();
   final songArtistController = TextEditingController();
 
   Future<void> _pickImage() async {
@@ -97,6 +100,12 @@ class _AddUpdateSongScreenState extends State<AddUpdateSongScreen> with Utility 
       songArtistController.text = widget.data?.artistName ?? "";
       status = widget.data?.status ?? false;
       isPopular = widget.data?.isPopular ?? false;
+      if (Platform.isWindows) {
+        final rawHtml = widget.data?.description ?? "";
+        final document = html_parser.parse(rawHtml);
+        final cleanText = document.body?.text ?? "";
+        descriptionTextController.text = cleanText.trim();
+      }
       setState(() {});
     }
     super.initState();
@@ -260,13 +269,24 @@ class _AddUpdateSongScreenState extends State<AddUpdateSongScreen> with Utility 
                       const TextWidget(text: "Description"),
                       heightBox5(),
                       SizedBox(
-                        height: 500,
-                        child: CustomHtmlEditor(
-                          hint: "",
-                          onPressed: () async {},
-                          controller: descriptionController,
-                          htmlContent: widget.data?.description ?? "",
-                        ),
+                        height: Platform.isWindows ? null : 500,
+                        child: Platform.isWindows
+                            ? TextField(
+                                controller: descriptionTextController,
+                                focusNode: descriptionFocusNode,
+                                maxLines: 12,
+                                decoration: InputDecoration(
+                                  hintText: "Enter song description",
+                                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                                  contentPadding: const EdgeInsets.all(12),
+                                ),
+                              )
+                            : CustomHtmlEditor(
+                                hint: "",
+                                onPressed: () async {},
+                                controller: descriptionController,
+                                htmlContent: widget.data?.description ?? "",
+                              ),
                       ),
                       heightBox10(),
                       const TextWidget(text: "Popular"),
@@ -343,7 +363,9 @@ class _AddUpdateSongScreenState extends State<AddUpdateSongScreen> with Utility 
                                   }
                                   var validHtml;
                                   try {
-                                    final contentData = await descriptionController.getText();
+                                    final contentData = Platform.isWindows
+                                        ? descriptionTextController.text
+                                        : await descriptionController.getText();
                                     final document = parse(contentData);
                                     validHtml = document.outerHtml;
                                     log("Validated HTML: $validHtml   $selectedArtistId");
