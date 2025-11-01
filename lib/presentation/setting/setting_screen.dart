@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:elite_admin/utils/toast.dart';
@@ -5,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:html/parser.dart';
+import 'package:html/parser.dart' as html_parser;
+
 import 'package:html_editor_enhanced/html_editor.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
@@ -33,6 +36,11 @@ class _SettingScreenState extends State<SettingScreen> with Utility {
   final HtmlEditorController _privacyController = HtmlEditorController();
   final HtmlEditorController _aboutUsController = HtmlEditorController();
   final HtmlEditorController _helpAndSupportController = HtmlEditorController();
+
+  final TextEditingController _termAndCondControllerText = TextEditingController();
+  final TextEditingController _privacyControllerText = TextEditingController();
+  final TextEditingController _aboutUsControllerText = TextEditingController();
+  final TextEditingController _helpAndSupportControllerText = TextEditingController();
   final TextEditingController appNameController = TextEditingController();
   final TextEditingController appVersionController = TextEditingController();
   final emailController = TextEditingController();
@@ -56,7 +64,7 @@ class _SettingScreenState extends State<SettingScreen> with Utility {
 
   Future<void> _pickImage() async {
     final pickedFile = await ImagePickerUtil.pickImageFromGallery(
-            context: context,
+      context: context,
       aspectRatio: const CropAspectRatio(ratioX: 4, ratioY: 3),
     );
     if (pickedFile != null) {
@@ -68,7 +76,7 @@ class _SettingScreenState extends State<SettingScreen> with Utility {
 
   Future<void> _pickSplashImage(int index) async {
     final pickedFile = await ImagePickerUtil.pickImageFromGallery(
-            context: context,
+      context: context,
       aspectRatio: const CropAspectRatio(ratioX: 4, ratioY: 3),
     );
     if (pickedFile != null) {
@@ -109,6 +117,7 @@ class _SettingScreenState extends State<SettingScreen> with Utility {
   @override
   void initState() {
     context.read<GetSettingCubit>().getSetting();
+
     super.initState();
   }
 
@@ -140,6 +149,17 @@ class _SettingScreenState extends State<SettingScreen> with Utility {
                   cashfreeClientSecretKey.text = state.model.setting?.cashfreeClientSecretKey ?? '';
                   selectedPaymentType = state.model.setting?.paymentType;
                   isSongOnSubscription = state.model.setting?.isSongOnSubscription ?? false;
+                  if (Platform.isWindows) {
+                    String cleanHtml(String? html) {
+                      final document = html_parser.parse(html ?? "");
+                      return (document.body?.text ?? "").trim();
+                    }
+
+                    _termAndCondControllerText.text = cleanHtml(state.model.setting?.termsAndCondition);
+                    _privacyControllerText.text = cleanHtml(state.model.setting?.privacyPolicy);
+                    _aboutUsControllerText.text = cleanHtml(state.model.setting?.aboutUs);
+                    _helpAndSupportControllerText.text = cleanHtml(state.model.setting?.helpSupport);
+                  }
                 }
               },
               builder: (context, state) {
@@ -369,49 +389,89 @@ class _SettingScreenState extends State<SettingScreen> with Utility {
                             const TextWidget(text: "About Us"),
                             heightBox10(),
                             SizedBox(
-                              height: 600,
-                              child: CustomHtmlEditor(
-                                hint: state.model.setting?.aboutUs ?? "",
-                                htmlContent: state.model.setting?.aboutUs ?? "",
-                                onPressed: () {},
-                                controller: _aboutUsController,
-                              ),
+                              height: Platform.isWindows ? null : 600,
+                              child: Platform.isWindows
+                                  ? TextField(
+                                      controller: _aboutUsControllerText,
+                                      maxLines: 12,
+                                      decoration: InputDecoration(
+                                        hintText: "Enter About Us",
+                                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                                        contentPadding: const EdgeInsets.all(12),
+                                      ),
+                                    )
+                                  : CustomHtmlEditor(
+                                      hint: state.model.setting?.aboutUs ?? "",
+                                      htmlContent: state.model.setting?.aboutUs ?? "",
+                                      onPressed: () {},
+                                      controller: _aboutUsController,
+                                    ),
                             ),
                             heightBox15(),
                             const TextWidget(text: "Privacy Policy"),
                             heightBox10(),
                             SizedBox(
-                              height: 600,
-                              child: CustomHtmlEditor(
-                                hint: state.model.setting?.privacyPolicy ?? "",
-                                htmlContent: state.model.setting?.privacyPolicy ?? "",
-                                onPressed: () {},
-                                controller: _privacyController,
-                              ),
+                              height: Platform.isWindows ? null : 600,
+                              child: Platform.isWindows
+                                  ? TextField(
+                                      controller: _privacyControllerText,
+                                      maxLines: 12,
+                                      decoration: InputDecoration(
+                                        hintText: "Enter Privacy Policy",
+                                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                                        contentPadding: const EdgeInsets.all(12),
+                                      ),
+                                    )
+                                  : CustomHtmlEditor(
+                                      hint: state.model.setting?.privacyPolicy ?? "",
+                                      htmlContent: state.model.setting?.privacyPolicy ?? "",
+                                      onPressed: () {},
+                                      controller: _privacyController,
+                                    ),
                             ),
                             heightBox15(),
                             const TextWidget(text: "Term and Conditions"),
                             heightBox10(),
                             SizedBox(
-                              height: 600,
-                              child: CustomHtmlEditor(
-                                hint: state.model.setting?.termsAndCondition ?? "",
-                                htmlContent: state.model.setting?.termsAndCondition ?? "",
-                                onPressed: () {},
-                                controller: _termAndCondController,
-                              ),
+                              height: Platform.isWindows ? null : 600,
+                              child: Platform.isWindows
+                                  ? TextField(
+                                      controller: _termAndCondControllerText,
+                                      maxLines: 12,
+                                      decoration: InputDecoration(
+                                        hintText: "Enter Term and Conditions",
+                                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                                        contentPadding: const EdgeInsets.all(12),
+                                      ),
+                                    )
+                                  : CustomHtmlEditor(
+                                      hint: state.model.setting?.termsAndCondition ?? "",
+                                      htmlContent: state.model.setting?.termsAndCondition ?? "",
+                                      onPressed: () {},
+                                      controller: _termAndCondController,
+                                    ),
                             ),
                             heightBox15(),
                             const TextWidget(text: "Help And Support"),
                             heightBox10(),
                             SizedBox(
-                              height: 600,
-                              child: CustomHtmlEditor(
-                                hint: state.model.setting?.helpSupport ?? "",
-                                htmlContent: state.model.setting?.helpSupport ?? "",
-                                onPressed: () {},
-                                controller: _helpAndSupportController,
-                              ),
+                              height: Platform.isWindows ? null : 600,
+                              child: Platform.isWindows
+                                  ? TextField(
+                                      controller: _helpAndSupportControllerText,
+                                      maxLines: 12,
+                                      decoration: InputDecoration(
+                                        hintText: "Enter Help and Support",
+                                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                                        contentPadding: const EdgeInsets.all(12),
+                                      ),
+                                    )
+                                  : CustomHtmlEditor(
+                                      hint: state.model.setting?.helpSupport ?? "",
+                                      htmlContent: state.model.setting?.helpSupport ?? "",
+                                      onPressed: () {},
+                                      controller: _helpAndSupportController,
+                                    ),
                             ),
                             heightBox15(),
                             const TextWidget(text: "Show Subscription On Music"),
@@ -441,21 +501,40 @@ class _SettingScreenState extends State<SettingScreen> with Utility {
                                 return CustomOutlinedButton(
                                   inProgress: (updateState is UpdateSettingLoadingState),
                                   onPressed: () async {
-                                    final aboutcontentData = await _aboutUsController.getText();
-                                    final document = parse(aboutcontentData);
-                                    final aboutUsControllerText = document.outerHtml;
+                                    String aboutUsControllerText = "";
+                                    String privacyControllerText = "";
+                                    String termControllerText = "";
+                                    String helpControllerText = "";
 
-                                    final privacycontentData = await _privacyController.getText();
-                                    final privacydocument = parse(privacycontentData);
-                                    final privacyControllerText = privacydocument.outerHtml;
+                                    try {
+                                      if (Platform.isWindows) {
+                                        String wrap(String text) => "<html><body>$text</body></html>";
 
-                                    final termContentData = await _termAndCondController.getText();
-                                    final termDocument = parse(termContentData);
-                                    final termControllerText = termDocument.outerHtml;
+                                        aboutUsControllerText = wrap(_aboutUsControllerText.text);
+                                        privacyControllerText = wrap(_privacyControllerText.text);
+                                        termControllerText = wrap(_termAndCondControllerText.text);
+                                        helpControllerText = wrap(_helpAndSupportControllerText.text);
+                                      } else {
+                                        // On other platforms: get from HTML editors
+                                        final aboutcontentData = await _aboutUsController.getText();
+                                        final aboutDocument = parse(aboutcontentData);
+                                        aboutUsControllerText = aboutDocument.outerHtml;
 
-                                    final helpContentData = await _helpAndSupportController.getText();
-                                    final helpDocument = parse(helpContentData);
-                                    final helpControllerText = helpDocument.outerHtml;
+                                        final privacycontentData = await _privacyController.getText();
+                                        final privacyDocument = parse(privacycontentData);
+                                        privacyControllerText = privacyDocument.outerHtml;
+
+                                        final termContentData = await _termAndCondController.getText();
+                                        final termDocument = parse(termContentData);
+                                        termControllerText = termDocument.outerHtml;
+
+                                        final helpContentData = await _helpAndSupportController.getText();
+                                        final helpDocument = parse(helpContentData);
+                                        helpControllerText = helpDocument.outerHtml;
+                                      }
+                                    } catch (e) {
+                                      log("Error parsing HTML fields: $e");
+                                    }
 
                                     context.read<UpdateSettingCubit>().updateSetting(
                                       id: state.model.setting?.id ?? "",
