@@ -47,6 +47,7 @@ class _GenreScreenState extends State<GenreScreen> with Utility {
   }
 
   final searchController = TextEditingController();
+  
 
   @override
   void dispose() {

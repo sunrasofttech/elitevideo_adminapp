@@ -20,7 +20,7 @@ class GetAllGenreCubit extends Cubit<GetAllGenreState> {
       }
 
       final uri = Uri.parse(
-        "${AppUrls.genreUrl}/get-all",
+        "${AppUrls.genreUrl}/admin/get-all",
       ).replace(queryParameters: queryParams.isEmpty ? null : queryParams);
 
       // Make API call

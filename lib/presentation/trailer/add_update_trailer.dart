@@ -393,7 +393,9 @@ class _AddUpdateTrailerScreenState extends State<AddUpdateTrailerScreen> with Ut
                                 onPressed: () async {
                                   var validHtml;
                                   try {
-                                    final contentData = await descriptionController.getText();
+                                     final contentData = Platform.isWindows
+                                        ? descriptionTextController.text
+                                        : await descriptionController.getText();
                                     final document = parse(contentData);
                                     validHtml = document.outerHtml;
                                     log("Validated HTML: $validHtml");

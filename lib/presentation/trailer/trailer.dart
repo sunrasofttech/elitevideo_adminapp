@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:ui';
 import 'package:elite_admin/bloc/trailer/delete_trailer/delete_trailer_cubit.dart';
 import 'package:elite_admin/bloc/trailer/get_all_trailer/get_all_trailer_cubit.dart';
@@ -235,8 +236,8 @@ class _TrailerScreenState extends State<TrailerScreen> with Utility {
                                 itemCount: state.model.data?.trailors?.length,
                                 shrinkWrap: true,
                                 physics: const NeverScrollableScrollPhysics(),
-                                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 2,
+                                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: Platform.isWindows ? 6 : 2,
                                   crossAxisSpacing: 5,
                                   mainAxisSpacing: 5,
                                   childAspectRatio: 1,

@@ -1,6 +1,6 @@
 {
-    "name": "elite_admin",
-    "short_name": "elite_admin",
+    "name": "Elite Admin",
+    "short_name": "Elite Admin",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

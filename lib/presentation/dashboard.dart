@@ -104,7 +104,7 @@ class _DashboardScreenState extends State<DashboardScreen> with Utility {
   void initState() {
     super.initState();
     context.read<GetProfileCubit>().getProfile(context);
-    context.read<GetAllMovieCubit>().getAllMovie();
+    context.read<GetAllMovieCubit>().getAllMovie(limit: 10,page: 1);
     context.read<GetAllMovieCategoryCubit>().getAllMovieCategory();
     context.read<GetAllGenreCubit>().getGenre();
     context.read<GetAllLanguageCubit>().getAllLanguage();

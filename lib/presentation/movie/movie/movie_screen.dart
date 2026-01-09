@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:ui';
 import 'package:elite_admin/utils/toast.dart';
 import 'package:flutter/material.dart';
@@ -45,6 +46,12 @@ class _MovieScreenState extends State<MovieScreen> with Utility {
   bool isSelectAll = false;
 
   @override
+  void initState() {
+    context.read<GetAllMovieCubit>().getAllMovie(limit: 10,page: 1);
+    super.initState();
+  }
+
+  @override
   void dispose() {
     movieNameFocusNode.dispose();
     movieNameController.dispose();
@@ -55,7 +62,7 @@ class _MovieScreenState extends State<MovieScreen> with Utility {
   Widget build(BuildContext context) {
     return RefreshIndicator(
       onRefresh: () async {
-        await context.read<GetAllMovieCubit>().getAllMovie();
+        await context.read<GetAllMovieCubit>().getAllMovie(limit: 10, page: 1);
       },
       child: Scaffold(
         body: Padding(
@@ -73,7 +80,7 @@ class _MovieScreenState extends State<MovieScreen> with Utility {
                       hintText: "Search movie name ...",
                       controller: movieNameController,
                       onChanged: (p0) {
-                        context.read<GetAllMovieCubit>().getAllMovie(movieName: p0);
+                        context.read<GetAllMovieCubit>().getAllMovie(movieName: p0, limit: 10, page: 1);
                       },
                       suffixIcon: const Icon(Icons.search, color: AppColors.blackColor),
                     ),
@@ -144,7 +151,11 @@ class _MovieScreenState extends State<MovieScreen> with Utility {
                                 );
                                 selectedCategoryId = selectedDatum?.id;
                                 print("Selected Datum ID: ${selectedDatum?.id}");
-                                context.read<GetAllMovieCubit>().getAllMovie(categoryId: selectedDatum?.id);
+                                context.read<GetAllMovieCubit>().getAllMovie(
+                                  categoryId: selectedDatum?.id,
+                                  limit: 10,
+                                  page: 1,
+                                );
                               });
                             },
                           );
@@ -170,7 +181,11 @@ class _MovieScreenState extends State<MovieScreen> with Utility {
                                 final selectedDatum = state.model.data?.firstWhere((datum) => datum.name == value);
                                 print("Selected Datum ID: ${selectedDatum?.id}");
                                 selectedLanguageId = selectedDatum?.id;
-                                context.read<GetAllMovieCubit>().getAllMovie(languageId: selectedDatum?.id);
+                                context.read<GetAllMovieCubit>().getAllMovie(
+                                  languageId: selectedDatum?.id,
+                                  limit: 10,
+                                  page: 1,
+                                );
                               });
                             },
                           );
@@ -244,7 +259,7 @@ class _MovieScreenState extends State<MovieScreen> with Utility {
                         selectedLanguageId = null;
                         selectedCategory = null;
                         selectedLanguage = null;
-                        context.read<GetAllMovieCubit>().getAllMovie();
+                        context.read<GetAllMovieCubit>().getAllMovie(limit: 10, page: 1);
                         setState(() {});
                       },
                       buttonText: "Reset Filter",
@@ -262,7 +277,7 @@ class _MovieScreenState extends State<MovieScreen> with Utility {
 
                   if (state is UpdateMovieLoadedState) {
                     showMessage(context, "Update Movie Successfully");
-                    context.read<GetAllMovieCubit>().getAllMovie();
+                    context.read<GetAllMovieCubit>().getAllMovie(limit: 10, page: 1);
                   }
                 },
                 child: BlocListener<DeleteMovieCubit, DeleteMovieState>(
@@ -277,7 +292,7 @@ class _MovieScreenState extends State<MovieScreen> with Utility {
                       isSelectAll = false;
                       setState(() {});
                       showMessage(context, "Delete Successfully");
-                      context.read<GetAllMovieCubit>().getAllMovie();
+                      context.read<GetAllMovieCubit>().getAllMovie(limit: 10, page: 1);
                       Navigator.pop(context);
                     }
                   },
@@ -298,8 +313,8 @@ class _MovieScreenState extends State<MovieScreen> with Utility {
                                 itemCount: state.model.data?.movies?.length,
                                 shrinkWrap: true,
                                 physics: const NeverScrollableScrollPhysics(),
-                                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 2,
+                                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: Platform.isWindows ? 5 : 2,
                                   crossAxisSpacing: 5,
                                   mainAxisSpacing: 5,
                                   childAspectRatio: 1,
@@ -528,7 +543,7 @@ class _MovieScreenState extends State<MovieScreen> with Utility {
                         setState(() {
                           currentPage = e;
                         });
-                        context.read<GetAllMovieCubit>().getAllMovie(page: currentPage);
+                        context.read<GetAllMovieCubit>().getAllMovie(page: currentPage, limit: 10);
                       },
                     );
                   }

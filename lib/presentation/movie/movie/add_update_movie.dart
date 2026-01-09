@@ -668,7 +668,7 @@ class _AddUpdateMoveiScreenState extends State<AddUpdateMoveiScreen> with Utilit
                           if (state is UpdateMovieLoadedState) {
                             showMessage(context, "Update Sucessfully");
                             Navigator.pop(context);
-                            context.read<GetAllMovieCubit>().getAllMovie();
+                            context.read<GetAllMovieCubit>().getAllMovie(limit: 10,page: 1);
                           }
                         },
                         builder: (context, updateState) {
@@ -685,7 +685,7 @@ class _AddUpdateMoveiScreenState extends State<AddUpdateMoveiScreen> with Utilit
                               if (state is PostMovieLoadedState) {
                                 showMessage(context, "Post Sucessfully");
                                 Navigator.pop(context);
-                                context.read<GetAllMovieCubit>().getAllMovie();
+                                context.read<GetAllMovieCubit>().getAllMovie(limit: 10,page: 1);
                               }
                             },
                             builder: (context, state) {

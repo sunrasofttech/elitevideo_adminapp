@@ -30,82 +30,82 @@ class _UserScreenState extends State<UserScreen> with Utility {
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const TextWidget(text: "User", color: AppColors.blackColor, fontSize: 16, fontWeight: FontWeight.w500),
-            heightBox15(),
-            Row(
-              children: [
-                Expanded(
-                  child: TextFormFieldWidget(
-                    controller: searchController,
-                    backgroundColor: AppColors.whiteColor,
-                    onChanged: (value) {
-                      final input = value.trim();
-                      if (input.isEmpty) return;
-                      if (RegExp(r'^\d+$').hasMatch(input)) {
-                        context.read<GetAllUserCubit>().getAllUser(mobileNo: input, name: null);
-                      } else {
-                        context.read<GetAllUserCubit>().getAllUser(name: input, mobileNo: null);
-                      }
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const TextWidget(text: "User", color: AppColors.blackColor, fontSize: 16, fontWeight: FontWeight.w500),
+              heightBox15(),
+              Row(
+                children: [
+                  Expanded(
+                    child: TextFormFieldWidget(
+                      controller: searchController,
+                      backgroundColor: AppColors.whiteColor,
+                      onChanged: (value) {
+                        final input = value.trim();
+                        if (input.isEmpty) return;
+                        if (RegExp(r'^\d+$').hasMatch(input)) {
+                          context.read<GetAllUserCubit>().getAllUser(mobileNo: input, name: null);
+                        } else {
+                          context.read<GetAllUserCubit>().getAllUser(name: input, mobileNo: null);
+                        }
+                      },
+                      hintText: "search user...",
+                      isSuffixIconShow: true,
+                      suffixIcon: const Icon(Icons.search),
+                    ),
+                  ),
+                  widthBox10(),
+                  InkWell(
+                    onTap: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => const AddUpdateUserScreen()));
                     },
-                    hintText: "search user...",
-                    isSuffixIconShow: true,
-                    suffixIcon: const Icon(Icons.search),
-                  ),
-                ),
-                widthBox10(),
-                InkWell(
-                  onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => const AddUpdateUserScreen()));
-                  },
-                  child: Container(
-                    padding: const EdgeInsets.all(14),
-                    decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(12)),
-                      gradient: LinearGradient(colors: AppColors.blueGradientList),
-                    ),
-                    child: Row(
-                      children: [
-                        const TextWidget(text: "Add", color: AppColors.whiteColor),
-                        widthBox5(),
-                        const Icon(Icons.add_circle_rounded, color: AppColors.whiteColor),
-                      ],
+                    child: Container(
+                      padding: const EdgeInsets.all(14),
+                      decoration: const BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(12)),
+                        gradient: LinearGradient(colors: AppColors.blueGradientList),
+                      ),
+                      child: Row(
+                        children: [
+                          const TextWidget(text: "Add", color: AppColors.whiteColor),
+                          widthBox5(),
+                          const Icon(Icons.add_circle_rounded, color: AppColors.whiteColor),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              ],
-            ),
-            heightBox15(),
-            BlocListener<DeleteUserCubit, DeleteUserState>(
-              listener: (context, state) {
-                if (state is DeleteUserErrorState) {
-                  showMessage(context, state.error);
-                  return;
-                }
-                if (state is DeleteUserLoadedState) {
-                  showMessage(context, "Delete Sucessfully");
-                  Navigator.pop(context);
-                  context.read<GetAllUserCubit>().getAllUser();
-                }
-              },
-              child: BlocBuilder<GetAllUserCubit, GetAllUserState>(
-                builder: (context, state) {
-                  if (state is GetAllUserLoadingState) {
-                    return const Center(child: CustomCircularProgressIndicator());
+                ],
+              ),
+              heightBox15(),
+              BlocListener<DeleteUserCubit, DeleteUserState>(
+                listener: (context, state) {
+                  if (state is DeleteUserErrorState) {
+                    showMessage(context, state.error);
+                    return;
                   }
-
-                  if (state is GetAllUserErrorState) {
-                    return const CustomErrorWidget();
+                  if (state is DeleteUserLoadedState) {
+                    showMessage(context, "Delete Sucessfully");
+                    Navigator.pop(context);
+                    context.read<GetAllUserCubit>().getAllUser();
                   }
-
-                  if (state is GetAllUserLoadedState) {
-                    return state.model.users?.isEmpty ?? true
-                        ? const CustomEmptyWidget()
-                        : Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-                            child: SingleChildScrollView(
+                },
+                child: BlocBuilder<GetAllUserCubit, GetAllUserState>(
+                  builder: (context, state) {
+                    if (state is GetAllUserLoadingState) {
+                      return const Center(child: CustomCircularProgressIndicator());
+                    }
+          
+                    if (state is GetAllUserErrorState) {
+                      return const CustomErrorWidget();
+                    }
+          
+                    if (state is GetAllUserLoadedState) {
+                      return state.model.users?.isEmpty ?? true
+                          ? const CustomEmptyWidget()
+                          : Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
                               child: SingleChildScrollView(
                                 scrollDirection: Axis.horizontal,
                                 child: Container(
@@ -194,33 +194,33 @@ class _UserScreenState extends State<UserScreen> with Utility {
                                   ),
                                 ),
                               ),
-                            ),
-                          );
+                            );
+                    }
+                    return const SizedBox();
+                  },
+                ),
+              ),
+              heightBox15(),
+              BlocBuilder<GetAllUserCubit, GetAllUserState>(
+                builder: (context, state) {
+                  if (state is GetAllUserLoadedState) {
+                    return CustomPagination(
+                      currentPage: currentPage,
+                      totalPages: state.model.pages ?? 0,
+                      onPageChanged: (e) {
+                        setState(() {
+                          currentPage = e;
+                        });
+                        context.read<GetAllUserCubit>().getAllUser(page: currentPage);
+                      },
+                    );
                   }
                   return const SizedBox();
                 },
               ),
-            ),
-            heightBox15(),
-            BlocBuilder<GetAllUserCubit, GetAllUserState>(
-              builder: (context, state) {
-                if (state is GetAllUserLoadedState) {
-                  return CustomPagination(
-                    currentPage: currentPage,
-                    totalPages: state.model.pages ?? 0,
-                    onPageChanged: (e) {
-                      setState(() {
-                        currentPage = e;
-                      });
-                      context.read<GetAllUserCubit>().getAllUser(page: currentPage);
-                    },
-                  );
-                }
-                return const SizedBox();
-              },
-            ),
-            heightBox15(),
-          ],
+              heightBox15(),
+            ],
+          ),
         ),
       ),
     );

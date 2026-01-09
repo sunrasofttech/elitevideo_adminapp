@@ -487,7 +487,9 @@ class _AddUpdateSeriesScreenState extends State<AddUpdateSeriesScreen> with Util
                                 onPressed: () async {
                                   var validHtml;
                                   try {
-                                    final contentData = await descriptionController.getText();
+                                    final contentData = Platform.isWindows
+                                        ? descriptionTextController.text
+                                        : await descriptionController.getText();
                                     final document = parse(contentData);
                                     validHtml = document.outerHtml;
                                     log(

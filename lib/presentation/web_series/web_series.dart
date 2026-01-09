@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:ui';
 
 import 'package:elite_admin/utils/apiurls/api.dart';
@@ -263,8 +264,8 @@ class _WebSeriesScreenState extends State<WebSeriesScreen> with Utility {
                               itemCount: state.model.data?.length,
                               shrinkWrap: true,
                               physics: const NeverScrollableScrollPhysics(),
-                              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 2,
+                              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: Platform.isWindows ? 6 : 2,
                                 crossAxisSpacing: 5,
                                 mainAxisSpacing: 5,
                                 childAspectRatio: 1,

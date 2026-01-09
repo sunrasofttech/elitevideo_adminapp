@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:ui';
 
 import 'package:elite_admin/utils/apiurls/api.dart';
@@ -163,8 +164,8 @@ class _LiveTvScreenState extends State<LiveTvScreen> with Utility {
                                 itemCount: state.model.data?.channels?.length,
                                 shrinkWrap: true,
                                 physics: const NeverScrollableScrollPhysics(),
-                                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 2,
+                                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: Platform.isWindows ? 5 : 2,
                                   crossAxisSpacing: 5,
                                   mainAxisSpacing: 5,
                                   childAspectRatio: 1,
